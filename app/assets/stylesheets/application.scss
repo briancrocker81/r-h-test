@@ -1,0 +1,51 @@
+@import "reset";
+@import "bootstrap";
+@import 'font_awesome5_webfont';
+@import 'fullcalendar';
+@import '_variables';
+@import 'typography';
+@import 'style';
+@import 'nav';
+@import 'sidebar';
+@import 'calendar';
+@import 'welcome';
+@import 'core/main';
+@import 'events';
+@import 'daygrid/main';
+@import 'timegrid/main';
+@import 'select2';
+@import 'select2-bootstrap';
+@import 'datepicker';
+@import 'account';
+@import 'forms';
+@import 'landlords';
+@import 'properties';
+@import 'filterrific';
+@import 'select2';
+@import 'tenancies';
+@import 'signature_pad';
+@import 'bootstrap-toggle';
+@import 'reporting';
+@import 'modals';
+@import 'listings';
+@import 'buttons';
+@import 'pagination';
+@import 'bootstrap-overides';
+
+.tenancy_tenancy_identifications_verified{
+  margin-top: 20px;
+}
+.tenancy_tenancy_documents_verified{
+  margin-top: 20px;
+}
+.nav-link.active, .tab-nav-report.active {
+  color: #f0f7ff !important;
+  background-color: #f05e23 !important;
+}
+.docs{
+  margin-bottom: 10px;
+}
+
+.select2-container {
+  width: auto !important;
+}

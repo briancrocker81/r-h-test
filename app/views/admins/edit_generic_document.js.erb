@@ -1,0 +1,43 @@
+var len = $('#generic_documents').find('.new_documents').length
+$('#generic_document_form').attr('action', '/admin/update_generic_document');
+// $('#generic_document_form').attr('method', 'patch');
+if (parseInt(len) < 4) {
+  $('#doc-<%= @generic_document.id %>').hide();
+  $('#generic_documents').append("<%= j render 'form_field'%>");
+  $(".datepicker").datepicker({ autoclose: true });
+  $('.save-document').show();
+  $(".remove-document").on('click', function(){
+    $(this).parent().parent().remove();
+    $('#doc-<%= @generic_document.id %>').show();
+    if($('.new_documents').length == 0) {
+      $('.save-document').hide();
+    } else {
+      $('.save-document').show();
+    }
+  });
+  $("#change_file_<%=@generic_document.id%>").on('click', function(){
+    console.log('change');
+    $("#file_<%= @generic_document&.id%>").show();
+    $("#label_file_<%= @generic_document&.id%>").hide();
+    $("#remove_file_<%=@generic_document.id%>").show();
+    $(this).hide();
+  });
+  $("#remove_file_<%=@generic_document.id%>").on('click', function(){
+    console.log('change');
+    $("#file_<%= @generic_document&.id%>").hide();
+    $("#label_file_<%= @generic_document&.id%>").show();
+    $(this).hide();
+    $("#change_file_<%=@generic_document.id%>").show();
+  });
+  if($('.documents').children().length > 3){
+    $('.add-generic').hide();
+  }
+} else {
+  alert('You may only upload four generic documents!')
+}
+DocumentPreview();
+if($('.documents').children('.generic-doc').length >= 3){
+  $('.add-generic').hide();
+} else {
+  $('.add-generic').show();
+}

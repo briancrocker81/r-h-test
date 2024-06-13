@@ -1,0 +1,93 @@
+<tr class="property-collapse collapse" id="property-room-detail-<%= property.id %>">
+  <td colspan="7">
+    <table class="table table-light">
+      <thead>
+      <tr class="tr-property">
+        <th>Room</th>
+        <th>Size</th>
+        <th>Rate</th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th>Available</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <% property.rooms.each do |room| %>
+        <tr>
+          <td>
+            <%= link_to room.number, room_path(room) %>
+          </td>
+          <td><%= room.property.number_of_bedrooms %></td>
+          <td><%= room.list_price %></td><!-- Pull from property info -->
+          <td colspan="8" valign="middle">
+            <% if room.tenancies.not_archived.count >= 1 %>
+              <table class="table table-light table-striped tenancy-table">
+                <tbody>
+                <thead>
+                <tr class="table-info">
+                  <th>Start</th>
+                  <th>End</th>
+                  <th>Name</th>
+                  <th>Mobile</th>
+                  <th>Email</th>
+                  <th class="tenancy-header t_icon"><i class="fas fa-edit" title="Booking form completed"></i></th>
+                  <th class="tenancy-header t_icon"><i class="fas fa-signature" title="Signed Tenancy"></i></th>
+                  <th class="tenancy-header t_icon"><i class="fas fa-user-lock" title="Guarantor"></i></th>
+                  <th title="Advanced Rent / Deposit Paid">AvR/DPT</th>
+                </tr>
+                </thead>
+                <% room.tenancies.not_archived.each do |tenancy, index| %>
+                  <tr>
+                    <td><%= l(tenancy.tenancy_start, format: :default, default: '') %></td>
+                    <td><%= l(tenancy.tenancy_end, format: :default, default: '') %></td>
+                    <td><%= link_to tenancy.tenant_name, tenancy_path(tenancy) %></td>
+                    <td><%= tel_to(tenancy.mobile) %></td>
+                    <td><%= mail_to tenancy.email %></td>
+                    <td class="t_icon"><%= yes_no(tenancy.form_submitted) %></td>
+                    <td class="t_icon"><%= yes_no(tenancy.signed_tenancy_agreement) %></td>
+                    <td class="t_icon">
+                      <% if tenancy.is_guarantor_available == true %>
+                        <%= yes_no(tenancy&.guarantor&.complete_guarantor_agreement) %>
+                      <% else %>
+                        <i class="fas fa-times-circle" style="color: red" title="No Guarantor"></i>
+                      <% end %>
+                    </td>
+                    <td class="t_icon"><%= yes_no(tenancy.deposit_paid) %></td><!-- THIS IS A MANUAL CHECK BY TEAM -->
+                    <%- if index == 0 -%>
+                      <% available = available_for_the_year(sort_year, room) %>
+                      <td>
+                        <% if available %>
+                          <%= link_to 'Book Room', set_tenancy_form_path(room.property.id, room_id: room.id), :data => {:turbolinks => false}, class: 'btn small btn-primary', :remote => true %>
+                        <% end %>
+                      </td>
+                    <%- else -%>
+                      <td></td>
+                    <%- end -%>
+                  </tr>
+                <% end %>
+                </tbody>
+              </table>
+            <% else %>
+              Available
+            <% end %>
+          </td>
+          <% availability = room.availability? %>
+          <td><%= availability ? '<span class="badge badge-success">Yes</span>'.html_safe : '<span class="badge badge-warning">No</span>'.html_safe %></td>
+          <td>
+            <% if availability %>
+              <%= link_to 'Book Room', set_tenancy_form_path(room.property.id, room_id: room.id), :data => {:turbolinks => false}, class: 'btn small btn-primary', :remote => true %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </td>
+</tr>

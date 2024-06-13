@@ -1,0 +1,33 @@
+<div class="modal-header">
+  <h3 class="modal-title"><%= @tag.titleize %> Automation Setting</h3>
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<%= form_for @manage_automation_mail, url: @url do |f| %>
+  <div class="modal-body">
+    <div id="automation_error" class="text-danger">
+    </div>
+
+    <article>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <%= f.label :mail_type %>
+            <%= f.select :mail_type, options_for_select(ManageAutomationMail::AUTOMATION_MAILS, @manage_automation_mail.mail_type), { prompt: 'Select Mail Type' }, class: 'form-control', id: 'mail_types' %>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <%= f.label :mail_methods %>
+            <%= f.select :mail_methods, options_for_select(@options, @manage_automation_mail.mail_methods), { prompt: 'Select Methods' }, class: 'form-control', multiple: true, id: 'mail_methods' %>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+  <div class="modal-footer">
+    <%= f.submit "Save", class: 'btn btn-primary'%>
+    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+  </div>
+<% end %>

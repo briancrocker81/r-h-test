@@ -1,0 +1,60 @@
+<%= simple_form_for(@user, :url => create_new_user_path, :method => :post) do |f| %>
+  <%= f.error_notification %>
+  <div class="row">
+    <div class="col-6">
+      <div class="form-group">
+        <%= f.input :first_name %>
+      </div>
+      <div class="form-group">
+        <%= f.input :surname %>
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="form-group">
+        <%= f.input :username %>
+      </div>
+      <div class="form-group">
+        <%= f.input :mobile %>
+      </div>
+      <div class="form-group">
+        <%= f.input :email, required: true, autofocus: true %>
+      </div>
+    </div>
+  </div>
+  <div class="form-inputs">
+    <%#= f.input :avatar %>
+
+    <div class="form-group">
+      <%#= f.label :role %>
+      <%= f.input :role, as: :radio_buttons, collection: %w(Staff Agent Finance Cleaner Maintenance) %>
+      <%#= f.select( :role, options_for_select([ ['Admin'], ['Agent'], ['Finance'], ['Cleaner'], ['Maintenance'] ]), { selected: resource.role }, class: "form-control form-inputs" ) %>
+    </div>
+
+    <% unless current_user.role = 'Agent' %>
+      <%= f.label :colour, 'Calendar Colour' %>
+      <ul id="colour-picker">
+        <li class="colour purple-bg" data-colour-val="purple"></li>
+        <li class="colour orange-bg" data-colour-val="orange"></li>
+        <li class="colour manatee-bg" data-colour-val="manatee"></li>
+        <li class="colour blue-bg" data-colour-val="blue"></li>
+        <li class="colour turquoise-bg" data-colour-val="turquoise"></li>
+        <li class="colour arsenic-bg" data-colour-val="arsenic"></li>
+        <li class="colour pea-green-bg" data-colour-val="pea-green"></li>
+        <li class="colour suva-grey-bg" data-colour-val="suva-grey"></li>
+        <li class="colour iceberg-blue-bg" data-colour-val="iceberg-blue"></li>
+        <li class="colour pink-bg" data-colour-val="pink"></li>
+        <li class="colour beaver-bg" data-colour-val="beaver"></li>
+        <li class="colour khaki-bg" data-colour-val="khaki"></li>
+      </ul>
+      <%= f.hidden_field :colour %>
+    <% end %>
+    <% if current_user.is_admin? %>
+      <%= f.input :admin, as: :boolean %>
+    <% end %>
+  </div>
+
+  <div class="actions">
+    <%= link_to 'Back', :back, class: 'btn btn-secondary' %>
+    <%= f.button :submit, class: 'btn btn-primary' %>
+  </div>
+<% end %>

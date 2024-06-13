@@ -1,0 +1,21 @@
+<tr>
+  <td><%= property_expense.expense_date.try(:strftime, '%d/%m/%Y') %></td>
+  <td><%= property_expense.name %></td>
+  <td><%= property_expense.category %></td>
+  <td>£<%= number_with_delimiter(sprintf("%.2f",property_expense.amount), delimiter: ',') %></td>
+  <td>
+    <% if property_expense.file.present? %>
+      <div class="doc-prv inline" title="Click to show document" data = " <%= property_expense.file %>" data-doc-name="" data-verified="" data-verified-by="">
+        <%= document_badge(true, 'fas fa-file-pdf', 'View') %>
+      </div>
+    <% else %>
+      N/A
+    <% end %>
+  <td><%= yes_no(property_expense.recurring) %></td>
+  <td><%= property_expense.number_of_months %></td>
+  <td>
+    <%= link_to property_property_expense_path(@property, property_expense, year: @year), method: :delete, 'data-confirm': "Are you sure?", title: 'Delete', remote: true do %>
+      <i class="fas fa-trash text-danger"></i>
+    <% end %>
+  </td>
+</tr>

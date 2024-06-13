@@ -1,0 +1,19 @@
+<%= form_tag landlord_staff_conversations_path(landlord_id: landlord.id), :method => :post, html: {multipart: true} do %>
+  <div class="form-group">
+    <div class="row">
+      <div class="col-md-12">
+        <label>Subject: </label>
+        <%= text_field_tag "subject",'', class: "form-control", placeholder: "Subject", required: true %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <label>Content: </label>
+        <%= text_area_tag "body", nil,"cols" => 50, "rows" => 4, class: "form-control", placeholder: "Type here your message.....", required: true %>
+      </div>
+    </div><br>
+    <%= button_tag(type: "submit", class: "btn btn-primary") do %>
+      Save
+    <% end %>
+  </div>
+<% end %>

@@ -1,0 +1,141 @@
+<script>
+  $(document).ready(function() {
+    var calendarEl = document.getElementById('calendar');
+    if ('<%= @selected_date.blank? %>' == 'true'){
+      var today = new Date();
+    }else{
+      var today = new Date('<%= @selected_date %>');
+    }
+    var month = (today.getMonth()+1);
+    if(/^\d$/.test(month)){
+      month = "0"+month;
+    }
+    var day = today.getDate();
+    if(/^\d$/.test(day)){
+      day = "0"+day;
+    }
+    var date = today.getFullYear()+'-'+month+'-'+day;
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+      schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
+      plugins: [ 'interaction', 'resourceDayGrid', 'resourceTimeGrid' ],
+      defaultView: 'resourceTimeGridDay',
+      defaultDate: date,
+      editable: true,
+      selectable: true,
+      minTime: '08:00',
+      maxTime: '19:00',
+      eventLimit: true, // allow "more" link when too many events
+      header: {
+        left: 'prev,next today',
+        center: 'title',
+        right: ''
+        // right: 'resourceTimeGridDay,resourceTimeGridTwoDay,resourceTimeGridWeek'
+      },
+      weekends: true,
+      resourceOrder: 'order',
+      resources: [
+        <% [ ['Visit', 3], ['Communal Clean', 4], ['Maintenance', 5] ].each do |visit| %>
+          { id: '<%= visit[1] %>',
+            title: '<%= visit[0] %>',
+            order: 1 },
+        <% end %>
+      ],
+      events: [
+        <% [ ['Visit', 3], ['Communal Clean', 4], ['Maintenance', 5] ].each do |visit| %>
+          <% visit_events = Event.where(event_type: visit[1]) %>
+          <% visit_events.each do |event| %>
+            { id: '<%= event.id %>',
+              resourceId: '<%= visit[1] rescue nil %>',
+              start: '<%= event.start.strftime("%FT%T") %>',
+              end: '<%= event.end.strftime("%FT%T") %>',
+              classNames: ['<%= current_user.colour %>-bg'],
+              title:  ['<%= event.event_title(true) %> \n <%= escape_javascript event&.notes %>']
+            },
+          <% end %>
+        <% end %>
+      ],
+
+      select: function(arg) {
+        var start = arg.start;
+        var end = arg.end;
+        var start_date = new Date(start);
+        var end_date = new Date(end);
+
+        var start_time_hr = start_date.getHours();
+        var start_time_min = start_date.getMinutes();
+        $('#event_start_hr').val(start_time_hr);
+        $('#event_start_min').val(start_time_min);
+
+        $('#event_start_date').val(start_date);
+        $('#event_end_date').val(end_date);
+
+        var end_time_hr = end_date.getHours();
+        var end_time_min = end_date.getMinutes();
+        $('#event_end_hr').val(end_time_hr);
+        $('#event_end_min').val(end_time_min);
+
+        $('#selected_agent').val(arg.resource._resource.id);
+        var selected_event_type = arg.resource._resource.id;
+        data = {selected_data: { event_type: selected_event_type, event_start_hr: start_time_hr, event_start_min: start_time_min, event_start_date: start_date, event_end_date: end_date, event_end_hr: end_time_hr, event_end_min: end_time_min}, modal: false }
+        $.get('<%= new_event_url %>.js', data );
+        // $.getScript('/events/new', function() {});
+        // console.log(
+        //   'select',
+        //    arg.startStr,
+        //    arg.endStr,
+        //   arg.resource ? arg.resource.id : '(no resource)'
+        // );
+      },
+      eventClick: function(event, jsEvent, view) {
+        data = { modal: false }
+        $.get('/events/'+event.event.id+'/edit.js', data );
+        // $.getScript('/events/'+event.event.id+'/edit/', function() {});
+        // $.ajax({
+        //   url: '/events/'+event.event.id+'/edit/',
+        //   dataType: 'html',
+        //   type: 'GET',
+        //   success: function(){
+        //     window.location.replace('/events/'+event.event.id+'/edit/')
+        //   }
+        // });
+      },
+      eventDrop: function(event, delta, revertFunc) {
+          event_data = {
+            user_id: event.event.getResources()[0]._resource.id,
+            event: {
+              start: event.event.start,
+              end: event.event.end ? event.event.end : event.event.start,
+            }
+          };
+          $.ajax({
+            url: '/events/'+event.event.id,
+            data: event_data,
+            type: 'PATCH'
+          });
+      },
+      eventResize: function(event) {
+          console.log('Resized Event');
+          event_data = {
+            user_id: event.event.getResources()[0]._resource.id,
+            event: {
+              start: event.event.start,
+              end: event.event.end ? event.event.end : event.event.start,
+            }
+          };
+          $.ajax({
+            url: '/events/'+event.event.id,
+            data: event_data,
+            type: 'PATCH'
+          });
+      },
+      dateClick: function(arg) {
+        console.log(
+          'dateClick',
+          arg.date,
+          arg.resource ? arg.resource.id : '(no resource)'
+        );
+      }
+    });
+    calendar.render();
+  });
+</script>

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <p>Hi <%= @guarantor.guarantor_name %></p>
+
+    <p>You have completed the <%= @tenancy&.room&.property&.property_name %> booking process of tenancy <%= @tenancy.first_name %>. Please find attached the copies of the completed documents of the tenancy!</p>
+    <p>
+      <b> Thanks </b><br>
+      Team <br>
+      CityLets
+    </p>
+    <p>Phone: <%= link_to "01752 604242", "tel:#{'01752604242'}" %></p>
+    <p>Email: <%= mail_to "info@cityletsplymouth.co.uk" %></p>
+  </body>
+</html>

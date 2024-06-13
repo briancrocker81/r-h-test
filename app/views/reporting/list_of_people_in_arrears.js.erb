@@ -1,0 +1,3 @@
+$("#filterrific_results").html("<%= j render 'list_of_people_in_arrears', tenancies_in_arrears: @tenancies_in_arrears %>");
+$('#people').html("<%= @total_list_of_tenancies_in_arrears %>");
+$('#arrears').html("£<%= number_with_delimiter(sprintf("%.2f",@tenancies_in_arrears.sum(&:total_arrears)), delimiter: ',') %>");

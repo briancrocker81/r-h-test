@@ -1,0 +1,49 @@
+<% js = escape_javascript(
+  render(partial: 'list', locals: { rooms: @rooms })
+) %>
+$("#filterrific_results").html("<%= js %>");
+<% year = (@filterrific.room_availability.present? && @filterrific.room_availability.search_by_year_range.present?) ? @filterrific.room_availability.search_by_year_range : @current_year %>
+
+$('#sort-by-years').val("<%= year %>")
+$(document).ready(function(){
+  $("#filterrific_room_availability_room_available").click(function(){
+    $('#filterrific_room_availability_room_booked').prop("checked", false);
+    $('#filterrific_room_availability_room_complete').prop("checked", false);
+  });
+  $("#filterrific_room_availability_room_booked").click(function(){
+    $('#filterrific_room_availability_room_available').prop("checked", false);
+    $('#filterrific_room_availability_room_complete').prop("checked", false);
+  });
+  $("#filterrific_room_availability_room_complete").click(function(){
+    $('#filterrific_room_availability_room_available').prop("checked", false);
+    $('#filterrific_room_availability_room_booked').prop("checked", false);
+  });
+});
+
+
+
+$(document).ready(function() {
+  if ($("#sort-by-years").val()  !=  ""){
+    var year = $("#sort-by-years").val();
+    $(".years-filters").find("[data-years-range='" + year + "']").addClass("btn btn-primary");
+    $("#sort-by-years").trigger('click');
+  }
+  $("#selectAll").select_all();
+  var format = "";
+  var mail = false;
+  $('.get-listings').on('click', function(){
+    format = $(this).data("format");
+    mail = $(this).data("mail");
+    select_all_rooms(format, mail);
+    $('#filterrific_filter').submit();
+  });
+  function select_all_rooms(format, mail){
+    var room_ids = [];
+    $('.selectable:checkbox:checked').each(function(){
+      room_ids.push($(this).val());
+    });
+    $('#filterrific_with_room_ids').val([room_ids]);
+    $('#filterrific_filter').append("<input type='hidden' name='format' value='"+format+"' />");
+    $('#filterrific_filter').append("<input type='hidden' name='mail' value='"+mail+"' />");
+  }
+});``

@@ -1,0 +1,15 @@
+$('#commonModal .modal-content').html("<%= j render 'form'%>")
+$('#property_expense_expense_date').datepicker({
+  format: 'dd/mm/yyyy'
+});
+$('#commonModal').modal('show');
+$('#property_expense_recurring').on('click', function(){
+  if($(this).prop('checked')){
+    $('.numbert_of_months_expense').show();
+    $('#property_expense_number_of_months').prop('disabled', false);
+  } else {
+    $('#property_expense_number_of_months').prop('disabled', true);
+    $('.numbert_of_months_expense').hide();
+  }
+})
+DocumentPreview();

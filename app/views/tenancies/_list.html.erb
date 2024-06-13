@@ -1,0 +1,58 @@
+<div id="filterrific_results">
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>Year</th>
+        <th>Property</th>
+        <th>Room No.</th>
+        <th>Type</th>
+        <th>Start</th>
+        <th>End</th>
+        <th>Name</th>
+        <th>Mobile</th>
+        <th>Email</th>
+        <th>Booking Status</th>
+        <th></th>
+      </tr>
+      </thead>
+
+      <tbody>
+      <% @tenancies.each do |tenancy| %>
+        <tr>
+          <td><%= tenancy.year %></td>
+          <% if tenancy.room.present? && tenancy.room.property.present? %>
+            <td><%= link_to (tenancy.room.property.property_name rescue 'N/A'), (tenancy.room.property rescue 'N/A') %></td>
+            <td>
+              <%=
+                if tenancy.room_id.present?
+                  link_to (tenancy.room.number rescue 'N/A'), (room_path(tenancy.room_id) rescue 'N/A')
+                else
+                  'Complete property'
+                end
+              %>
+            </td>
+          <% else %>
+            <td colspan="3"><p style="color: red;">This property is removed ! <br>Please update tenant with new property and room !</p></td>
+          <% end %>
+          <td><%= tenancy.tenancy_is_nice_name %></td>
+          <td><%= l(tenancy.tenancy_start, format: :default, default: '') %></td>
+          <td><%= l(tenancy.tenancy_end, format: :default, default: '') %></td>
+          <td><%= link_to tenancy.tenant_name,  (@archived ? tenancy_path(tenancy, archived: @archived) : tenancy), :data => {:turbolinks => false} %></td>
+          <td><%= tenancy.mobile %></td>
+          <td><%= mail_to tenancy.email %></td>
+          <td><%= tenancy.booking_status.to_s.titleize %></td>
+          <td>
+            <%= link_to tenancy_path(tenancy), method: :delete, data: { confirm: 'Are you sure?' } do%>
+              <i class="fas fa-trash"></i>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+  <div class="pagy-container">
+    <%= pagy_bootstrap_nav(@pagy).html_safe %>
+  </div>
+</div>

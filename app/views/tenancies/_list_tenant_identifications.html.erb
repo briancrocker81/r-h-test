@@ -1,0 +1,28 @@
+<div id="filterrific_results">
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th>ID Name</th>
+      <th>ID Document</th>
+      <th>Verified By</th>
+      <th>Verified At</th>
+      <th>Uploaded At</th>
+    </tr>
+    </thead>
+    <tbody>
+      <% identifications.each do |identification| %>
+        <tr>
+          <td><%= identification.id_proof_name.capitalize %></td>
+          <td>
+            <iframe src="<%= identification.id_proof_doc.url %>" style="width: 100%;">
+              alternative content for browsers which do not support iframe
+            </iframe>
+          </td>
+          <td><%= identification.users.full_name %></td>
+          <td><%= identification.verified_at.nil? ? "Not verified" : identification.verified_at.strftime("%d/%m/%y at %l:%M %p")%></td>
+          <td><%= identification.created_at.strftime("%d/%m/%y at %l:%M %p")%></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

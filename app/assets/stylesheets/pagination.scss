@@ -1,0 +1,54 @@
+//Pagination
+
+.pagy-container {
+  text-align: center;
+  .pagination {
+    display: inline-flex;
+    margin: 5px auto;
+    .page-item {
+      &.active {
+        .page-link {
+          background-color: $primary;
+          border-color: $primary;
+          color: $white;
+        }
+      }
+      .page-link {
+        padding: 10px 15px;
+        color: $primary;
+        background: transparent;
+        border-radius: 1px 7px 1px 7px;
+      }
+    }
+  }
+}
+
+
+@media (min-width: $screen-sm-min) {
+
+  .pagy-container {
+    text-align: right;
+    .pagination {
+      .page-item {
+        &.active {
+          .page-link {
+            //background-color: $white;
+            border: none;
+            color: $white;
+            font-weight: bold;
+          }
+        }
+        &.disabled{
+          color: $light-grey;
+        }
+        .page-link {
+          padding: 4px 5px;
+          font-size: 14px;
+          color: $font-colour;
+          border: none;
+          transition: color .1s linear 0s,background-color .1s linear 0s,opacity .2s linear 0s!important;
+        }
+      }
+    }
+  }
+}

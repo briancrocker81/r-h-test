@@ -1,0 +1,44 @@
+
+<%= simple_form_for(@company) do |f| %>
+  <div id="title-bar" class="sticky-top">
+    <h1>
+      <%=raw @company.name.present? ? "#{@company.name+'<small class="edit">- Edit mode</small>'}" : 'Enter your company details' %>
+    </h1>
+    <div class="actions d-flex justify-content-end push">
+      <%= link_to 'Back', :back, class: 'btn btn-secondary' %>
+      <%= f.submit t('admin.save'), class: 'btn btn-success' %>
+    </div>
+  </div>
+
+  <%= f.error_notification %>
+  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+
+  <article>
+    <section>
+      <h3 class="article-title">Company Details</h3>
+      <div class="form-inputs">
+        <%= f.input :name %>
+        <%= f.input :address %>
+        <%= f.input :phone_number %>
+        <%= f.input :main_email %>
+        <%= f.input :main_contact %>
+        <%= f.input :vat_number %>
+        <%= f.input :registration_number %>
+      </div>
+    </section>
+    <section>
+      <h3 class="article-title">Company Bank Details</h3>
+        <%= f.input :bank_account_name %>
+        <%= f.input :bank_name %>
+        <%= f.input :bank_address %>
+        <%= f.input :bank_sort_code %>
+        <%= f.input :bank_account_number %>
+        <%= f.input :bank_iban %>
+        <%= f.input :bank_bic %>
+        <%= f.input :bank_payment_reference %>
+      </div>
+    </section>
+  </article>
+
+
+<% end %>

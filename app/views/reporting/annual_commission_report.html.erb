@@ -1,0 +1,104 @@
+<% content_for :title, 'Commission Report' %>
+<p id="notice"><%= notice %></p>
+<div id="title-bar">
+  <h1>Commission Report</h1>
+  <div class="actions push">
+    <div class="badges btn-group d-flex w-100 mb-3">
+      <% business_years.each do |year| %>
+        <%= link_to year, annual_commission_report_path(year: year), class: "badge badge-#{year == @year ? 'primary' : 'secondary'} btn-filter-expense" %>
+      <% end %>
+    </div>
+    <div>
+      <%= link_to 'Back', reporting_index_path, class: 'ml-2 btn btn-secondary' %>
+      <%= link_to print_annual_commission_report_path(year: @year), class: "btn btn-primary", target: "_blank" do %>
+        <i class="fas fa-print"></i>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<article>
+  <section>
+    <h3 class="article-title">Key Figures</h3>
+    <div class="row">
+      <div class="col-sm-3">
+        <h3>Total Annual Income</h3>
+        <div class="key-section">
+          £<%= number_with_delimiter(sprintf("%.2f",@total_partner.values.sum), delimiter: ',') %>
+        </div>
+      </div>
+<!--      <div class="col-sm-3">-->
+<!--        <h3>VAT</h3>-->
+<!--        <div class="key-section">-->
+<!--          £<%#= @total_inc_vat %>-->
+<!--        </div>-->
+<!--      </div>-->
+    </div>
+  </section>
+  <section>
+    <h3 class="article-title">Annual commission Report</h3>
+
+    <div class="col-md-12 mt-2">
+      <div class="row">
+        <div class="table-responsive">
+          <table class="table table-striped annual-income">
+            <% date = Date.parse("01/08/#{Date.today.year.to_s[0..1]}#{@year[0..1]}") %>
+            <thead>
+              <tr>
+                <th>Type</th>
+                <th>Advanced Rent</th>
+                <% (1..12).each do |i| %>
+                  <th><%= (date + i.month).strftime("%b")%></th>
+                <% end %>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% total = {} %>
+              <% @annual_data.each do |key, annual_data| %>
+                <tr>
+                  <td><%= key %></td>
+                  <td>£<%= number_with_delimiter(sprintf("%.2f",annual_data['AvR']), delimiter: ',') %></td>
+                  <% (1..12).each do |i| %>
+                    <% if annual_data[(date + i.month)] %>
+                      <td>£<%= number_with_delimiter(sprintf("%.2f",annual_data[(date + i.month)]), delimiter: ',') %></td>
+                    <% else %>
+                      <td>£<%= number_with_delimiter(sprintf("%.2f",'0.0'), delimiter: ',') %></td>
+                    <% end %>
+                  <% end %>
+                  <td>£<%= number_with_delimiter(sprintf("%.2f",@total_partner[key]), delimiter: ',') %></td>
+                </tr>
+              <% end %>
+              <tr>
+                <td>Subtotal</td>
+                <td>£<%= number_with_delimiter(sprintf("%.2f",@total_avr), delimiter: ',') %></td>
+                <% (1..12).each do |i| %>
+                  <td>£<%= number_with_delimiter(sprintf("%.2f",@total_month[(date + i.month)].to_f), delimiter: ',') %></td>
+                <% end %>
+                <td>£<%= number_with_delimiter(sprintf("%.2f",@total_partner.values.sum), delimiter: ',') %></td>
+              </tr>
+              <tr>
+                <td>VAT</td>
+                <td>£<%= number_with_delimiter(sprintf("%.2f",(@total_avr * 0.2)), delimiter: ',') %></td>
+                <% (1..12).each do |i| %>
+                  <td>£<%= number_with_delimiter(sprintf("%.2f",(@total_month[(date + i.month)].to_f) * 0.2), delimiter: ',') %></td>
+                <% end %>
+                <td>£<%= number_with_delimiter(sprintf("%.2f",(@total_partner.values.sum) * 0.2), delimiter: ',') %></td>
+              </tr>
+              <tr>
+                <td>Total</td>
+                <td>£<%= number_with_delimiter(sprintf("%.2f",( (@total_avr)  + (@total_avr * 0.2) )), delimiter: ',') %></td>
+                <% (1..12).each do |i| %>
+                  <td>£<%= number_with_delimiter(sprintf("%.2f",((@total_month[(date + i.month)].to_f) + (@total_month[(date + i.month)].to_f) * 0.2) ), delimiter: ',') %></td>
+                <% end %>
+                <td>£<%= number_with_delimiter(sprintf("%.2f",(@total_partner.values.sum) + (@total_partner.values.sum * 0.2)), delimiter: ',') %></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+
+  </section>
+</article>

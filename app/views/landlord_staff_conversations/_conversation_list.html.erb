@@ -1,0 +1,34 @@
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Subject</th>
+      <th>Message</th>
+      <th>Date</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if conversations.present? %>
+      <% conversations.each_with_index do |conversation, conv_index| %>
+        <tr>
+          <td><%= conversation.id %></td>
+          <td><%= conversation.landlord_staff_messages&.first&.subject %></td>
+          <td><%= conversation.landlord_staff_messages&.first&.body %></td>
+          <td><%= conversation.landlord_staff_messages&.first&.message_time %></td>
+          <td>
+            <%= link_to landlord_staff_reply_form_path(conversation.landlord_staff_messages&.first&.id), :data => {:turbolinks => false}, class: 'btn small btn-info', :remote => true, title: 'Reply', style: 'min-width: 0px !important;' do %>
+              <%= fa_icon 'reply'%> Reply
+            <% end if conversation.landlord_staff_messages.present? %>
+          </td>
+        </tr>
+      <% end %>
+    <% else %>
+      <tr>
+        <td colspan="5"><strong>No Conversations.</strong></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<div class="modal fade" id="landlord-staff-conversation-reply-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"></div>

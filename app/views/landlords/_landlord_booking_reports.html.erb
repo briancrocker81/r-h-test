@@ -1,0 +1,63 @@
+<% @properties.each do |property| %>
+  <% rooms = @year != "all" ? property.rooms.eager_load(:tenancies).where("tenancies.year = ?", @year).order(:id).uniq : property.rooms.order(:id).uniq %>
+  <% if rooms.count > 0 %>
+    <% rooms.each_with_index do |room, i| %>
+      <% tenancies = @year != "all" ? room.tenancies.not_archived.where(year: @year).uniq : room.tenancies.not_archived.uniq %>
+      <% if tenancies.count > 0 %>
+        <% tenancies.each_with_index do |tenancy, j| %>
+          <tr>
+            <td class="<%= (i > 0 || j > 0) ? 'remove-border' : '' %>"><%= link_to property.address_line_2? ? property.property_name + ', ' + property.address_line_2 : property.property_name, property if (i == 0 && j == 0) %></td>
+            <td class="<%= j > 0 ? 'remove-border' : '' %>"><%= room.number if j == 0 %></td>
+<!--            <td><%#= room.availability ? "<label class='badge badge-warning'>Available</label>".html_safe : "£#{number_with_delimiter(sprintf("%.2f",room.list_price.to_f), delimiter: ',')}" %></td>-->
+<!--            <td><label class="badge badge-success">Yes</label></td>-->
+<!--            <td><%#= "£#{tenancy.payment_amount}" %></td>-->
+<!--            <td><%#= "£#{tenancy.monthly_price}" %></td>-->
+            <td><%= "£#{monthly_payment_price(tenancy)}" %></td>
+            <td><label class="badge badge-success">Yes</label></td>
+            <td><%= tenancy.tenancy_start.try(:strftime, '%d/%m/%Y') %></td>
+            <td><%= tenancy.tenancy_end.try(:strftime, '%d/%m/%Y') %></td>
+            <td><%= tenancy.number_of_weeks %></td>
+            <td><%= yes_no(tenancy.signed_tenancy_agreement) %></td>
+            <td class="tenancy-documents">
+              <div id="landlord-docs" class="d-flex">
+                <% tenancy.tenancy_documents.where(document_name: ['booking_form', 'signed_tenancy_agreement', 'tenancy_compliance']).uniq.each do |doc| %>
+                  <% if doc.document_name.present? && doc.document_file.present? %>
+                    <div class="docs doc-prv col-4" title="<%= doc.document_name.split('_').map(&:capitalize).join(' ')%>" data="<%=doc.document_file%>" data-doc-name="<%= doc.document_name.split('_').map(&:capitalize).join(' ')%>">
+                      <%= document_badge((doc.document_file != '' && !doc.document_file.nil?) ? true : false, 'fas fa-file-pdf', doc.document_name.split('_').map(&:capitalize).join(' ')) %>
+                    </div>
+                  <% end %>
+                <% end %>
+              </div>
+            </td>
+          </tr>
+        <% end %>
+      <% else %>
+        <tr>
+          <td class="<%= i > 0 ? 'remove-border' : '' %>"><%= link_to property.address_line_2? ? property.property_name + ', ' + property.address_line_2 : property.property_name, property if i == 0 %></td>
+          <td><%= room.number %></td>
+<!--          <td></td>-->
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      <% end %>
+    <% end %>
+  <% else %>
+    <tr>
+      <td><%= link_to property.property_name, property_path(property) %></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+  <% end %>
+<% end %>

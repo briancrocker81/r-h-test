@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <p>Hi <%= @tenancy.first_name %></p>
+
+    <p></p>
+    <p>Your booking process of <b><%= @tenancy.room.number %>, <%= @tenancy.room.property.property_name %></b> has been completed by Guarantor <b><%= @guarantor.guarantor_name ? @guarantor.guarantor_name : @guarantor&.guarantor_email %></b>. </p>
+
+    <p>Also, You can check the status in <%= link_to "Your Dashboard", tenancy_dashboard_url(u_id: @tenancy.uri_string), target: '_blank' %>.</p>
+
+    <p>Let us know if you have any questions.</p>
+    <p>
+      <b> Thanks </b><br>
+      Team <br>
+      CityLets
+    </p>
+  </body>
+</html>

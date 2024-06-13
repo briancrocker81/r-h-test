@@ -1,0 +1,123 @@
+#colour-picker {
+  display: flex;
+  flex-flow: wrap row;
+  li {
+    height: 30px;
+    //width: 80px;
+    cursor: pointer;
+    //display: inline-flex;
+    flex: 0 0 16.6666666667%;
+    max-width: 16.6666666667%;
+    list-style: none;
+    color: #ffffff;
+    font-weight: bolder;
+  }
+  .purple-bg {
+    background-color: $purple;
+    border-color: darken($purple, 5%);
+    &.selected {
+      background-color: darken($purple, 10%);
+      border-color: lighten($purple, 5%);
+    }
+  }
+  .turquoise-bg {
+    background-color: $turquoise;
+    border-color: darken($turquoise, 5%);
+    &.selected {
+      background-color: darken($turquoise, 10%);
+      border-color: lighten($turquoise, 5%);
+    }
+  }
+  .blue-bg {
+    background-color: $light-blue;
+    border-color: darken($light-blue, 5%);
+    &.selected {
+      background-color: darken($light-blue, 10%);
+      border-color: lighten($light-blue, 5%);
+    }
+  }
+  .orange-bg {
+    background-color: $flamingo;
+    border-color: darken($flamingo, 5%);
+    &.selected {
+      background-color: darken($flamingo, 10%);
+      border-color: lighten($flamingo, 5%);
+    }
+  }
+  .yellow-bg {
+    background-color: $yellow;
+    border-color: darken($yellow, 5%);
+    &.selected {
+      background-color: darken($yellow, 10%);
+      border-color: lighten($yellow, 5%);
+    }
+  }
+  .arsenic-bg {
+    background-color: $arsenic;
+    border-color: darken($arsenic, 5%);
+    &.selected {
+      background-color: darken($arsenic, 10%);
+      border-color: lighten($arsenic, 5%);
+    }
+  }
+  .manatee-bg {
+    background-color: $manatee;
+    border-color: darken($manatee, 5%);
+    &.selected {
+      background-color: darken($manatee, 10%);
+      border-color: lighten($manatee, 5%);
+    }
+  }
+  .pea-green-bg {
+    background-color: $pea-green;
+    border-color: darken($pea-green, 5%);
+    &.selected {
+      background-color: darken($pea-green, 10%);
+      border-color: lighten($pea-green, 5%);
+    }
+  }
+  .suva-grey-bg {
+    background-color: $suva-grey;
+    border-color: darken($suva-grey, 5%);
+    &.selected {
+      background-color: darken($suva-grey, 10%);
+      border-color: lighten($suva-grey, 5%);
+    }
+  }
+  .iceberg-blue-bg {
+    background-color: $iceberg-blue;
+    border-color: darken($iceberg-blue, 5%);
+    &.selected {
+      background-color: darken($iceberg-blue, 10%);
+      border-color: lighten($iceberg-blue, 5%);
+    }
+  }
+  .pink-bg {
+    background-color: $pink;
+    border-color: darken($pink, 5%);
+    &.selected {
+      background-color: darken($pink, 10%);
+      border-color: lighten($pink, 5%);
+    }
+  }
+  .beaver-bg {
+    background-color: $beaver;
+    border-color: darken($beaver, 5%);
+    &.selected {
+      background-color: darken($beaver, 10%);
+      border-color: lighten($beaver, 5%);
+    }
+  }
+  .khaki-bg {
+    background-color: $khaki;
+    border-color: darken($khaki, 5%);
+    &.selected {
+      background-color: darken($khaki, 10%);
+      border-color: lighten($khaki, 5%);
+    }
+  }
+}
+
+#new-password {
+  display: none;
+}

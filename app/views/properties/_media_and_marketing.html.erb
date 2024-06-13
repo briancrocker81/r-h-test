@@ -1,0 +1,23 @@
+<section id="images">
+  <h3 class="article-title">Property Images</h3>
+  <div class="row">
+    <div class="col-md-6">
+      <%= f.label "Select Property Images :" %><br>
+      <%= f.file_field :attachment, multiple: true %>
+    </div>
+    <div class="col-md-6">
+      <div class="row">
+        <% if @property.attachments.count > 0 %>
+          <% @property.attachments.each do |file| %>
+            <div class="col-4 img-prv" style="margin-bottom: 30px; text-align: center;">
+              <%= image_tag file.attachment_url, class: 'img-fit' %>
+              <span class="img-title"><%= file.title %></span>
+            </div>
+            <%= link_to '<i class="fa fa-trash"></i>'.html_safe, remove_property_image_path(property_id: @property, id: file.id), method: :delete, data: { confirm: 'Are you sure?' }, class: 'trash-btn' %>
+            <%= link_to '<i class="fa fa-edit"></i>'.html_safe, property_edit_attachment_path(property_id: @property, id: file.id), remote: true, class: 'edit-btn' %>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</section>

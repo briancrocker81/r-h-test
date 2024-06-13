@@ -1,0 +1,21 @@
+<section id="listed-block">
+  <h3 class="article-title">Utilities & Services</h3>
+  <%= f.simple_fields_for :property_utilities do |ff| %>
+    <div class="row">
+      <div class="col-md-6 col-lg form-group">
+        <%= ff.input :utility_name, readonly: true %>
+      </div>
+      <div class="col-md-6 col-lg-2 col-xl-1 form-group pl-lg-0 pr-lg-0">
+        <labeL></labeL>
+        <%= ff.input :included, as: :boolean %>
+      </div>
+      <div class="col-md-6 col-lg form-group">
+        <%= ff.input :landlord_contribution %>
+      </div>
+      <div class="col-md-6 col-lg form-group">
+        <%= ff.input :frequency, as: :select, collection: PropertyUtility::FREQUENCY %>
+      </div>
+    </div>
+    <hr class="d-md-none">
+  <%- end -%>
+</section>

@@ -1,0 +1,46 @@
+@import "variables";
+header {
+  width: 100%;
+  height: 50px;
+  //background: lighten($text-black, 5%);
+  background: $pm-blue;
+  border-bottom: 1px solid $text-black;
+  margin-bottom: 20px;
+  padding: 10px 20px;
+  line-height: 30px;
+  .home-link {
+    font-size: 20px;
+  }
+  nav {
+    display: flex;
+    color: $white;
+    a {
+      color: $white;
+      margin-right: 10px;
+      display: inline-block;
+      &:last-of-type {
+        margin-right: 0;
+      }
+      i {
+        font-size: 22px;
+        line-height: 30px;
+      }
+      &:hover {
+        color: $flamingo;
+        text-decoration: none;
+      }
+    }
+    #user {
+      #nav-user {
+        max-width: 22px;
+        border-radius: 45px;
+        margin-right: 10px;
+        margin-bottom: 7px;
+      }
+    }
+    .user-profile {
+      display: inline-block;
+      margin-left: auto;
+    }
+  }
+}

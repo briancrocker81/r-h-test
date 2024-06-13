@@ -1,0 +1,17 @@
+<%= simple_form_for([@tenancy, @tenancy.criminal_records.build]) do |f| %>
+  <div class="field">
+    <%= f.input :conviction_status %>
+  </div>
+  <div class="field">
+    <%= f.input :offence %>
+  </div>
+  <div class="field">
+    <%= f.input :date %>
+  </div>                
+  <div class="field">    
+    <%= f.input :judgement %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

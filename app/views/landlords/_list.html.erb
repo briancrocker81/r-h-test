@@ -1,0 +1,28 @@
+<div id="filterrific_results">
+  <div class="table-responsive">
+    <table class="table table-striped list">
+      <thead>
+        <tr>
+          <th>Landlord</th>
+          <th class="contact-num">Contact number</th>
+          <th>Email</th>
+          <th>Partner type</th>
+        </tr>
+      </thead>
+
+      <tbody>
+      <% @landlords.each do |landlord| %>
+        <tr>
+          <td><%= link_to landlord.contact_name, landlord %></td>
+          <td><%= tel_to(landlord.contact_number) %></td>
+          <td><%= mail_to landlord.email %></td>
+          <td><%= landlord.partnership_format %></td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+  <div class="pagy-container">
+    <%= pagy_bootstrap_nav(@pagy).html_safe %>
+  </div>
+</div>

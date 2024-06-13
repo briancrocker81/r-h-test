@@ -1,0 +1,13 @@
+<%= CSV.generate_line(%w[Property Postcode Bedrooms Bathrooms Type Availability Marketed], { force_quotes: false }).html_safe -%>
+<% @properties.each do |property| %>
+  <% row = []%>
+  <% row << property.property_name %>
+  <% row << property.postcode %>
+  <% row << property.number_of_bedrooms %>
+  <% row << property.number_of_bathrooms %>
+  <% row << property.property_type_nice_name %>
+  <% row << property.list_on_3rd_party_websites %>
+  <% row << property_num_available(property) %>
+  <% row.map! { |data| data.is_a?(String) ? data.strip : data } %>
+<%= CSV.generate_line(row, { force_quotes: false }).html_safe -%>
+<% end %>

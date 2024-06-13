@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Category:</strong>
+  <%= @system_content_data_category.category %>
+</p>
+
+<p>
+  <strong>Title:</strong>
+  <%= @system_content_data_category.title %>
+</p>
+
+<%= link_to 'Edit', edit_system_content_data_category_path(@system_content_data_category) %> |
+<%= link_to 'Back', system_content_data_categories_path %>

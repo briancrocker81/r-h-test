@@ -1,0 +1,9 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Company Information</h1>
+
+<article>
+<p>Please enter your company details to continue</p>
+</article>
+<br>
+<%= link_to 'My Company', new_company_path, class: "btn btn-success" unless Company.exists?(1) %>

@@ -1,0 +1,652 @@
+<%= simple_form_for @event, multipart: true do |f| %>
+  <div id="title-bar" class="sticky-top">
+    <div id="mobile-title" class="d-block d-lg-none">
+      <h1><%= t('.title') %></h1>
+      <%= link_to (fa_icon 'trash'),
+                  event,
+                  method: :delete,
+                  class: 'btn btn-danger del d-inline-block col-2 col-lg',
+                  data: { confirm: 'Are you sure?' } unless @event.new_record? %>
+    </div>
+    <div id="desktop-title" class="d-none d-lg-block">
+      <h1><%= t('.title') %></h1>
+    </div>
+
+    <div class="actions push d-flex">
+        <%= link_to (fa_icon 'trash'),
+                    event,
+                    method: :delete,
+                    class: 'btn btn-danger del col-2 col-lg d-none d-lg-inline-block',
+                    data: { confirm: 'Are you sure?' } unless @event.new_record? %>
+        <%= link_to 'Cancel',
+                    calendar_index_path,
+                    class: 'btn btn-secondary col-5 col-lg' %>
+        <%= f.button :submit, 'Submit', class: 'btn-success submit col-5 col-lg' %>
+
+    </div>
+  </div>
+
+  <article>
+    <div class="row">
+      <div class="col-12">
+        <%= f.error_notification %>
+        <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+      </div>
+    </div>
+
+    <section>
+      <div class="row">
+        <div class="col">
+          <div class="form-group">
+            <h3 class="article-title"><%= f.label :event_type %></h3>
+            <%- selected_event_type = @event.event_type || (session[:selected_data] && session[:selected_data].delete('event_type')) -%>
+            <%= f.select(:event_type, options_for_select([ ['Please select an option'], ['Student Viewing', 1], ['Private Viewing', 2], ['Visit', 3], ['Communal Clean', 4], ['Maintenance', 5], ['Block out my diary', 6] ], selected_event_type), {}, {class: 'form-control'})  %>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="field-type" style="display: none;">
+      <section class="viewing-info-view">
+        <h2 class="article-title">Viewing Information</h2>
+        <div class="row">
+          <div class="col-lg-6">
+            <div class="form-group">
+              <label>Viewer status</label>
+              <%= f.hidden_field :viewing_type %>
+
+              <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                <div class="btn-group" role="group" aria-label="First group">
+                  <button type="button" class="btn btn-light viewing-type-btn" value="1">Student</button>
+                  <button type="button" class="btn btn-light viewing-type-btn" value="2">Graduate</button>
+                  <button type="button" class="btn btn-light viewing-type-btn" value="3">Professional</button>
+                  <button type="button" class="btn btn-light viewing-type-btn" value="4">Family</button>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>
+                Required Bedrooms
+              </label>
+              <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                <div class="btn-group btn-group-justified" role="group" aria-label="First group">
+                  <button type="button" class="room-required btn btn-light bt-room-required" name="1">1</button>
+                  <button type="button" class="room-required btn btn-light bt-room-required" name="2">2</button>
+                  <button type="button" class="room-required btn btn-light bt-room-required" name="3">3</button>
+                  <button type="button" class="room-required btn btn-light bt-room-required" name="4">4</button>
+                  <button type="button" class="room-required btn btn-light bt-room-required" name="5">5</button>
+                  <button type="button" class="room-required btn btn-light bt-room-required" name="6">6</button>
+                  <button type="button" class="room-required btn btn-light bt-room-required" name="7">7</button>
+                  <button type="button" class="room-required btn btn-light bt-room-required" name="8">8</button>
+                  <button type="button" class="room-required btn btn-light bt-room-required" name="9">9</button>
+                  <button type="button" class="room-required btn btn-light bt-room-required" name="10">10</button>
+                  <button type="button" class="room-required btn btn-light bt-room-required-10" name="10+">10+</button>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="form-group">
+                  <div class="form-group string optional event_budget_per_week">
+                    <label>Budget per Week</label>
+                    <%= f.input :budget_per_week, class: "form-control string optional", label: false %>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="form-group">
+                  <div class="form-group string optional event_budget_per_month">
+                    <label>Budget per Month</label>
+                    <%= f.input :budget_per_month, class: "form-control string optional", label: false %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="form-group">
+              <div class="form-group string required event_client_name">
+                <%= f.input :client_name, label: 'Name', oninput: "this.className = ''", class: "form-control string required", style: "background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABHklEQVQ4EaVTO26DQBD1ohQWaS2lg9JybZ+AK7hNwx2oIoVf4UPQ0Lj1FdKktevIpel8AKNUkDcWMxpgSaIEaTVv3sx7uztiTdu2s/98DywOw3Dued4Who/M2aIx5lZV1aEsy0+qiwHELyi+Ytl0PQ69SxAxkWIA4RMRTdNsKE59juMcuZd6xIAFeZ6fGCdJ8kY4y7KAuTRNGd7jyEBXsdOPE3a0QGPsniOnnYMO67LgSQN9T41F2QGrQRRFCwyzoIF2qyBuKKbcOgPXdVeY9rMWgNsjf9ccYesJhk3f5dYT1HX9gR0LLQR30TnjkUEcx2uIuS4RnI+aj6sJR0AM8AaumPaM/rRehyWhXqbFAA9kh3/8/NvHxAYGAsZ/il8IalkCLBfNVAAAAABJRU5ErkJggg==&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%;" %>
+                <span id="error-contact-name" class="form-error"></span>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="form-group string optional appointment_info">
+                <%= f.input :appointment_info, class: "form-control string appointment_info optional" %>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="form-group string optional event_client_contact_number">
+                <label>Contact number <abbr title="required">*</abbr></label>
+                <%= f.input :client_contact_number, class: "form-control string optional", oninput: "this.className = ''", label: false %>
+                <span id="error-contact-number" class="form-error"></span>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="form-group email optional event_client_email">
+                <%= f.input :client_email, label: 'Email', class: "form-control string email optional"%>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <div class="form-group">
+              <%= f.label :user_id, 'Agent', id: 'event_user_id'  %>
+              <%= select_tag 'user_id', options_for_select(User.agent.map{|u| [u.first_name+" "+u.surname,u.id ]}, @event.users.pluck(:id)), multiple: true, id:'dropdown_agent',:class=> 'form-control event_user_id' %>
+              <span id="error-agent" class="form-error"></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="event-info-view">
+        <h2 class="article-title">Event Information</h2>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label>Event start date</label>
+              <input class="form-control datepicker" type="text" name="start_date" id="start_date" readonly />
+            </div>
+          </div>
+          <div class="col-md-2">
+            <div class="form-group time optional event_start">
+              <%= f.input :start, as: :time, start_year: Date.current.year, end_year: Date.today.year + 1, label: 'Event start time', minute_step: 15 %>
+              <span id="error-text-start" class="form-error"></span>
+            </div>
+          </div>
+          <div class="col-md-4" id="block_out_end">
+            <div class="form-group">
+              <label>Event end date</label>
+              <%= text_field_tag :end_date, f.object.end.try(:strftime, '%B %d, %Y'), id: "end_date", class: 'form-control datepicker' %>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <div class="form-group time optional event_end">
+              <%= f.input :end, as: :time, label: 'Event end time', minute_step: 15 %>
+              <span id="error-text-end" class="form-error"></span>
+            </div>
+          </div>
+          <div class="col-md-4" id="block_out">
+            <div class="form-group">
+              <label class="form-control-label string required" for="event_client_contact_number">Duration</label>
+              <div class="fix-duration">
+                <div class="viewing-duration one_hr fix-end-time bt" data-hr="1">
+                  <span>1hr</span>
+                </div>
+                <div class="viewing-duration one_and_half_hr fix-end-time bt" data-hr="1.30">
+                  <span>1.5hr</span>
+                </div>
+                <div class="viewing-duration two_hr fix-end-time bt" data-hr="2">
+                  <span>2hr</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12">
+            <div class="form-group">
+              <div class="form-group text optional event_notes">
+                <%= f.input :notes, label: 'Additional information', class: "form-control text optional" %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="w-100 properties-view">
+        <h2 class="article-title">Properties</h2>
+        <div class="row">
+          <div class="col-lg-6 col-sm-6">
+            <div class="form-group">
+              <label class="string optional">Beds</label>
+              <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                <div class="btn-group" role="group" aria-label="First group">
+                  <% (1..10).each do |i| %>
+                    <button type='button' class='room btn btn-light bt-room' name='<%= i %>'><%= i %></button>
+                  <% end %>
+                  <button type="button" class="room btn btn-light bt-room-10" name="10+">10+</button>
+                </div>
+              </div>
+              <div class="row mt-2">
+                <div class="col-sm-6">
+                  <label class="string optional">Property Search</label>
+                  <%= text_field_tag :search, @search, placeholder: 'Search', class: 'form-control', id: 'property_search' %>
+                </div>
+                <div id="year-filter" class="col-sm-6">
+                  <label class="string">Availability</label>
+                  <br/>
+                  <% business_years.each do |year| %>
+                    <%= button_tag year, type: 'button', class: "btn-sm btn-#{year == @year ? 'primary' : 'secondary'} btn-property", id: "btn-#{year.gsub('/', '-')}", "data-event_id": @event.try(:id), "data-year": year %>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+            <%= f.input :property_ids, as: :hidden %>
+            <% checked = false %>
+            <div class="left-property-view">
+              <div id="studio-rooms" class="property-list mr-lg-4">
+                <div class="table-responsive">
+                <table class="table">
+                  <thead>
+                  <tr>
+                    <th class="checkbox"></th>
+                    <th class="property"> Property </th>
+                    <th class="price">Price</th>
+                    <th class="ensuite">E</th>
+                    <th class="available">A</th>
+                  </tr>
+                  </thead>
+                  <tbody id="property_filter">
+                  <%= render 'properties' %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <span id="error-property" class="form-error"></span>
+            <br>
+          </div>
+        </div>
+
+        <div class="col-lg-6 col-sm-6">
+          <div class="form-group" id="view_property">
+            <h3 class="article-title d-md-none">Viewing</h3>
+            <label class="d-none d-md-block">Viewing</label>
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                <tr>
+                  <th class="checkbox"></th>
+                  <th class="property"> Property </th>
+                  <th class="price">Price</th>
+                  <th class="ensuite">E</th>
+                  <th class="available">A</th>
+                </tr>
+                </thead>
+                <tbody id="view_property_ul" class="select2-selection__rendered property_view_ul">
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+    <%= f.hidden_field :client_confirmation %>
+    <input type="hidden" name="form-update" value="true" >
+  </article>
+<% end %>
+
+<script>
+  $(document).ready(function() {
+    var viewing_type_selected = $('#event_viewing_type').val();
+    // $('.viewing-type-btn').css({"border-color": "#dddddd"});
+    if(viewing_type_selected != ''){
+      // no_of_btns = $('.viewing-type-btn').length
+      // for(i=0; i < no_of_btns; i++){
+      //   if($($('.viewing-type-btn')[i]).val() == viewing_type_selected){
+      //     $($('.viewing-type-btn')[i]).css("background-color", '#6C5CAE');
+      //   }
+      // }
+    }else{
+      $($('.viewing-type-btn')[0]).addClass('active');
+      $('#event_viewing_type').val(1);
+    }
+    $('.viewing-type-btn').click(function(){
+      $('.viewing-type-btn').removeClass('active');
+      $(this).toggleClass('active');
+      // $('.viewing-type-btn').css({"background-color": '#ffffff', "color":"white", "border-color": "#dddddd"});
+      var btn_selected = $(this).val();
+      $('#event_viewing_type').val(btn_selected);
+    });
+
+    if( $('#event_budget_per_week').val() !='' ) {
+      $('#event_budget_per_month').val((parseFloat($('#event_budget_per_week').val()) * 4.34524).toFixed(2));
+    }
+    $('#event_budget_per_week').on('change keyup', function(){
+     $('#event_budget_per_month').val((parseFloat($('#event_budget_per_week').val()) * 4.34524).toFixed(2));
+    });
+    if( $('#event_budget_per_month').val() !='' ) {
+      $('#event_budget_per_week').val((parseFloat($('#event_budget_per_month').val()) / 4.34524).toFixed(2));
+    }
+    $('#event_budget_per_month').on('change keyup', function(){
+      $('#event_budget_per_week').val((parseFloat($('#event_budget_per_month').val()) / 4.34524).toFixed(2));
+    });
+
+    var selected_date = $('#event_start_date').val();
+    if(!selected_date){
+      sdate = new Date
+    } else {
+      sdate = new Date(selected_date);
+    }
+    $('.datepicker').datepicker({minDate: sdate, format: 'MM dd, yyyy'});
+    $('.datepicker').datepicker('setDate', moment(sdate).format('MMMM DD, YYYY'));
+    if($('#end_date').val() == ''){
+      $('#end_date').val(moment(sdate).format('MMMM DD, YYYY'));
+    }
+    var month = (sdate.getMonth()+1);
+    if(/^\d$/.test(month)){
+      month = "0"+month;
+    }
+    var day = sdate.getDate();
+    if(/^\d$/.test(day)){
+      day = "0"+day;
+    }
+    var sdate = sdate.getFullYear()+'-'+month+'-'+day;
+    <%# $('#datepicker-form').datepicker({minDate: sdate}); %>
+    <%# $('#datepicker').datepicker({minDate: sdate}); %>
+
+    $('.modal-title-date').text('('+selected_date+')');
+    $('#datepicker-form').change(function(){
+      $('.modal-title-date').text($('#datepicker-form').find('input').val());
+    });
+    if($('.new_event').length>0){
+      $('.event_user_id').val($('#selected_agent').val());
+    }
+    $("#dropdown").select2({
+      theme: "bootstrap"
+    });
+
+    $("#dropdown_agent").select2({
+      theme: "bootstrap"
+    });
+    var event_start_hr = $('#event_start_hr').val();
+    var event_start_min = $('#event_start_min').val();
+    if(/^\d$/.test(event_start_hr)){
+      event_start_hr = "0"+event_start_hr;
+    }
+    if(/^\d$/.test(event_start_min)){
+      event_start_min = "0"+event_start_min;
+    }
+    var event_end_hr = $('#event_end_hr').val();
+    var event_end_min = $('#event_end_min').val();
+    if(/^\d$/.test(event_end_hr)){
+      event_end_hr = "0"+event_end_hr;
+    }
+    if(/^\d$/.test(event_end_min)){
+      event_end_min = "0"+event_end_min;
+    }
+    if(event_start_hr != "" && event_start_min != ""){
+      $('#event_start_4i').find('option[value='+event_start_hr+']').attr('selected','selected');
+      $('#event_start_5i').find('option[value='+event_start_min+']').attr('selected','selected');
+    }
+    if(event_end_hr != "" && event_end_min != ""){
+      $('#event_end_4i').find('option[value='+event_end_hr+']').attr('selected','selected');
+      $('#event_end_5i').find('option[value='+event_end_min+']').attr('selected','selected');
+    }
+
+    $('.room').click(function(){
+      var i = 0;
+      var selected_rooms = [];
+      var ten_plus = 'no';
+      for (i = 0; i < $('.bt-room').length; i++) {
+        if($('.bt-room')[i].value=='selected'){
+          // console.log($('.bt-room')[i].name);
+          selected_rooms.push($('.bt-room')[i].name);
+        }
+      }
+      if($('.bt-room-10').val()==='selected'){
+        ten_plus = 'yes';
+      }
+      var number = $(this).data('hr');
+      var event_property_ids = $('#event_property_ids').val().split(' ');
+      var year = $('.btn-property.btn-primary').text();
+      var search = $('#property_search').val();
+      $.ajax({
+        url: '/properties/get_properties',
+        type: 'GET',
+        data: {
+          selected_rooms: selected_rooms, ten_plus: ten_plus, selected_properties: event_property_ids, year: year, search: search
+        },
+        contentType: 'application/json',
+        dataType: 'json',
+        success: function(data) {
+          $('#property_filter').empty();
+          $.each(data, function(id, value) {
+            $('#property_filter').append(value);
+          });
+        }
+      });
+    });
+
+    block_out_diry($('#event_event_type').val())
+    // onchange end date of block out of my dairy
+    $('#event_event_type').on('change', function(){
+      block_out_diry($(this).val())
+    })
+
+    function block_out_diry(event_type){
+      if(event_type == "6"){
+        $('#block_out_end').show();
+        $('#block_out').hide();
+      } else {
+        $('#block_out_end').hide();
+        $('#block_out').show();
+      }
+    }
+  });
+  $('.fix-end-time').click(function(){
+
+    var text_value = $(this).data('hr');
+    var prv_time = $('#event_start_4i').val()+'.'+$('#event_start_5i').val();
+    var curnt_time = text_value;
+    var new_time = ((parseFloat(curnt_time)+parseFloat(prv_time)).toFixed(2)).split(".");
+    var new_hr_end = new_time[0];
+    var new_min_end = new_time[1];
+    if(new_min_end>=60){
+      new_min_end = parseInt(new_min_end)-60;
+      new_hr_end = parseFloat(new_hr_end) + 1;
+    }
+
+    if(/^\d$/.test(new_hr_end)){
+      new_hr_end = "0"+new_hr_end;
+    }
+    if(/^\d$/.test(new_min_end)){
+      new_min_end = "0"+new_min_end;
+    }
+    $('#event_end_4i').val(new_hr_end);
+    $('#event_end_5i').val(new_min_end);
+  });
+
+  $(".bt").click(function(){
+    $(".bt").removeClass('active');
+    $(this).addClass('active');
+  });
+  $(".bt-room").click(function(){
+    var selected = $(this).val();
+    $(".bt-room-10").val('');
+    if(selected==='selected'){
+      $(this).val('').removeClass('active');
+    }else{
+      $(this).val('selected').addClass('active');
+    }
+  });
+  $(".bt-room-10").click(function(){
+    $('.bt-room').val('');
+    var selected = $(this).val();
+    if(selected==='selected'){
+      $(this).val('').removeClass('active');
+    }else{
+      $(this).val('selected').addClass('active');
+    }
+  });
+
+  $(".bt-room-required").click(function(){
+    var selected = $(this).val();
+    $(".bt-room-required-10").css("background-color","#ffffff");
+    $(".bt-room-required-10").val("");
+    if(selected==='selected'){
+      $(this).val('').removeClass('active');
+    }else{
+      $(this).val('selected').addClass('active');
+    }
+  });
+  $(".bt-room-required-10").click(function(){
+    $('.bt-room-required').val('');
+    $('.bt-room-required').css("background-color", '#ffffff');
+    var selected = $(this).val();
+    if(selected==='selected'){
+      $(this).css("background-color", '#ffffff');
+      $(this).val('');
+    }else{
+      $(this).css("background-color", '#6C5CAE');
+      $(this).val('selected');
+    }
+  });
+
+  $('#dropdown').on('change', function(){
+    var drop_down_data = $('#dropdown').select2('data');
+    $('#view_property_ul').find('tr').remove();
+    $.each(drop_down_data, function( index, value ) {
+      $('#view_property_ul').append('<tr class="select2-selection__choice" title="'+value.text+'" style="cursor: pointer;">'+value.text+' <a class="remove_btn" href="javascript:void(0)"> ×</a></li>');
+    });
+    $('.remove_btn').on('click', function(){
+      var title = $(this).parent().attr('title');
+      $(this).parent().remove();
+      var i = 0;
+      for (i = 0; i < $('.select2-selection__rendered').find('li').length; i++) {
+        if($('.select2-selection__rendered').find('li')[i].title==title){
+          $('.select2-selection__rendered').find('li[title="'+title+'"]').find('span').trigger('click');
+        }
+      }
+    });
+    $(function() {
+      $('#view_property_ul').railsSortable();
+    });
+  });
+</script>
+
+<script>
+  function validate(){
+    valid = true;
+
+    var selected_date = new Date($('#datepicker-form').find('input').val()+ ' ' +$('#event_start_4i').val()+':'+$('#event_start_5i').val()+':00');
+    var today = new Date();
+    //Remove this to get current time, leave this to get time start of day
+    // today.setHours(0);
+    // today.setMinutes(0);
+    // today.setSeconds(0);
+    var currentDateTimestamp = today.getTime();
+    var selectedDateTimestamp = selected_date.getTime();
+
+    //Check if the timestamp is within 24 hours, 24 hours = 60 seconds * 60 minutes * 24 hours * 1000 milliseconds
+    if (Math.abs(currentDateTimestamp - selectedDateTimestamp) <= 60 * 60 * 24 * 1000) {
+      //Within 24 hours
+      if (confirm('Your appointment time is less than 24hours, confirm that you have already spoken to the client?')) {
+        if ( $('#event_start_4i').val() < "07" ) {
+          $('#error-text-start').text('*You can only select time duration between business hours (07:00AM to 07:00PM)');
+          valid = false;
+        }
+        else if ( $('#event_end_4i').val() > "19" ) {
+          $('#error-text-end').text('*You can only select time duration between business hours (07:00AM to 07:00PM)');
+          valid = false;
+        }else{
+          $('.submit').hide();
+          $('#event_client_confirmation').val(true);
+          $('<%= image_tag('loader.gif', class: 'loader') %>').insertBefore($('.submit'));
+        }
+      } else {
+        valid = false;
+      }
+    }
+    else{
+      $('.submit').hide();
+      $('<%= image_tag('loader.gif', class: 'loader') %>').insertBefore($('.submit'));
+    }
+    return valid;
+  }
+
+  $(document).ready(function(){
+    $(document.body).on('click', '.css-label', function(){
+      var property_id = $(this).prev('input').data('property-id');
+      var old_event_property_ids = $('#event_property_ids').val();
+
+      $('#event_property_ids').val((old_event_property_ids+' '+property_id).replace(/^ /, ''));
+      if($(this).prev('input').hasClass('minus')){
+        $(this).prev('input').removeClass('minus');
+        $(this).prev('input').addClass('plus');
+        $(this).prev('input').prop('checked', true);
+        var div = $(this).parent().parent().html();
+        $('#view_property_ul').append('<tr id="property_added_list-'+property_id+'" class="remove-check">'+div+'</tr>');
+        $("#property_added_list-"+property_id).find('.checkbox').find('#property_id_').hide();
+        $("#property_added_list-"+property_id).find('label').replaceWith('<label for="a" class="remove-property-label" data-property-id='+property_id+' style="margin-left: 4px;"><span class="fa fa-trash"></span></label>');
+      }else{
+        $(this).prev('input').removeClass('plus');
+        $(this).prev('input').addClass('minus');
+        $(this).prev('input').prop('checked', false);
+        $('#view_property_ul').find("tr#property_added_list-"+property_id).remove();
+        var y = old_event_property_ids.split(" ")
+        var split_output = y.filter( ( el ) => property_id != el );
+        $('#event_property_ids').val(split_output.join(" "));
+      }
+
+    })
+    var checked_properties = $('.properties_check:checkbox:checked');
+    for(i=0; i < checked_properties.length; i++){
+      var property_id = $($('.properties_check:checkbox:checked')[i]).parent().find('input').data('property-id');
+      var div = $($('.properties_check:checkbox:checked')[i]).parent().parent().html();
+      $('#view_property_ul').append('<tr id="property_added_list-'+property_id+'" class="remove-check">'+div+'</tr>');
+      $("#property_added_list-"+property_id).find('.checkbox').find('#property_id_').hide();
+      $("#property_added_list-"+property_id).find('label').replaceWith('<label for="a" class="remove-property-label" data-property-id='+property_id+' style="margin-left: 4px;"><span class="fa fa-trash"></span></label>');
+    }
+
+    $('.btn-property').on('click', function(){
+      var event_property_ids = $('#event_property_ids').val().split(' ');
+      var i = 0;
+      var selected_rooms = [];
+      var ten_plus = 'no';
+      for (i = 0; i < $('.bt-room').length; i++) {
+        if($('.bt-room')[i].value=='selected'){
+          selected_rooms.push($('.bt-room')[i].name);
+        }
+      }
+      if($('.bt-room-10').val()==='selected'){
+        ten_plus = 'yes';
+      }
+      $.get('/properties/get_available_properties.js', { event_id: $(this).data('event_id'), year: $(this).data('year'), selected_rooms: selected_rooms, ten_plus: ten_plus, selected_properties: event_property_ids, search: $('#property_search').val()})
+    })
+
+    $('#property_search').on('change', function(){
+      var event_property_ids = $('#event_property_ids').val().split(' ');
+      var i = 0;
+      var selected_rooms = [];
+      var ten_plus = 'no';
+      for (i = 0; i < $('.bt-room').length; i++) {
+        if($('.bt-room')[i].value=='selected'){
+          selected_rooms.push($('.bt-room')[i].name);
+        }
+      }
+      if($('.bt-room-10').val()==='selected'){
+        ten_plus = 'yes';
+      }
+      $.get('/properties/get_available_properties.js', { event_id: $('.btn-property.btn-primary').data('event_id'), year: $('.btn-property.btn-primary').data('year'), selected_rooms: selected_rooms, ten_plus: ten_plus, selected_properties: event_property_ids, search: $(this).val() })
+    })
+
+    $(document.body).on('click', '.remove-property-label', function(){
+      var remove_property_id = $(this).data('property-id');
+      var old_event_property_ids = $('#event_property_ids').val();
+      var available_rooms = parseInt($(this).find('div.available').text());
+      $('.properties_check').each(function() {
+        if( remove_property_id == $(this).data('property-id')){
+          $(this).removeClass('plus');
+          $(this).addClass('minus');
+          $(this).prop('checked', false);
+        }
+      });
+
+      var y = old_event_property_ids.split(" ")
+      var split_output = y.filter( ( el ) => remove_property_id != el );
+      $('#event_property_ids').val(split_output.join(" "));
+
+      $('#view_property_ul').find("tr#property_added_list-"+remove_property_id).remove();
+      var y = old_event_property_ids.split(" ")
+      var removeProperty = remove_property_id;
+
+      y = jQuery.grep(y, function(value) {
+        return value != removeProperty;
+      });
+    });
+  });
+</script>
+

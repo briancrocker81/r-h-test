@@ -1,0 +1,73 @@
+<% content_for :title, 'Manage Automation Mail' %>
+<p id="notice"><%= notice %></p>
+
+<div id="title-bar">
+  <h1>Manage Automation Mail</h1>
+  <div class="actions d-flex btn-group justify-content-end push">
+    <%= link_to 'Back', admin_path, class: 'ml-2 btn btn-secondary' %>
+    <%= link_to "Add New", open_automation_mail_admin_path(tag: 'new'), class: "btn btn-primary", remote: "true" %>
+  </div>
+</div>
+<article>
+  <div id="automation_mail">
+    <div class="col-md-12">
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Mail Type</th>
+              <th>Mail Methods</th>
+              <th>Automation</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <% @manage_automation_mails.each do |manage_automation_mail| %>
+              <tr>
+                <td><%= manage_automation_mail.mail_type %></td>
+                <td><%= manage_automation_mail.mail_methods.join(', ') %></td>
+                <td>
+                  <%= check_box_tag :automation, manage_automation_mail.automation, manage_automation_mail.automation, data: {toggle: 'toggle', onstyle: 'success', confirm: 'Are you confirm?', id: manage_automation_mail.id}, class: 'automation' %>
+                </td>
+                <td>
+                  <%= link_to open_automation_mail_admin_path(tag: 'edit', id: manage_automation_mail.id ), remote: true do %>
+                    <i class="fas fa-edit"></i>
+                  <% end %>
+                  <%= link_to delete_automation_mail_admin_path(id: manage_automation_mail.id), 'data-confirm': 'Are you sure?', method: :delete do %>
+                    <i class="fa fa-trash"></i>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div id="automation">
+  </div>
+</article>
+
+<%= render 'shared/common_modal' %>
+
+<script type="text/javascript">
+  $(document).on('ready turbolinks:load', function() {
+    $('.automation').bootstrapToggle();
+  });
+  $(function() {
+    $('.toggle-group').click(function() {
+      var $checkbox = $(this).prev('.automation')
+      console.log($checkbox.prop('checked'));
+      if (confirm("Are you sure you want to do this?")) {
+        $.get('/admin/update_manage_automation?id=' + $checkbox.data('id') +'&automation=' + !$checkbox.prop('checked'))
+      } else {
+        if(!$checkbox.prop('checked')){
+          $checkbox.bootstrapToggle('on');
+        } else {
+          $checkbox.bootstrapToggle('off');
+        }
+      }
+    })
+  })
+</script>

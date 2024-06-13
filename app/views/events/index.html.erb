@@ -1,0 +1,38 @@
+<% content_for :title, 'Events' %>
+<p id="notice"><%= notice %></p>
+
+<div id="title-bar" class="sticky-top">
+  <h1><%= t('.title') %></h1>
+  <%= link_to t('.new'), new_event_path, class: 'btn btn-primary push' %>
+</div>
+
+<%= puts @filterrific.inspect %>
+<%= form_for_filterrific @filterrific, html: {class: 'filterrific-form'} do |f| %>
+
+  <nav class="navbar navbar-expand-lg navbar-light">
+    <h3 class="d-block d-lg-none">Filters</h3>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fa fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <div class="row w-100 m-0">
+        <div class="col-md-6 col-lg-3 option">
+          <%= f.text_field(
+                :search_query,
+                class: 'filterrific-periodically-observed form-control',
+                placeholder: 'Search...'
+              ) %>
+        </div>
+        <div class="col-md-6 col-lg-3 option">
+          <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by], {}, {class: 'form-control'}) %>
+        </div>
+        <div class="col text-right reset-filter">
+          <%= link_to 'Reset', reset_filterrific_url, class: 'btn', id: 'reset-filter' %>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+<% end %>
+
+<%= render(partial: 'list', locals: { events: @events }) %>

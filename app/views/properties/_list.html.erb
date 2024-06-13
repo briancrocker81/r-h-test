@@ -1,0 +1,69 @@
+<div id="filterrific_results">
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Property</th>
+          <th>Postcode</th>
+          <th><i class="fas fa-bed" title="Bedrooms"></i></th>
+          <th><i class="fas fa-bath" title="Bathrooms"></i></th>
+          <th>Type</th>
+          <th>Style</th>
+          <th>Furnished</th>
+<!--          <th>Availability</th>-->
+          <th>Marketed Website</th>
+          <th>Marketed 3rd party</th>
+          <th>Rooms</th>
+<!--          <th>#</th>-->
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @properties.each do |property| %>
+          <tr class="<%= property_available(property, "class") %>">
+            <td><%= link_to property.address_line_2? ? property.property_name + ', ' + property.address_line_2 : property.property_name, property_path(property) %></td>
+            <td><%= property.postcode %></td>
+            <td class="small"><%= property.number_of_bedrooms %></td>
+            <td class="small"><%= property.number_of_bathrooms %></td>
+            <td><%= property.rental_type.capitalize %></td>
+            <td><%= property.style %></td>
+            <td><%= furnished(property.furnished) rescue "" %></td>
+<!--            <td><%#= property_available(property).html_safe %></td>-->
+            <td><%= yes_no(property.property_listing_locations.present?) %></td>
+            <td><%= yes_no(property.list_on_3rd_party_websites) %></td>
+            <td>
+              <%= link_to (fa_icon 'home'), property_rooms_path(property), title: 'List Rooms', data: { turbolinks: false } %>
+            </td>
+<!--            <td>-->
+              <%# if property.rooms.count >= 1 %>
+<!--                <a class="property-angle" href="javscript:void(0)" data-toggle="collapse" data-target="#property-room-detail-<%#= property.id %>" aria-expanded="false" aria-controls="property-room-detail-<%#= property.id %>">-->
+<!--                </a>-->
+              <%# end %>
+<!--            </td>-->
+          </tr>
+
+          <%# if property.rooms.count >= 1 %>
+            <%#= render 'listing_room_data', property: property %>
+          <%# end %>
+
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <div class="pagy-container">
+    <%= pagy_bootstrap_nav(@pagy).html_safe %>
+  </div>
+</div>
+<div class="modal fade" id="set-tenancy-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"></div>
+<style type="text/css">
+
+</style>
+<script type="text/javascript">
+  $('.property-collapse').on('show.bs.collapse', function () {
+    $(this).siblings('.property-angle').addClass('active');
+  });
+
+  $('.property-collapse').on('hide.bs.collapse', function () {
+    $(this).siblings('.property-angle').removeClass('active');
+  });
+</script>

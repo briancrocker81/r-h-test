@@ -1,0 +1,6 @@
+<% unless @modal %>
+  window.location.replace("<%= new_event_url%>");
+<% else %>
+  $('#remote_container').html('<%= j render "new" %>');
+  $('#new_event').modal('show');
+<% end %>

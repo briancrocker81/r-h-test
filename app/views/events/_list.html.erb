@@ -1,0 +1,32 @@
+<div id="filterrific_results">
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>With</th>
+          <th>Date</th>
+          <th>Time</th>
+          <th colspan="3"></th>
+        </tr>
+      </thead>
+
+      <tbody>
+      <% @events.each do |event| %>
+        <tr>
+          <td><%= link_to event_name(event), event %></td>
+          <td><%= event.client_name %></td>
+          <td><%= event.end.strftime('%d-%b-%y') %></td>
+          <td><%= event_time(event) %></td>
+          <td><%= link_to (fa_icon 'search'), event %></td>
+          <td><%= link_to (fa_icon 'edit'), edit_event_path(event) %></td>
+          <td><%= link_to (fa_icon 'trash'), event, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+    <div class="pagy-container">
+      <%= pagy_bootstrap_nav(@pagy).html_safe %>
+    </div>
+  </div>
+</div>

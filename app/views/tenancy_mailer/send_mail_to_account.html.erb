@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <p>Hello,</p>
+
+    <p></p>
+    <p>Tenancy <%= @tenancy.first_name %> booking/dashboard process of Room <b><%= @tenancy.room.number %>, <%= @tenancy.room.property.property_name %></b> has been completed by Guarantor <b><%= @guarantor.guarantor_name ? @guarantor.guarantor_name : @guarantor&.guarantor_email %></b>. </p>
+
+    <p>Let us know if you have any questions.</p>
+    <p>
+      <b> Thanks </b><br>
+      Team <br>
+      CityLets
+    </p>
+  </body>
+</html>

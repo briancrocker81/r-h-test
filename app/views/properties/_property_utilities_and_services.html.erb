@@ -1,0 +1,22 @@
+<div class="table-responsive">
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th>Service / Utility</th>
+      <th>Included</th>
+      <th>Contribution</th>
+      <th>Frequency</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @property.property_utilities.each do |utility| %>
+      <tr>
+        <td><%= utility.utility_name %></td>
+        <td><%= yes_no(utility.included) %></td>
+        <td><%= utility.landlord_contribution? ? uk_price(utility.landlord_contribution) : '' %></td>
+        <td><%= utility.frequency %></td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>

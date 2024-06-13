@@ -1,0 +1,15 @@
+<%= form_tag tenancy_staff_conversations_path(tenancy_id: tenancy.id), :method => :post, html: {multipart: true} do %>
+  <div class="form-group">
+    <label>Subject: </label>
+    <%= text_field_tag "subject",'', class: "form-control", placeholder: "Subject", required: true %>
+  </div>
+
+  <div class="form-group">
+    <label>Content: </label>
+    <%= text_area_tag "body", nil,"cols" => 50, "rows" => 6, class: "form-control", placeholder: "Type here your message.....", required: true %>
+  </div>
+
+  <%= button_tag(type: "submit", class: "btn btn-success") do %>
+    <%= fa_icon 'plus'%> &nbsp; Submit
+  <% end %>
+<% end %>

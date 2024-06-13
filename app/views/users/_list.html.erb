@@ -1,0 +1,39 @@
+<div id="filterrific_results">
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>Name</th>
+        <th>Mobile</th>
+        <th>Email</th>
+        <th>Admin</th>
+        <th>Role</th>
+        <th colspan="3">Action</th>
+      </tr>
+      </thead>
+
+      <tbody>
+        <% @users.each do |user| %>
+          <tr>
+            <td><%= link_to user.full_name, user_path(user) %></td>
+            <td><%= user.mobile %></td>
+            <td><%= mail_to user.email %></td>
+            <td><%= user.is_admin? ? '<span class="badge badge-success">Yes</span>'.html_safe : '<span class="badge badge-warning">No</span>'.html_safe %></td>
+            <td><%= user.role %></td>
+            <td>
+              <%= link_to edit_user_path(user) do %>
+                <i class="fa fa-edit"></i>
+              <% end %> | 
+              <%= link_to user_path(user), :method => :delete, :data => { confirm: "Are you sure?"} do %>
+                <i class="fa fa-trash"></i>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <div class="pagy-container">
+    <%= pagy_bootstrap_nav(@pagy).html_safe %>
+  </div>
+</div>

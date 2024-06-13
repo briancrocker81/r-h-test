@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  utility_name: MyString
+  included: false
+  landlord_contribution: 9.99
+  frequency: MyString
+  property: one
+
+two:
+  utility_name: MyString
+  included: false
+  landlord_contribution: 9.99
+  frequency: MyString
+  property: two

@@ -1,0 +1,27 @@
+<%= simple_form_for @criminal_record, :url => tenancy_criminal_record_path(tenancy_id: @criminal_record.tenancy_id, id: @criminal_record.id), :method => :put do |f| %>
+  <div class="modal-body" style="min-height: 55vh !important;">
+    <div class="form-group">
+      <div class="row">
+        <div class="col-md-6">
+          <%= f.input :conviction_status, class: "form-control" %>
+        </div>
+        <div class="col-md-6">
+          <%= f.input :offence, class: "form-control" %>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <%= f.input :date, class: "form-control" %>
+        </div>
+        <div class="col-md-6">
+          <%= f.input :judgement, class: "form-control" %>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-primary submit-payment-item-form">Save changes</button>
+    <button type="reset" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Close</button>
+  </div>
+<% end %>

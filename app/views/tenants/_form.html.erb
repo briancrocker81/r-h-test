@@ -1,0 +1,99 @@
+
+<%= simple_form_for(@tenant) do |f| %>
+  <%= f.error_notification %>
+  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-lg-6">
+        <%= f.input :first_name %>
+      </div>
+      <div class="col-lg-6">
+        <%= f.input :surname %>
+      </div>
+      <div class="col-lg-6 form-inputs">
+        <%= f.label :property_id %>
+        <span class="form-group">
+          <%= f.select :property_id, options_for_select(@properties, @tenant.property_id), {include_blank: "Select"}, class: "form-control form-inputs" %>
+        </span>
+        <span class="rental-type-msg"></span>
+        <span class="rental-type"></span>
+      </div>
+      <div class="col-lg-6 form-inputs">
+        <%= f.label :room_id %>
+        <span class="form-group">
+          <%= f.select :room_id, options_for_select('',''), {include_blank: "Select property first"}, class: "form-inputs form-control", required: true %>
+          <%#= f.select :room_id, options_for_select(@rooms, @tenant.room_id), {include_blank: "Select"}, class: "form-inputs form-control", required: true %>
+        </span>
+        <span class="error-no-rooms"></span>
+      </div>
+    </div>
+    <%= f.input :dob, start_year: 1950, end_year: Date.today.year - 18, prompt: { day: 'Select day', month: 'Select month', year: 'Select year' } %>
+    <%= f.input :mobile_number %>
+    <%= f.input :email %>
+    <%= f.input :nationality %>
+
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#student" role="tab" aria-controls="student" aria-selected="true">Student</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#graduate" role="tab" aria-controls="graduate" aria-selected="false">Graduate</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Contact</a>
+      </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+      <div class="tab-pane fade show active" id="student" role="tabpanel" aria-labelledby="student-tab">
+        <%#= f.simple_fields_for :student_tenants do |st| %>
+          <%#= st.input :studying_at %>
+        <%# end %>
+        <%#= render 'student', locals: {f: f}  %>
+      </div>
+      <div class="tab-pane fade" id="graduate" role="tabpanel" aria-labelledby="graduate-tab">...</div>
+      <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
+    </div>
+  </div>
+
+  <div class="actions d-flex btn-group justify-content-end" style="margin-top: 30px;">
+    <%= link_to 'Back', tenants_path, class: 'btn btn-secondary' %>
+    <%= f.submit t('admin.save'), class: 'btn btn-primary' %>
+  </div>
+<% end %>
+
+<script type="text/javascript">
+
+  $(document).on("change", "#tenant_property_id", function(){
+    var property_id = $(this).val();
+    $.ajax({
+        url: '/properties/'+property_id+'/get_rooms',
+        dataType: 'json',
+        success: function (data) {
+          $('#tenant_room_id').empty();
+          $('.error-no-rooms').text('');
+          $('.rental-type-msg').text('');
+          if (data['rental_type']=='room'){
+            if(data['data'].length == 0){
+              $('#tenant_room_id').append('<option> No Rooms </option>');
+              $('.error-no-rooms').text('No Rooms added/assigned to this property');
+              $('.rental-type').text("Rental type:" +data["rental_type"]);
+            }else{
+              $('#tenant_room_id').prop('disabled', false);
+              $('#tenant_room_id').append('<option> Select </option>');
+              $(data["data"]).each(function() {
+                $("#tenant_room_id").append('<option value=' + this[1] + '>' + this[0] + '</option>');
+              });
+              $('.rental-type').text("Rental type: " +data["rental_type"]);
+            }
+          }else{
+            $('#tenant_room_id').prop('disabled', true);
+            $('.rental-type-msg').text('This property is listed rental type as home!');
+            $('.rental-type').text("Rental type: " +data["rental_type"]);
+          }
+        }
+    })
+  });
+
+
+</script>

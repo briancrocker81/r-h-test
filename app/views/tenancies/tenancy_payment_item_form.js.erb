@@ -1,0 +1,9 @@
+$("#tenancy-payment-item-modal").html("<%= j(render 'tenancy_payment_item_form')%>");
+$("#tenancy-payment-item-modal").modal("show");
+
+$('.submit-payment-item-form').on('click', function(){
+  // $("#tenancy-payment-item-modal").modal("hide");
+})
+$('.reset-payment-item-form').on('click', function(){
+  $("#tenancy-payment-item-modal").modal("hide");
+})

@@ -1,0 +1,224 @@
+<% content_for :title, "Landlord - #{@landlord.contact_name}" %>
+<p id="notice"><%= notice %></p>
+
+<div id="title-bar" class="sticky-top">
+  <h1><%= @landlord.company_name %> <%= @landlord.contact_name %></h1>
+  <div class="actions d-flex btn-group justify-content-end push">
+    <%= link_to 'Back', landlords_path, class: 'btn btn-secondary' %>
+    <%= link_to 'Edit', edit_landlord_path(@landlord), class: 'btn btn-success' %>
+  </div>
+</div>
+
+<article>
+  <section>
+    <h3 class="article-title d-flex">Key Figures<span class="ml-auto"><%= @year %></span></h3>
+    <div class="row">
+      <div class="col-6 col-lg-3">
+        <h3>Properties Let:</h3>
+        <div class="key-section">
+          <%= @property_let != nil ? @property_let.to_s + '%' : 'no properties' %>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3">
+        <h3>Number Let/Available:</h3>
+        <div class="key-section">
+          <%= @total_let_tenancies %>/<%= @landlord_rooms.count %>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3">
+        <h3>Income:</h3>
+        <div class="key-section">
+          £<%= number_with_delimiter(sprintf("%.2f",@income), delimiter: ',') %>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3">
+        <h3>Total Rooms:</h3>
+        <div class="key-section">
+          <%= @landlord.rooms.count %>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h3 class="article-title">Partnership Details</h3>
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>Partner type:</th>
+        <th>Rate / Fee</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td><%= @landlord.partnership_format %></td>
+        <td><%= rate_or_fee @landlord %></td>
+      </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h3 class="article-title">Conversations</h3>
+    <div class="actions d-flex btn-group justify-content-end push">
+      <%= link_to new_landlord_staff_conversation_path(landlord_id: @landlord.id), :data => {:turbolinks => false}, class: 'btn small btn-success mb-4', :remote => true, title: 'Message', style: 'min-width: 0px !important;' do %>
+        <%= fa_icon 'plus'%> Add Note
+      <% end %>
+    </div>
+    <%= render(partial: 'landlord_staff_conversations/conversation_list', locals: { conversations: @landlord.landlord_staff_conversations } ) %>
+  </section>
+
+  <section>
+    <h3 class="article-title">Partner Details</h3>
+    <div class="row">
+      <div class="col-md-6">
+        <h3>Contact details</h3>
+        <table class="table table-striped">
+          <tbody>
+          <tr>
+            <td>Contact name:</td>
+            <td><%= @landlord.contact_name %></td>
+          </tr>
+          <% if @landlord.company_name.present? %>
+            <tr>
+              <td>Company name:</td>
+              <td><%= @landlord.company_name %></td>
+            </tr>
+          <% end %>
+          <tr>
+            <td>Contact number:</td>
+            <td><%= tel_to(@landlord.contact_number) %></td>
+          </tr>
+          <tr>
+            <td>Email:</td>
+            <td><%= mail_to @landlord.email %></td>
+          </tr>
+          <tr>
+            <td>Address:</td>
+            <td><%= @landlord.address %></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-12 d-md-none">
+        <hr>
+      </div>
+      <div class="col-md-6">
+        <h3>Alternate contact details</h3>
+        <table class="table table-striped">
+          <tbody>
+          <tr>
+            <td>Alternate contact name</td>
+            <td><%= @landlord.alternate_name %></td>
+          </tr>
+          <tr>
+            <td>Alternate contact number</td>
+            <td><%= @landlord.alternate_number ? tel_to(@landlord.alternate_number) : '' %></td>
+          </tr>
+          <tr>
+            <td>Alternate contact email</td>
+            <td><%= mail_to @landlord.alternate_email %></td>
+          </tr>
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+  </section>
+
+
+
+  <section>
+    <h3 class="article-title">Properties:</h3>
+    <div id="properties-row" class="row">
+      <div class="">
+      </div>
+      <div class="ml-auto mb-4">
+        <%= link_to new_property_path(landlord_id: @landlord.id), data: {turbolinks: false}, class: 'btn btn-success small' do %>
+          <%= fa_icon 'plus'%> Add Property
+        <% end %>
+      </div>
+    </div>
+
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>Property name</th>
+        <th>Postcode</th>
+        <th>Bedrooms</th>
+        <th>Type</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @properties.each do |property| %>
+        <tr>
+          <td><%= link_to property.property_name, property %></td>
+          <td><%= property.postcode %></td>
+          <td><%= property.number_of_bedrooms %></td>
+          <td><%= property.property_type.reject(&:blank?).join(", ") %></td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h3 class="article-title">Landlord Booking Report</h3>
+    <div class="row mb-3">
+      <div class="actions d-flex col-xs-12 col-lg-auto mb-3 mb-lg-0">
+        <% business_years.each do |year| %>
+          <%= link_to year, filter_booking_report_landlord_path(id: @landlord.id, year: year), class: "badge badge-#{year == @year ? 'primary' : 'secondary'} mr-2 btn-filter-statement col-xs-4 col-lg-auto justify-content-center", id: "btn-booking-#{year.gsub('/', '-')}", remote: true %>
+        <% end %>
+
+      </div>
+      <div class="col-xs-12 col-lg-auto ml-lg-auto">
+        <span class="d-block d-lg-inline mb-3 mb-lg-0">Send Landlord Report: <%= yes_no(@landlord.send_report) %></span>
+        <span class="d-none d-lg-inline">| </span>
+        <span class="d-flex d-lg-inline">
+          <%= link_to landlord_booking_report_landlord_path(landlord_id: @landlord.id), class: 'btn btn-info small mr-3 col-xs-6 col-lg-auto', id: 'generate-pdf', target: "_blank" do %>
+            <i class="fas fa-file-pdf"></i> Generate Pdf
+          <% end %>
+          <%= link_to send_booking_report_landlord_path(landlord_id: @landlord.id), class: 'btn btn-info small col-xs-6 col-lg-auto' do %>
+            <i class="fa fa-envelope"></i> Send
+          <% end %>
+        </span>
+      </div>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Property</th>
+            <th>Room</th>
+            <th>Monthly Rent</th>
+<!--            <th>Tenancy</th>-->
+            <th>Guarantor</th>
+            <th>Start</th>
+            <th>Expires</th>
+            <th>Weeks</th>
+            <th>Signed Tenancy</th>
+            <th>Documents</th>
+          </tr>
+        </thead>
+        <tbody id="landlord_booking_report">
+          <%= render "landlord_booking_reports" %>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</article>
+
+<div class="modal fade" id="landlord-staff-conversation-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"></div>
+<div class="modal fade" id="doc-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Document: <span class="doc-name"></span></h3>
+        <button type="button" class="close" data-dismiss="modal" style="font-size: 3.5rem !important;"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+      </div>
+      <div class="modal-body">
+        <object data="" type="application/pdf" width="100%" height="520px" class="doc-preview"></object>
+      </div>
+    </div>
+  </div>
+</div>

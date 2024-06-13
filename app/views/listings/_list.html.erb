@@ -1,0 +1,123 @@
+<div id="filterrific_results">
+  <div class="table-responsive">
+    <table class="table table-striped table-hover list" aria-describedby="listings-table">
+      <thead>
+        <tr>
+          <th><input type="checkbox" id="selectAll" ></th>
+          <th>No.</th>
+          <th>Property</th>
+          <th>Room</th>
+          <th>List <br>Price</th>
+          <th>Booked <br>Price</th>
+          <th class="tenancy-header">Type</th>
+          <th class="tenancy-header">Start</th>
+          <th class="tenancy-header">End</th>
+          <th class="tennancy-header list_name">Name</th>
+          <th class="tenancy-header">Mobile</th>
+          <th class="tenancy-header list_email">Email</th>
+          <th class="tenancy-header t_icon"><i class="fas fa-edit" title="Booking form completed"></i></th>
+          <th class="tenancy-header t_icon"><i class="fas fa-signature" title="Signed Tenancy"></i></th>
+          <th class="tenancy-header t_icon"><i class="fas fa-user-lock" title="Guarantor"></i></th>
+          <th title="Advanced Rent">AvR</th>
+          <th title="Deposit Paid">DPT</th>
+          <th></th>
+        </tr>
+      </thead>
+      <% sort_year = (@filterrific.room_availability.present? && @filterrific.room_availability.search_by_year_range != "") ? @filterrific.room_availability.search_by_year_range : @current_year  %>
+      <% status = '' %>
+      <% if @filterrific.room_availability.present? %>
+        <% status = 0  if @filterrific.room_availability.room_available == '1' %>
+        <% status = 1 if @filterrific.room_availability.room_booked == '1' %>
+        <% status = 2 if @filterrific.room_availability.room_complete == '1' %>
+      <% end %>
+      <tbody>
+        <% @rooms.uniq.each do |room| %>
+          <% tenancies = get_tenancies_btwn_years(room, sort_year, status) %>
+          <%- if tenancies[:tenant_present] -%>
+            <%- tenancies[:tenancies].each_with_index do |tenancy, index| -%>
+              <tr class="<%= tenancy.booking_status %>">
+                <%- if index == 0 -%>
+                  <td class="small"><%= check_box_tag "room_ids[]", room.id, false, class: 'selectable' %></td>
+                  <td class="small"><%= link_to room.property.number, property_path(room.property) %></td>
+                  <td><%= link_to room.property.street, property_path(room.property) %></td>
+                  <td class="small"><%= link_to room_display_type(room.number), room_path(room) %></td>
+                <%- else -%>
+                  <%- 4.times do -%>
+                    <td></td>
+                  <%- end -%>
+                <%- end -%>
+                <td>£<%= room.list_price %></td>
+                <td><%= tenancy.payment_amount? ? "£#{tenancy.payment_amount}" : ''  %></td>
+                <td><%= tenant_type_icon(tenancy.tenancy_is)&.html_safe %></td>
+                <td class="start-date"><%= l(tenancy.tenancy_start, format: :nice, default: '') %></td>
+                <td class="end-date"><%= l(tenancy.tenancy_end, format: :nice, default: '') %></td>
+                <td class="list_name">
+                  <%= link_to tenancy_path(tenancy) do %>
+                    <%= tenancy.tenant_name.truncate(15, omission: '...') %>
+                    <% if tenancy.additional_tenants.present? %>
+                      <br>
+                      <% tenancy.additional_tenants.each do |additional_tenant| %>
+                        <%= "#{additional_tenant.first_name} #{additional_tenant.surname}".truncate(15, omission: '...') %>
+                      <% end %>
+                    <% end %>
+                  <% end %>
+                </td>
+                <td><%= tel_to(tenancy.mobile) %></td>
+                <td class="list_email"><%= mail_to tenancy.email, tenancy.email.truncate(22, omission: '...') %></td>
+                <td class="t_icon"><%= yes_no(tenancy.form_submitted) %></td>
+                <td class="t_icon"><%= yes_no(tenancy.signed_tenancy_agreement) %></td>
+                <td class="t_icon">
+                  <% if tenancy.is_guarantor_available == true %>
+                    <%= yes_no(tenancy&.guarantor&.complete_guarantor_agreement) %>
+                  <% else %>
+                    <span class="badge badge-danger">N/A</span>
+                  <% end %>
+                </td>
+                <td class="t_icon">
+                  <% if tenancy.tenancy_is == 0 %>
+                    <%= yes_no(tenancy.tenancy_payment_items.where(item: 'AvR').where.not(date_paid: nil).where('amount_paid >= amount_due').present?) %>
+                  <% else %>
+                    <span class="badge badge-danger">N/A</span>
+                  <% end %>
+                </td>
+                <td class="t_icon">
+                  <%= yes_no(tenancy.deposit_paid) %>
+                </td>
+                <%- if index == 0 -%>
+                  <% available = available_for_the_year(sort_year, room) %>
+                  <td>
+                    <% if available %>
+                      <%= link_to 'Book', set_tenancy_form_path(room.property.id, room_id: room.id), :data => {:turbolinks => false}, class: 'btn small btn-success', :remote => true %>
+                    <% end %>
+                  </td>
+                <%- else -%>
+                  <td></td>
+                <%- end -%>
+              </tr>
+            <%- end -%>
+          <%- else -%>
+            <tr>
+              <td><%= check_box_tag "room_ids[]", room.id, false, class: 'selectable' %></td>
+              <td><%= link_to room.property.number, property_path(room.property) %></td>
+              <td><%= link_to room.property.street, property_path(room.property) %></td>
+              <td><%= link_to room_display_type(room.number), room_path(room) %></td>
+              <td>£<%= room.list_price %></td>
+              <td></td>
+              <td colspan="11"></td>
+              <td>
+                <% available = available_for_the_year(sort_year, room) %>
+                <%- if available %>
+                  <%= link_to 'Book', set_tenancy_form_path(room.property.id, room_id: room.id), :data => {:turbolinks => false}, class: 'btn small btn-success', :remote => true %>
+                <%- end -%>
+              </td>
+            </tr>
+          <%- end -%>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <div class="pagy-container">
+    <%= pagy_bootstrap_nav(@pagy).html_safe %>
+  </div>
+</div>
+<div class="modal fade" id="set-tenancy-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"></div>

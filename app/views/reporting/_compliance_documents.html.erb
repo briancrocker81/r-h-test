@@ -1,0 +1,62 @@
+<div class="table-responsive">
+  <table class="table table-striped w-100">
+    <thead>
+    <tr>
+      <th>Property</th>
+      <th>Landord Name</th>
+      <th>Doc</th>
+      <th>Expiry Date</th>
+    </tr>
+    </thead>
+    <tbody>
+      <% if doc_for == "next_three_months_expired" %>
+        <% @all_compliance_documents = @next_three_months_expired_compliance_documents %>
+      <% elsif doc_for == "expired" %>
+        <% @all_compliance_documents = @expired_compliance_documents %>
+      <% elsif doc_for == 'next_month_expired' %>
+        <% @all_compliance_documents = @next_month_expired_compliance_documents %>
+      <% else %>
+        <% @all_compliance_documents = @compliance_documents %>
+      <% end %>
+      <% if doc_for == "missing_documents" %>
+        <% @missing_document_properties.each do |property| %>
+          <% if @missing_document_property_hash[property.id].present? %>
+            <% GenericDocument::REQUIRED_DOCUMENT_TYPES.each do |key, doc| %>
+              <% unless @missing_document_property_hash[property.id].include?(key.to_s) %>
+                <tr>
+                  <td>
+                    <%= link_to property.property_name , property_path(property.id) %>
+                  </td>
+                  <td>
+                    <%= property.landlord.contact_name %>
+                  </td>
+                  <td><%= doc %></td>
+                  <td>N/A</td>
+                </tr>
+              <% end %>
+            <%end %>
+          <% end %>
+        <% end %>
+      <% else %>
+        <% if @all_compliance_documents %>
+          <% @all_compliance_documents.each do |doc| %>
+            <tr>
+              <td>
+                <% if doc.property.present? %>
+                  <%= link_to doc.property.property_name , property_path(doc.property.id) %>
+                <% else %>
+                  N/A
+                <% end %>
+              </td>
+              <td>
+                <%= doc.property.landlord.contact_name %>
+              </td>
+              <td><%= GenericDocument::DOCUMENT_TYPES[doc.document_name.to_s.to_sym] %></td>
+              <td><%= l(doc.document_expiry, format: :nice, default: '') %></td>
+            </tr>
+          <% end %>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,29 @@
+<%= CSV.generate_line(['','Property', 'Room No', 'Type', 'Start', 'End','Name', 'Mobile', 'Email', 'Booking Status', 'Booking form completed', 'Signed Tenancy', 'Deposit / Guarantor'], { col_sep: "\t", force_quotes: false }).html_safe -%>
+
+<% @tenancies.each do |tenancy| %>
+	<% row = []%>
+	<% if tenancy.room.present? && tenancy.room.property.present? %>
+		<% row << tenancy.room.property.property_name.gsub(",","-")  %>
+		<%
+		if tenancy.room_id.present?
+			row << tenancy.room.number
+		else
+			row << 'Complete property'
+		end
+		%>
+	<% else %>
+		<% row << 'N/A' %>
+		<% row << 'N/A' %>
+	<% end %>
+	<% row << tenancy.tenancy_is_nice_name %>
+	<% row << tenancy.tenancy_start %>
+	<% row <<  tenancy.tenancy_end %>
+	<% row <<  (tenancy.tenant_name == "" ? "N/A" : tenancy.tenant_name) %>
+	<% row << (tenancy.mobile == nil ? "N/A" : tenancy.mobile) %>
+	<% row << (tenancy.email == nil ? "N/A" : tenancy.email) %>
+	<% row << (tenancy.booking_status == nil ? "N/A" : tenancy.booking_status.to_s.titleize) %>
+	<% row << (tenancy.accept_agreement ? 'YES' : 'NO') %>
+	<% row << (tenancy.signed_tenancy_agreement ? 'YES' : 'NO') %>
+	<% row << ' ' %>
+	<%= CSV.generate_line(row, { col_sep: "\t", force_quotes: false }).html_safe -%>
+<% end %>

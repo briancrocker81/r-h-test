@@ -1,0 +1,159 @@
+<%= render 'dashboard_header' %>
+<%= simple_form_for @guarantor, :url => guarantor_submit_agreement_form_path(@guarantor.uri_string), :method => :post do |f| %>
+
+  <div id="title-bar" class="sticky-top">
+    <div class="actions d-flex btn-group justify-content-end push">
+      <%= f.button :submit, "Submit", class: 'cmn-submit-btn signature_pad_save' %>
+      <%= link_to 'Back', :back, class: 'btn btn-secondary' %>
+    </div>
+  </div>
+
+  <%= f.error_notification %>
+  <% if @errors %>
+    <p class="alert alert-danger"><%= @errors %></p>
+  <% end %>
+  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+  <%= render "guarantor_error" %>
+  <article id="guarantor-agreement">
+    <section>
+      <h3 class="article-title">Guarantor Agreement</h3>
+      <p>A Guarantor Agreement is a legally binding contract between a Landlord and a person agreeing to guarantee the Tenant's performance under &nbsp;the tenancy agreement throughout the fixed term, or any extension, renewal or re-grant continuation of the Agreement whether for a fixed &nbsp;term or periodic tenancy and whether it is created by agreement between the landlord and the tenant or by operation of the law or otherwise. &nbsp;The duty of the Guarantor is to indemnify the Landlord against any economic loss, damage or costs or other expenses arising either directly or &nbsp;indirectly out of any breach of the agreement, or non-performance of contractual obligations. &nbsp;</p>
+      <p>The Landlord's protection from financial loss is a requirement stipulated by both the Landlord's insurance company and the Landlord's &nbsp;financial lenders.&nbsp;</p>
+      <p>The Guarantor's liability is joint and several with the tenant. This means that each will be responsible for complying with the tenant's &nbsp;obligations under the Agreement. The Guarantor should be a homeowner or show Citylets that that they have sufficient income to cover and &nbsp;pay all reasonable costs incurred by the landlord in enforcing the guarantee and the terms of the Agreement whether for a fixed term or &nbsp;periodic tenancy and whether it is created by agreement between the landlord and the tenant or by operation of the law or otherwise.&nbsp;</p>
+      <p><strong>This Guarantor Agreement creates a binding legal contract. If you do not fully understand the nature of this Agreement then it is recommended that you take independent legal advice before signing either from a solicitor or the local citizens Advice &nbsp;Bureau for an explanation before signing it. &nbsp;</strong></p>
+    </section>
+
+    <section>
+      <h3 class="article-title">Agreement details</h3>
+      <p>THIS GUARANTOR AGREEMENT is dated the <%= l(@guarantor.created_at, format: :date_month_year_concise, default: '') %></p>
+      <p>AND MADE BETWEEN THE PARTIES: -</p>
+      <ol>
+        <li><%= @guarantor.guarantor_name %> <strong>The Guarantor</strong></li>
+        <li>c/o City Lets, 4 Beechwood House, Beech Avenue, Cattedown, Plymouth, Devon, PL4 0QQ <strong>The Landlord</strong></li>
+      </ol>
+    </section>
+
+    <section>
+      <h3 class="article-title">Proposed Tenant & Accommodation</h3>
+      <div class="row">
+        <div class="col-md-6">
+          <strong>Name: </strong><%= @guarantor.tenancy.first_name %> <%= @guarantor.tenancy.surname %>
+        </div>
+        <div class="col-md-6">
+          <strong>Address: </strong>Room <%= @guarantor.tenancy.room.number %>, <%= @guarantor.tenancy.room.property.property_name %>
+        </div>
+        <br>
+        <br>
+        <div class="col-md-12">
+          <p><strong>RENT</strong> £<%= @guarantor.tenancy.total_tenancy_value %> For a fixed term tenancy and any subsequent renewal, or any extension, renewal or re-grant continuation of the
+          Agreement whether for a fixed term or periodic tenancy and whether it is created by agreement between the landlord and the tenant or by
+            operation of the law or otherwise.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="row guarantor-details">
+<!--        <div class="col-md-12">-->
+<!--          <h3 class="article-title">My Details</h3>-->
+<!--          <div class="row">-->
+            <div class="col-lg-6">
+              <h3 class="article-title">Guarantor's Details</h3>
+              <%= f.input :guarantor_name, label: 'My Name' %>
+              <%= f.input :guarantor_address, label: 'My Address', required: true  %>
+              <%= f.input :guarantor_post_code %>
+              <%= f.check_box :own_property %>
+              Do you own your own property?
+              <br/>
+              <%= f.input :national_insurance_number %>
+              <%= f.input :contact_number, label: 'Best contact number', required: true %>
+              <%= f.input :date_of_birth, start_year: Time.now.year - 80, end_year: Time.now.year - 18, order: %i(day month year), label: 'Date of Birth', required: true %>
+              <%= f.input :guarantor_relationship, label: 'Relationship to Proposed Tenant' %>
+              <%= f.input :guarantor_email, required: true, label: 'Email Address' %>
+            </div>
+<!--            <div class="col-lg-4">-->
+              <%#= f.input :guarantor_mobile %>
+<!--            </div>-->
+
+            <div class="col-lg-6">
+              <h3 class="article-title">Guarantor's Employer</h3>
+              <%= f.input :employment_status, label: 'employment_status', input_html: { id: 'employment_status' }, as: :select, collection: [['Employed', 'employed'], ['Unemployed', 'unemployed'], ['Retired', 'retired']], checked: f.object.employment_status, include_blank: "Select employment status" %>
+              <%= f.input :employer_name %>
+              <%= f.input :employer_manager %>
+              <%= f.input :employer_contact %>
+              <%= f.input :employer_address %>
+              <%= f.input :employer_email %>
+              <%= f.input :net_salary, label: "Monthly net salary", required: true %>
+            </div>
+      </div>
+    </section>
+
+    <section>
+      <h3 class="article-title">It is hereby agreed that:-</h3>
+      <p>1. I agree to act as Guarantor for the person noted in Box 1 above who is proposing to enter into a Tenancy Agreement and make &nbsp;myself legally responsible (in the event of the proposed tenant being granted a tenancy) for payment of all outstanding rent and &nbsp;other charges if the tenant defaults in payment, upon demand. I agree to fully compensate the landlord for any loss, damage, &nbsp;costs or other expenses arising directly or indirectly out of any breach of the agreement. &nbsp;</p>
+      <p>2. The Guarantor will also be liable for any increase in rent agreed between the landlord and any person acting on their behalf. &nbsp</p>
+      <p>3. I have read the Tenancy Agreement and understand the terms and conditions of the tenancy as set out therein.</p>
+      <p>4. I have been advised to take legal or professional advice in relation to this Guarantor Agreement and make this application in the full knowledge of the obligations in law that this Guarantor Agreement places upon me.&nbsp;</p>
+      <p>5. All information given by me on this form is true and correct. &nbsp;</p>
+      <p>6. In support of this document I understand the landlord may make a credit reference check or other form of check to confirm my &nbsp;identity.&nbsp;</p>
+      <p>7. I confirm that I am not an undischarged bankrupt and there is no bankruptcy petition pending against me. The guarantee shall &nbsp;not be revocable by the guarantor nor will it be rendered unenforceable by the Guarantor's death or bankruptcy. &nbsp;</p>
+      <p>8. I understand that my obligations under this Agreement shall commence on the Tenancy Commencement Date and shall &nbsp;continue throughout the period that the property is occupied by the tenant or any licensee and is not limited the term &nbsp;specified in the agreement. The Guarantee will continue throughout the tenancy or any extension/renewal in the property &nbsp;or other properties, or re-grant continuation of the Agreement whether for a fixed term or periodic tenancy and whether it &nbsp;is created by agreement between the landlord and the tenant or by operation of the law or otherwise. &nbsp;</p>
+      <p>9. In the event of my death, my personal representatives or administrators shall notify the Landlord as soon as practicable and &nbsp;my estate shall assume liability for the Guarantor's obligations under this Agreement.&nbsp;</p>
+      <p><strong>CONSIDERATION</strong></p>
+      <p>The consideration for this guarantee is that the landlord agrees to let the property to the tenant(s).&nbsp;</p>
+      <p><strong>GUARANTEE</strong></p>
+      <p>The guarantor covenants with the landlord that the tenant will pay all rent made payable by and perform and observe all covenants, &nbsp;conditions and obligations contained in the tenancy agreement to be performed and observed by the tenant and will compensate the landlord &nbsp;in full on demand made in writing within 7 days for all liabilities incurred by the tenant in respect of the obligations and for all losses, damages, &nbsp;costs and expenses thereby arising or incurred by the landlord.&nbsp;</p>
+      <p><strong>WAIVER</strong></p>
+      <p>The landlord may release or compromise the tenant's liability under the obligations or grant to either the tenant or the guarantor time or &nbsp;other indulgence without affecting the guarantor liability under this guarantee.</p>
+    </section>
+
+    <section>
+      <h3 class="article-title">Photographic I.D</h3>
+      <p>Please attach in this box either a Drivers Licence or a Passport</p>
+      <div class="col-lg-4">
+        <%= f.input :photo_id, as: :file, hint: "format - .png, jpg, jpeg, .doc, .docx, .pdf, .xls, .xlsx, .txt" %>
+      </div>
+    </section>
+    <section>
+      <h3 class="article-title">Utility Bill</h3>
+      <p>Please attach a utility bill or phone bill as proof of address from the last 3 months</p>
+      <div class="col-lg-4">
+        <%= f.input :utility_bill, as: :file, hint: "format - .png, jpg, jpeg, .doc, .docx, .pdf, .xls, .xlsx, .txt" %>
+      </div>
+    </section>
+
+    <section>
+      <h3 class="article-title">My Signature</h3>
+      <div class="row">
+        <div id="signature-box" class="col-md-12">
+          <div class="form-group">
+            <label>Guarantor Signature</label>
+            <%= f.input_field :guarantor_signature, as: :hidden, class: 'signature_pad_input' %>
+            <div class="signature_pad">
+              <div class="signature_pad_body">
+                <canvas id="one"></canvas>
+              </div>
+              <div class="signature_pad_footer">
+                <button type="button" class="btn btn-danger signature_pad_clear">Clear signature</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="form-group">
+            <div class="form-inline inline-me">
+              <%= f.input :confirm_guarantor, input_html: { class: 'confirm-checkbox' }, :label_html => { class: 'confirm-label' }, label: 'I confirm that I agree to this guarantor', required: true %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+  </article>
+  <div class="form-actions d-flex justify-content-end">
+    <%= f.button :submit, "Submit", class: 'cmn-submit-btn signature_pad_save' %>
+  </div>
+
+
+<% end %>

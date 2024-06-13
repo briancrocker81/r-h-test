@@ -1,0 +1,1 @@
+json.partial! "system_content_data_categories/system_content_data_category", system_content_data_category: @system_content_data_category

@@ -1,0 +1,104 @@
+<% content_for :title, "#{@event.viewer_status} viewing: #{@event.start.try(:strftime, '%d/%m/%Y')}" %>
+
+<div id="title-bar" class="sticky-top">
+  <h1><%= event_name(@event) %></h1>
+  <div class="actions d-flex btn-group justify-content-end push">
+    <%= link_to 'Edit', edit_event_path(@event), class: 'btn btn-secondary' %>
+    <%= link_to 'Back', events_path, class: 'btn btn-primary' %>
+  </div>
+</div>
+
+<p id="notice"><%= notice %></p>
+
+<article>
+
+  <section>
+    <h3 class="article-title">Event details</h3>
+
+    <div class="row">
+      <div class="col-md-6">
+        <table class="table table-striped">
+          <tbody>
+            <tr>
+              <td>Viewing type</td>
+              <td><%= @event.viewer_status %></td>
+            </tr>
+            <tr>
+              <td>Viewer Name</td>
+              <td><%= @event.client_name %></td>
+            </tr>
+            <tr>
+              <td>Viewer Contact Number</td>
+              <td><%= tel_to(@event.client_contact_number) %></td>
+            </tr>
+          <tr>
+            <td>Budget per week</td>
+            <td>£<%= @event.budget_per_week %></td>
+          </tr>
+          <tr>
+            <td>Budget per week</td>
+            <td>£<%= @event.budget_per_month %></td>
+          </tr>
+          <tr>
+            <td>Minimum required bedrooms</td>
+            <td><%= @event.client_required_bedrooms %></td>
+          </tr>
+
+          <tr>
+            <td>Event time</td>
+            <td><%= event_time(@event) %></td>
+          </tr>
+
+          <tr>
+            <td>Agent</td>
+            <td><%= @agent %></td>
+          </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <div class="col-md-6">
+        <section>
+          <h3>Properties visiting</h3>
+
+          <% if @event_props.count > 0 %>
+            <ul>
+              <% @event_props.uniq.each do |property| %>
+                <li>
+                  <%= link_to property.property_name, property_path(property) %>
+                </li>
+              <% end %>
+            </ul>
+          <% end %>
+        </section>
+
+        <p><strong>Event Notes</strong></p>
+        <p><%= @event.notes %></p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+<!--  <section>-->
+<!--    <h3 class="article-title">Tenant Notice</h3>-->
+<!--    <p>-->
+<!--      <strong>Mail sent:</strong>-->
+      <%#= yes_no(@event.mail_sent) %>
+<!--    </p>-->
+
+<!--    <p>-->
+<!--      <strong>Mail sent at:</strong>-->
+      <%#= @event.mail_sent_at.try(:strftime, '%d/%m/%Y at %l:%M %p') %>
+<!--    </p>-->
+
+<!--    <p>-->
+<!--      <strong>Updated at:</strong>-->
+      <%#= @event.updated_at.try(:strftime, '%d/%m/%Y at %l:%M %p') %>
+<!--    </p>-->
+<!--  </section>-->
+
+</article>
+

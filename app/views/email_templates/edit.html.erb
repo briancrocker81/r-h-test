@@ -1,0 +1,11 @@
+<% content_for :title, "Email Templates - #{@template.template_name}" %>
+
+<%= simple_form_for @template, url: admin_email_template_url(@template.template_name), method: :patch  do |f| %>
+  <p><em> This form uses <%= link_to('textile', 'https://textile-lang.com/') %>.</em></p>
+  <em> You may use the following tags: </em>
+  <%- @template.available_tags.each do |name| %>
+    <p><em><strong>{{ <%= name %> }}</strong></em><p>
+  <%- end -%>
+  <%= f.input :content, input_html: { rows: 20 } %>
+  <%= f.submit %>
+<%- end -%>

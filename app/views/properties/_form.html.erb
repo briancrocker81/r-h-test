@@ -1,0 +1,55 @@
+<%= simple_form_for @property, :html => {:multipart => true} do |f| %>
+  <div id="title-bar" class="sticky-top">
+    <h1>
+      <%=raw @property.property_name.present? ? "#{@property.property_name+'<small class="edit">- Edit mode</small>'}" : 'New Property' %>
+    </h1>
+    <div class="actions d-flex justify-content-end push">
+      <% if current_user.admin? %>
+        <%= link_to (fa_icon 'trash'), @property, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger del' unless @property.new_record? %>
+      <% end %>
+      <%= link_to 'Back', :back, class: 'btn btn-secondary' %>
+      <%= f.submit t('admin.save'), class: 'btn btn-success' %>
+    </div>
+  </div>
+
+  <% if property.errors.any? %>
+    <div id="error_explanation" class="bg-warning">
+      <div class="row justify-content-md-center">
+        <div class="col-2 icon">
+          <i class="fas fa-exclamation-triangle fa-5x"></i>
+        </div>
+        <div class="col-6">
+          <h2><%= pluralize(property.errors.count, "error") %> prohibited this property from being saved:</h2>
+          <ul>
+            <% property.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <article id="propertyAccordian">
+    <%= render partial: 'landlord', locals: {f: f, property: @property} %>
+    <%#= render partial: 'tenancy', locals: {f: f, property: @property} %>
+    <%#= render partial: 'sync_with', locals: {f: f, property: @property} %>
+    <%= render partial: 'listed', locals: {f: f, property: @property} %>
+    <%= render partial: 'property', locals: {f: f, property: @property} %>
+    <%= render partial: 'compliance_documents', locals: {f: f, property: @property} %>
+    <%= render partial: 'media_and_marketing', locals: {f: f, property: @property} %>
+  </article>
+
+<% end %>
+<div class="modal fade" id="set-tenancy-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"></div>
+<div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        <button type="button" class="close" data-dismiss="modal" style="font-size: 3.5rem !important;"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <img src="" class="imagepreview" style="width: 100%;" >
+      </div>
+    </div>
+  </div>
+</div>
+<%= render '/shared/common_modal' %>

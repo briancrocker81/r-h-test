@@ -1,0 +1,62 @@
+<div class="table-responsive">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th>Due Date</th>
+        <th>Amount Due</th>
+        <th>Amount Paid</th>
+        <th>Arrears</th>
+        <th>Date Paid</th>
+        <th>Method</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% total_amount_due = 0 %>
+      <% total_amount_paid = 0 %>
+      <% total_arrears = 0.0 %>
+      <% arrears_outstanding = 0.0 %>
+      <% get_tenancy_payment_items(@tenancy).each do |pay_item| %>
+        <% total_arrears += pay_item.arrears.to_f %>
+        <tr>
+          <td><%= pay_item.item %></td>
+          <td><%= pay_item.due_date.strftime('%d %b %Y') %></td>
+          <td><%= pay_item.amount_due.present? ? '£'+number_with_delimiter(sprintf("%.2f",pay_item.amount_due.to_f), delimiter: ',') : ''%></td>
+          <td><%= pay_item.amount_paid.present? ? '£'+number_with_delimiter(sprintf("%.2f",pay_item.amount_paid.to_f), delimiter: ',') : ''%></td>
+          <td><%= pay_item.arrears.present? ? "£#{number_with_delimiter(sprintf("%.2f",pay_item.arrears.to_f), delimiter: ',')}" : '' %></td>
+          <td><%= pay_item.date_paid ? pay_item.date_paid.strftime('%d %b %Y') : '' %></td>
+          <td><%= pay_item.payment_method %></td>
+          <td colspan="3">
+            <%= link_to '<i class="fa fa-edit"></i>'.html_safe, tenancy_payment_item_form_path(pay_item.tenancy_id, item_id: pay_item.id), :data => {:turbolinks => false}, :remote => true, title: 'Edit ' + pay_item.item %> |
+            <%= link_to '<i class="fa fa-trash"></i>'.html_safe, tenancy_payment_item_delete_path(pay_item.id), method: :delete, data: { confirm: 'Are you sure?' } %>
+          </td>
+        </tr>
+        <% total_amount_due += !pay_item.amount_due.nil? ? pay_item.amount_due : 0 %>
+        <% total_amount_paid += !pay_item.amount_paid.nil? ? pay_item.amount_paid : 0 %>
+        <% arrears_outstanding += pay_item.arrears.to_f %>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+<hr>
+<div class="row" id="tenancy-payment-totals-container">
+  <div class="col-lg payment-totals-column">
+    <strong>Payment Amount: </strong> £<%= @tenancy.payment_amount %>
+  </div>
+  <div class="col-lg payment-totals-column">
+    <b>Rent payment type:</b> <%= !@tenancy.rent_payment_option.nil? ? rent_option(@tenancy.rent_payment_option) : 'N/A' %>
+  </div>
+  <div class="col-lg payment-totals-column">
+    <% unless total_amount_due.to_i == total_amount_paid.to_i %>
+      <b>Total Amount Due: </b> £<%= number_with_delimiter(sprintf("%.2f",(total_amount_due*10).ceil/10.0), delimiter: ',') %>
+    <% end %>
+  </div>
+  <div class="col-lg payment-totals-column">
+    <b>Total Amount Paid: </b> £<%= number_with_delimiter(sprintf("%.2f",(total_amount_paid*10).ceil/10.0), delimiter: ',') %>
+  </div>
+  <div class="col-lg payment-totals-column">
+    <b>Current Arrears:</b> £<%= number_with_delimiter(sprintf("%.2f",arrears_outstanding.round(2)), delimiter: ',') %>
+  </div>
+</div>

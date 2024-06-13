@@ -1,0 +1,5 @@
+<% tenants_emails_str = @tenants_emails.join(', ') %>
+
+var emailLink = document.createElement("a");
+emailLink.href = 'mailto:?#{bcc_param}:' + "<%= tenants_emails_str %>";
+emailLink.click();

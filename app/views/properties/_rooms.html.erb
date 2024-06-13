@@ -1,0 +1,60 @@
+<% if @rooms.present? %>
+  <% @rooms.each do |room| %>
+    <tr>
+      <td valign="middle">
+        <% if room.tenancy_ids.present? %>
+          <% if room.number == 'Home' %>
+            <%= link_to room.number, room_path(room) %>
+          <% else %>
+            <%= link_to 'Room-'+room.number, room_path(room) %>
+          <% end %>
+          <%#= link_to 'Room-'+room.number, room_path(room) %>
+        <% else %>
+          <%= link_to rental_type(@property, room).html_safe, room_path(room) %>
+        <% end %>
+      </td>
+      <td valign="middle"><%= room.dimensions %></td>
+      <td valign="middle">£<%= room.list_price.present? ? number_with_delimiter(sprintf("%.2f",room.list_price.to_f), delimiter: ',') : 0 %></td>
+      <td valign="middle"><%= yes_no room.ensuite %></td>
+      <% if @tenancies.present? && @tenancies[room.id] && @tenancies[room.id].count > 0 %>
+        <td colspan="5" valign="middle" class="tenancy-list">
+          <table class="table table-striped">
+            <tbody>
+              <% @tenancies[room.id].each do |tenant|%>
+                <tr class="<%= tenant.booking_status == 'booking' ? 'bg-warning' : 'normal-class' %>">
+                  <td width="150">
+                    <%= link_to tenant.tenant_name, tenancy_path(tenant.id)%>
+                  </td>
+                  <td width="150">
+                    <%= tenant.mobile %>
+                  </td>
+                  <td width="150">
+                    <%= tenant.tenancy_is_nice_name %>
+                  </td>
+                  <td>
+                    <%= l(tenant.tenancy_start, format: :default, default: '') %>
+                  </td>
+                  <td>
+                    <%= l(tenant.tenancy_end, format: :default, default: '') %>
+                    <%#= tenant.number_of_weeks %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </td>
+      <% else %>
+        <td colspan="5" valign="middle" class="text-center text-success tenancy-list"> Available</td>
+      <% end %>
+      <td>
+        <% if available_for_the_year(@year, room) && @year != @last_year %>
+          <%= link_to 'Book', set_tenancy_form_path(@property, room_id: room.id), :data => {:turbolinks => false}, class: 'btn small btn-success', :remote => true %>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+<% else %>
+  <tr>
+    <td colspan="5">No Room found!</td>
+  </tr>
+<% end %>

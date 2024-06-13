@@ -1,0 +1,4 @@
+$('#landlord_booking_report').html("<%= j render 'landlords/landlord_booking_reports' %>")
+$(".btn-filter-statement").removeClass('badge-primary').addClass('badge-secondary');
+$("#btn-booking-<%= @year_id %>").addClass('badge-primary').removeClass('badge-secondary');
+$("#generate-pdf").attr("href", "<%= j landlord_booking_report_landlord_path(landlord_id: @landlord.id, year: @year) %>");

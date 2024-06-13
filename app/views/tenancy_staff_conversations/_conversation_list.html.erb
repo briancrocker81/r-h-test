@@ -1,0 +1,35 @@
+<div id="conversations">
+  <% if conversations.present? %>
+    <% conversations.each_with_index do |conversation, conv_index| %>
+      <div class="row conversation">
+        <div class="col-12 title id-<%= conversation.id %>">
+          <strong>
+            <%= conversation&.tenancy_staff_messages&.first&.subject %>
+          </strong>
+        </div>
+        <div class="col-12 body">
+          <%= conversation&.tenancy_staff_messages&.first&.body %>
+        </div>
+        <div class="col-12 col-xl-10">
+          <small>
+            <%= conversation&.tenancy_staff_messages&.first&.message_time %>
+          </small>
+        </div>
+        <div class="col-12 col-xl-2 actions">
+          <%= link_to tenancy_staff_reply_form_path(conversation.tenancy_staff_messages.first.id), :data => {:turbolinks => false}, class: 'btn small btn-info', :remote => true, title: 'Reply', style: 'min-width: 0px !important;' do %>
+            <%= fa_icon 'reply'%> Reply
+          <% end if conversation.tenancy_staff_messages.first %>
+        </div>
+      </div>
+    <% end %>
+  <% else %>
+    <div class="row">
+      <div class="col-12 ml-4">
+        <strong>No Conversations.</strong>
+      </div>
+    </div>
+  <% end %>
+
+</div>
+
+<div class="modal fade" id="tenancy-staff-conversation-reply-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"></div>

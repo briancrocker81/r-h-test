@@ -1,0 +1,27 @@
+<header>
+  <div class="container">
+    <nav>
+      <% if user_signed_in? %>
+        <%= link_to 'Data Manager', root_path, class: 'home-link' %>
+      <% else %>
+        Data Manager
+      <% end %>
+      <div class="user-profile push">
+        <div id="user">
+          <% if user_signed_in? %>
+            <% if current_user.avatar.attached? %>
+              <%= link_to image_tag(url_for(current_user.avatar), id: 'nav-user', class: 'img-responsive'), user_path(current_user.id), :class => 'edit-user navbar-link', :data => {:turbolinks => false} %>
+            <% else %>
+              <%= link_to fa_icon('user-circle'),user_path(current_user.id), :class => 'edit-user navbar-link', :data => {:turbolinks => false} %>
+            <% end %>
+            <%= link_to fa_icon('sign-out-alt'), destroy_user_session_path, method: :delete, class: 'navbar-link logout'  %>
+          <% else %>
+            <%= link_to 'Login', new_user_session_path, class: 'navbar-link login'  %>
+          <% end %>
+        </div>
+      </div>
+    </nav>
+
+  </div>
+
+</header>

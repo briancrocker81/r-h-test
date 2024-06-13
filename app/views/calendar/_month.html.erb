@@ -1,0 +1,15 @@
+<div class="tab-pane fade" id="month" role="tabpanel" aria-labelledby="month-tab">
+  <%= month_calendar events: @events do |date, events| %>
+    <%= l date, :format => :short %>
+
+    <div>
+      Viewings: <%= events.count %>
+    </div>
+    <% events.each do |event| %>
+      <div>
+        <%#= event.count %>
+        <%#= link_to event.title, event %>
+      </div>
+    <% end %>
+  <% end %>
+</div>

@@ -1,0 +1,85 @@
+<% content_for :title, @company.name %>
+<p id="notice"><%= notice %></p>
+<div id="title-bar" class="sticky-top">
+  <h1><%= @company.name %></h1>
+  <div class="actions d-flex btn-group justify-content-end push">
+    <%= link_to 'Back', admin_path, class: 'btn btn-secondary' %>
+    <%= link_to 'Edit', edit_company_path(@company), data: { turbolinks: false }, class: 'btn btn-success' %>
+  </div>
+</div>
+
+<article>
+  <section>
+    <h3 class="article-title">Company Details</h3>
+    <p>
+      <strong>Address:</strong>
+      <%= @company.address %>
+    </p>
+
+    <p>
+      <strong>Phone number:</strong>
+      <%= @company.phone_number %>
+    </p>
+
+    <p>
+      <strong>Main email:</strong>
+      <%= @company.main_email %>
+    </p>
+
+    <p>
+      <strong>Vat number:</strong>
+      <%= @company.vat_number %>
+    </p>
+
+    <p>
+      <strong>Registration number:</strong>
+      <%= @company.registration_number %>
+    </p>
+
+    <p>
+      <strong>Main contact:</strong>
+      <%= @company.main_contact %>
+    </p>
+  </section>
+
+  <section>
+    <h3 class="article-title">Company Bank Details</h3>
+    <p>
+      <strong>Bank account name:</strong>
+      <%= @company.bank_account_name %>
+    </p>
+
+    <p>
+      <strong>Bank name:</strong>
+      <%= @company.bank_name %>
+    </p>
+
+    <p>
+      <strong>Bank address:</strong>
+      <%= @company.bank_address %>
+    </p>
+
+    <p>
+      <strong>Bank sort code:</strong>
+      <%= @company.bank_sort_code %>
+    </p>
+
+    <p>
+      <strong>Bank account number:</strong>
+      <%= @company.bank_account_number %>
+    </p>
+
+    <p>
+      <strong>Bank iban:</strong>
+      <%= @company.bank_iban %>
+    </p>
+
+    <p>
+      <strong>Bank bic:</strong>
+      <%= @company.bank_bic %>
+    </p>
+    <p>
+      <strong>Bank Payment Reference:</strong>
+      <%= @company.bank_payment_reference %>
+    </p>
+  </section>

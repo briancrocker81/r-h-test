@@ -1,0 +1,13 @@
+<section id="images">
+  <h3 class="article-title">Landlord Documents</h3>
+  <div class="row">
+    <div class="col-md-12">
+      <%= f.simple_fields_for :landlord_documents do |landlord_document| %>
+        <%= render 'landlord_document_fields', f: landlord_document %>
+      <% end %>
+      <div class="links">
+        <%= link_to_add_association 'Add compliance documents', f, :landlord_documents, partial: 'landlord_document_fields', class: 'btn small btn-success' %>
+      </div>
+    </div>
+  </div>
+</section>

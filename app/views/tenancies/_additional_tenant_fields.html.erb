@@ -1,0 +1,23 @@
+<div class="row">
+  <div class="col-md-4">
+    <%= f.input :first_name %>
+    <%= f.input :surname %>
+  </div>
+
+  <div class="col-md-4">
+    <%= f.input :phone_number %>
+    <%= f.input :email %>
+  </div>
+
+  <div class="col-md-4">
+    <%= f.input :address, :input_html => { rows: 6 } %>
+  </div>
+
+  <div class="col-md-4">
+    <%= f.input :signed_date, as: :date, order: %i(day month year) %>
+  </div>
+
+  <div class="col-md-4">
+    <%= f.input :accept_agreement, label: 'Agreement Accepted',  :input_html => { class: 'mb-0'} %>
+  </div>
+</div>

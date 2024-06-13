@@ -1,0 +1,15 @@
+<div class="nested-fields">
+  <div class="row">
+    <div class="col-md-4">
+      <%= f.input :document_file, as: :file %>
+    </div>
+    <div class="col-md-4">
+      <%= f.input :document_name, collection: GenericDocument::DOCUMENT_TYPES.to_a.map(&:reverse), :required => true %>
+    </div>
+    <div class="col-md-4">
+      <%= f.input :document_expiry, as: :date, start_year: Time.now.year - 10, end_year: Time.now.year + 50, order: %i(day month year) %>
+    </div>
+  </div>
+  <%= link_to_remove_association "Remove", f, class: "remove" %>
+  <hr>
+</div>

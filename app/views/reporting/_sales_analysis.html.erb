@@ -1,0 +1,12 @@
+<% @booked_rooms.each do |room, i| %>
+  <% room.tenancies.not_archived.where(booking_status: ['booking', 'complete']).each_with_index do |tenancy, i| %>
+    <tr>
+      <td><%= link_to room&.property&.property_name, property_path(room.property) if i == 0 %></td>
+      <td><%= room.number if i == 0 %></td>
+      <td>£<%= number_with_delimiter(sprintf("%.2f",room.list_price.to_f), delimiter: ',') if i == 0 %></td>
+      <td><%= tenancy.tenancy_start.strftime('%d/%m/%Y') %></td>
+      <td><%= tenancy.tenancy_start.strftime('%d/%m/%Y') %></td>
+      <td>£<%= number_with_delimiter(sprintf("%.2f",(room.list_price.to_i * (tenancy.number_of_weeks ? tenancy.number_of_weeks.to_f : tenancy.number_of_months.to_f)).round(2)), delimiter: ',') %></td>
+    </tr>
+  <% end %>
+<% end %>

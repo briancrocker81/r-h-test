@@ -1,0 +1,36 @@
+<div id="filterrific_results">
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>Year</th>
+        <th>Tenant Name</th>
+        <th>Address</th>
+        <th>Room</th>
+        <th>Number</th>
+        <th>Archived</th>
+        <th>Arrears</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% if @tenancies_in_arrears.present? %>
+        <% @tenancies_in_arrears.each do |tenancy| %>
+          <tr>
+            <td><%= tenancy.year %></td>
+            <td><%= link_to tenancy.tenant_name, tenancy_path(tenancy.id) %></td>
+            <td><%= link_to tenancy&.room&.property&.street, property_path(tenancy.room.property) if tenancy.room %></td>
+            <td><%= tenancy&.room&.number %></td>
+            <td><%= tel_to(tenancy&.mobile) %></td>
+            <td><%= yes_no(tenancy.archived) %></td>
+            <td>£<%= number_with_delimiter(sprintf("%.2f",sprintf("%.2f", tenancy.total_arrears.to_f)), delimiter: ',') %></td>
+          </tr>
+        <% end %>
+      <% else %>
+        <tr>
+          <td colspan="9">No Arrears!</td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

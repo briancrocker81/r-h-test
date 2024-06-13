@@ -1,0 +1,22 @@
+<%= CSV.generate_line(['Property', 'Room No', 'List Price', 'Booked Price', 'Size', 'Name', 'Type', 'Start', 'End', 'Mobile', 'Email', 'Availability', 'Accepted', 'Signed'], { col_sep: ",", force_quotes: false }) %>
+<%- @rooms.uniq.each do |room| -%>
+  <% if room.tenancies.count >= 1 %>
+    <% sort_year = (@filterrific.room_availability.present? && @filterrific.room_availability.search_by_year_range != "") ? @filterrific.room_availability.search_by_year_range : @current_year  %>
+    <% status = '' %>
+    <% if @filterrific.room_availability.present? %>
+      <% status = 0 if @filterrific.room_availability.room_available == '1' %>
+      <% status = 1 if @filterrific.room_availability.room_booked == '1' %>
+      <% status = 2 if @filterrific.room_availability.room_complete == '1' %>
+    <% end %>
+    <% tenancies = get_tenancies_btwn_years(room, sort_year, status) %>
+    <% if tenancies[:tenant_present] %>
+      <% tenancies[:tenancies].each_with_index do |tenancy, index| %>
+        <%= CSV.generate_line([room.property.property_name.gsub(",","-"), tenancy.room.number, room.list_price, tenancy.payment_amount, tenancy.room.property.number_of_bedrooms, (tenancy.tenant_name == "" ? "N/A" : tenancy.tenant_name), tenancy.tenancy_is_nice_name, l(tenancy.tenancy_start, format: :nice, default: ''), l(tenancy.tenancy_end, format: :nice, default: ''), (tenancy.mobile == "" ? "N/A" : tenancy.mobile), (tenancy.email == "" ? "N/A" : tenancy.email), (room.availability? ? 'Yes' : 'No'), (tenancy.accept_agreement? ? 'Yes' : 'No'), (tenancy.signed_tenancy_agreement? ? 'Yes' : 'No')], { col_sep: ",", force_quotes: false }) -%>
+      <% end %>
+    <% else %>
+      <%= CSV.generate_line([room.property.property_name.gsub(",","-"), room.number, room.list_price, ' ', room.property.number_of_bedrooms, ' ', ' ', ' ', ' ', ' ', ' ', (room.availability? ? 'Yes' : 'No'), 'N/A', 'N/A'], { col_sep: ",", force_quotes: false }) -%>
+    <% end %>
+  <% else %>
+    <%= CSV.generate_line([room.property.property_name.gsub(",","-"), room.number, room.list_price, ' ', room.property.number_of_bedrooms, ' ', ' ', ' ', ' ', ' ', ' ', (room.availability? ? 'Yes' : 'No'), 'N/A', 'N/A'], { col_sep: ",", force_quotes: false }) -%>
+  <% end %>
+<%- end -%>

@@ -1,0 +1,537 @@
+<% content_for :title, "Tenant - #{@tenancy.tenant_name}" %>
+
+<p id="notice"><%= notice %></p>
+
+<div id="title-bar" class="sticky-top">
+  <h1><%= @tenancy.tenant_name %>
+    <% @tenancy.additional_tenants.each do |additional_tenant| %>
+      <%= ", #{additional_tenant.first_name} #{additional_tenant.surname}" %>
+    <% end %>
+  </h1>
+  <div id="property">
+    <h2><%= link_to @tenancy.room.property.property_name, @tenancy.room.property if @tenancy.room && @tenancy.room.property %>, <%= @tenancy.room&.number != 'Home' ? 'Room' : '' %> <%= @tenancy.room.number if @tenancy.room %></h2>
+  </div>
+  <div class="actions d-flex btn-group justify-content-end push">
+    <% if @tenancy.archived %>
+      <%= link_to (fa_icon 'undo'), tenancy_unarchived_path(@tenancy), data: { confirm: 'Are you sure? This will unarchive this tenant' }, class: 'btn btn-warning del', :data => {:turbolinks => false} %>
+      <%= link_to (fa_icon 'trash'), @tenancy, method: :delete, data: { confirm: 'Are you sure? This cannot be undone' }, class: 'btn btn-danger del', :data => {:turbolinks => false} %>
+    <% else %>
+      <%= link_to 'Back', (@tenancy.room && @tenancy.room.property ? property_path(@tenancy.room.property.id) : tenancies_path(archived: true)), class: 'btn btn-secondary btn-50-50', :data => {:turbolinks => false} %>
+      <%= link_to 'Edit', edit_tenancy_path(@tenancy), class: 'btn btn-success btn-50-50', :data => {:turbolinks => false} %>
+    <% end %>
+  </div>
+</div>
+
+<% if @tenancy.archived %>
+  <div class="bg-warning text-center sticky-top archived">
+    This tenant has been archived
+  </div>
+  <br>
+<% end %>
+
+<div class="row mb-5">
+  <div class="col-lg-12 actions d-flex btn-group justify-content-end push">
+    <% unless @tenancy.tenancy_is == 0 || @tenancy.booking_status == 'Booking' %>
+      <% unless @tenancy.roll_into_next_year %>
+        <%= link_to 'Roll into Next Year', roll_next_year_tenancy_path(@tenancy), class: 'btn btn-sm btn-success', 'data-confirm': 'Are you sure you wish to roll this tenant into next year?' %>
+      <% end %>
+    <% end %>
+
+    <%= link_to 'Resend tenant dashboard link', mail_tenancy_dashboard_link_path(@tenancy), class: 'btn btn-turquoise' if !@tenancy.uri_string.nil? && !@tenancy.final_submission%>
+    <%= link_to 'Resend guarantor dashboard link', mail_guarantor_dashboard_link_path(u_id: @tenancy.guarantor.uri_string), class: 'btn btn-turquoise' if @tenancy.guarantor && @tenancy.guarantor.uri_string.present? && @tenancy.booking_status != 'complete' && !@tenancy.guarantor.complete_guarantor_agreement%>
+  </div>
+</div>
+
+<article class="<%= @tenancy.archived? ? 'archived' : '' %>">
+    <section id="tenant-profile">
+      <h3 class="article-title">
+        Primary Tenant Profile
+        <span class="d-none d-md-block float-right">
+          <% if @tenancy.booking_status == 'booking' %>
+          <%= link_to 'Complete Tenancy', complete_tenancy_path(@tenancy), id: 'complete-tenancy', class: 'btn small btn-warning', 'data-confirm': 'Are you sure you want to confirm the complete tenancy?' %>
+        <% else %>
+          <span class="mr-3 badge badge-<%= @tenancy.booking_status == 'available' ? 'success' : 'info'%>"><%= @tenancy.booking_status.to_s.titleize %></span>
+        <% end %>
+        </span>
+      </h3>
+      <div class="d-block d-md-none mb-4">
+        <% if @tenancy.booking_status == 'booking' %>
+          <%= link_to 'Complete Tenancy', complete_tenancy_path(@tenancy), id: 'complete-tenancy', class: 'btn small btn-warning w-100', 'data-confirm': 'Are you sure you want to confirm the complete tenancy?' %>
+        <% else %>
+          <span class="mr-3 badge w-100 badge-<%= @tenancy.booking_status == 'available' ? 'success' : 'info'%>"><%= @tenancy.booking_status.to_s.titleize %></span>
+        <% end %>
+      </div>
+      <div class="row">
+        <div id="conversations-container" class="col-lg-6">
+          <div class="title-row d-none d-lg-flex mb-4">
+            <h3>Conversations</h3>
+            <div class="actions d-flex btn-group ml-auto">
+              <%= link_to new_tenancy_staff_conversation_path(tenancy_id: @tenancy.id), :data => {:turbolinks => false}, class: 'w-100 btn small btn-success', :remote => true, title: 'Message', style: 'min-width: 0px !important;' do %>
+                <%= fa_icon 'plus' %> Add note
+              <% end %>
+            </div>
+          </div>
+
+          <%#= render(partial: 'tenancy_staff_conversations/conversation_list', locals: { conversations: @tenancy.tenancy_staff_conversations } ) %>
+
+          <div class="accordion" id="accordionExample">
+            <div class="card">
+              <div class="card-header d-lg-none p-0" id="headingOne">
+                <h2 class="mb-3">
+                  <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#conversations-content" aria-expanded="true" aria-controls="conversations-content">
+                    View Conversations
+                    <i class="fas"></i>
+                  </button>
+                </h2>
+              </div>
+
+              <div id="conversations-content" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                <div class="card-body p-0">
+                  <%= render(partial: 'tenancy_staff_conversations/conversation_list', locals: { conversations: @tenancy.tenancy_staff_conversations } ) %>
+                </div>
+                <div class="actions d-flex btn-group p-4 ml-auto d-lg-none">
+                  <%= link_to new_tenancy_staff_conversation_path(tenancy_id: @tenancy.id), :data => {:turbolinks => false}, class: 'w-100 btn small btn-success', :remote => true, title: 'Message', style: 'min-width: 0px !important;' do %>
+                    <%= fa_icon 'plus' %> Add converstion
+                  <% end %>
+                </div>
+                <hr class="d-md-none mt-2 mb-2">
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+        <div class="col-lg-6">
+          <h3>Tenant Details</h3>
+          <table class="table">
+            <tbody>
+            <tr>
+              <td>Confirmed move in video / inventory:</td>
+              <td><%= yes_no(@tenancy.confirmed_video_viewed) %></td>
+            </tr>
+            <tr>
+              <td>Tenant is:</td>
+              <td><%= @tenancy.tenancy_is_nice_name %></td>
+            </tr>
+            <tr>
+              <td>Date of birth:</td>
+              <td><%= !@tenancy.dob.nil? ? (l @tenancy.dob, format: :default) : "Not given" %></td>
+            </tr>
+            <tr>
+              <td>Mobile:</td>
+              <% if @tenancy.mobile %>
+                <td><%= tel_to(@tenancy.mobile) %></td>
+              <% else %>
+                <td>Not given</td>
+              <% end %>
+            </tr>
+            <tr>
+              <td>Email:</td>
+              <td><%= mail_to @tenancy.email %></td>
+            </tr>
+            <tr>
+              <td>Nationality:</td>
+              <td><%= @tenancy.nationality %></td>
+            </tr>
+            <tr>
+              <td>Criminal record:</td>
+              <td><%= yes_no(@tenancy.criminal_record) %></td>
+            </tr>
+            <tr>
+              <td>Year:</td>
+              <td><%= @tenancy.year %></td>
+            </tr>
+            <tr>
+              <td>Tenancy dates:</td>
+              <td><%= (valid_date?(@tenancy.tenancy_start) ? @tenancy.tenancy_start.strftime("%d/%m/%Y") : '<span style="color:red;">Wrong date format given</span>'.html_safe) %> - <%= (valid_date?(@tenancy.tenancy_end) ? @tenancy.tenancy_end.strftime("%d/%m/%Y") : '<span style="color:red;">Wrong date format given</span>'.html_safe) %></td>
+            </tr>
+            <tr>
+              <td>Rent payment type:</td>
+              <td><%= @tenancy.deposit_term.to_s.titleize %></td>
+            </tr>
+            <tr>
+              <td>Monthly Payment amount:</td>
+              <td>£<%= monthly_payment_price(@tenancy) %></td>
+            </tr>
+
+            <tr>
+              <td>Tenancy number of <%= @tenancy.tenancy_is == 0 ? 'weeks' : 'months' %>:</td>
+              <td><%= @tenancy.tenancy_is == 0 ? @tenancy.number_of_weeks : @tenancy.number_of_months %></td>
+            </tr>
+
+            <% if @tenancy.tenancy_is != 0 %>
+              <tr>
+                <td>Roll into next year:</td>
+                <td><%= yes_no(@tenancy.roll_into_next_year) %></td>
+              </tr>
+            <% end %>
+            </tbody>
+          </table>
+
+          <div class="accordion" id="tenancy-dashboard-data">
+            <div class="card">
+              <div class="card-header" id="headingOne">
+                <h2 class="mb-0">
+                  <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#tenancyDashboard" aria-expanded="true" aria-controls="tenancyDashboard">
+                    Tenancy Dashboard
+                    <i class="fas"></i>
+                  </button>
+                </h2>
+              </div>
+
+              <div id="tenancyDashboard" class="collapse" aria-labelledby="headingOne" data-parent="#tenancy-dashboard-data">
+                <table class="table">
+                  <tbody>
+                  <% if @tenancy.uri_string? %>
+                    <tr>
+                      <th scope="row">Dashboard Link</th>
+                      <td><%= link_to "View Tenancy Dashboard", tenancy_dashboard_url(u_id: @tenancy.uri_string), target: '_blank' %></td>
+                    </tr>
+                  <% end %>
+                  <tr>
+                    <th scope="row">Tenant Emailed?</th>
+                    <td><%= @tenancy.dashboard_link_mail? ? '<span class="badge badge-success">Yes</span>'.html_safe : '<span class="badge badge-warning">No</span>'.html_safe %></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Dashboard Visited</th>
+                    <td><%= @tenancy.dashboard_link_visited? ? '<span class="badge badge-success">Yes</span>'.html_safe : '<span class="badge badge-warning">No</span>'.html_safe %></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Email date</th>
+                    <td><%= !@tenancy.dashboard_link_mail_at.nil? ? @tenancy.dashboard_link_mail_at.strftime("%d/%m/%y at %l:%M %p") : "NA" %></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Times sent</th>
+                    <td><span class="badge badge-success"><%= !@tenancy.dashboard_link_mail_number_of_time.nil? ? @tenancy.dashboard_link_mail_number_of_time : 0 %></span></td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <% if @tenancy.additional_tenants.present? %>
+      <section id="special-conditions">
+        <h3 class="article-title">Second Tenant Details</h3>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>First Name</th>
+              <th>Surname</th>
+              <th>Phone</th>
+              <th>Address</th>
+              <th>Email</th>
+              <th>Signed date</th>
+              <th>Accepted Agreement</th>
+            </tr>
+          </thead>
+          <tbody>
+        <% @tenancy.additional_tenants.each do |additional_tenant| %>
+          <tr>
+            <td><%= additional_tenant.first_name %></td>
+            <td><%= additional_tenant.surname %></td>
+            <td><%= tel_to(additional_tenant.phone_number) %></td>
+            <td><%= additional_tenant.address %></td>
+            <td><%= mail_to(additional_tenant.email) %></td>
+            <td><%= additional_tenant.signed_date %></td>
+            <td><%= yes_no(additional_tenant.accept_agreement) %></td>
+          </tr>
+        <% end %>
+          </tbody>
+        </table>
+      </section>
+    <% end %>
+
+    <% if @tenancy.special_conditions? %>
+      <section id="special-conditions">
+        <h3 class="article-title">Special Conditions</h3>
+        <%= @tenancy.special_conditions %>
+      </section>
+    <% end %>
+
+    <% if @tenancy.tenancy_is == 0 || @tenancy.student_course_detail&.studying_at? %>
+        <section id="student-course-details">
+          <h3 class="article-title">Student Course Details</h3>
+          <table class="table">
+            <thead>
+              <tr>
+                <th style="font-weight: bold">Studying At</th>
+                <th style="font-weight: bold">Student ID</th>
+                <th style="font-weight: bold">Course</th>
+                <th style="font-weight: bold">Start Year</th>
+                <th style="font-weight: bold">End Year</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="font-weight: normal"><%= @tenancy.student_course_detail&.studying_at %></td>
+                <td><%= @tenancy.student_course_detail&.student_id_number %></td>
+                <td><%= @tenancy.student_course_detail&.course %></td>
+                <td><%= @tenancy.student_course_detail&.course_start&.strftime('%Y') %></td>
+                <td><%= @tenancy.student_course_detail&.course_end&.strftime('%Y') %></td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+    <% end %>
+
+    <section id="tenancy-documents">
+      <h3 class="article-title">Documents</h3>
+      <h3>Tenancy Documents</h3>
+      <div class="row text-center">
+        <% @tenancy.tenancy_documents.each do |doc| %>
+          <% if doc.document_name.present? && doc.document_file.present? %>
+            <!-- Mobile -->
+            <%= link_to document_block((doc.document_file != '' && !doc.document_file.nil?) ? true : false, 'fas fa-file-pdf', doc.document_name.split('_').map(&:capitalize).join(' ')),  asset_path(doc.document_file), target: '_blank', class: 'col-sm-6 col-lg-2 docs d-block d-lg-none'%>
+            <!-- Desktop -->
+            <div class="col-sm-6 col-lg-2 docs doc-prv d-none d-lg-block" data="<%=doc.document_file%>" data-doc-name="<%=doc.document_name.split('_').map(&:capitalize).join(' ')%>">
+              <%= document_block((doc.document_file != '' && !doc.document_file.nil?) ? true : false, 'fas fa-file-pdf', doc.document_name.split('_').map(&:capitalize).join(' ')) %>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+
+      <% if @tenancy.tenancy_identifications.ids %>
+        <hr>
+        <h3>Tenant Uploads</h3>
+        <div class="row text-center">
+          <% @tenancy.tenancy_identifications.each do |doc| %>
+            <!-- Mobile -->
+            <%= link_to document_badge((doc.id_proof_doc != '') ? true : false, 'fas fa-user-lock', doc.id_proof_name.split('_').map(&:capitalize).join(' ')),  asset_path(doc.id_proof_doc), target: '_blank', class: 'col-sm-6 col-lg-2 docs d-block d-lg-none' %>
+            <div class="col-sm-6 col-lg-2 docs doc-prv d-none d-lg-block" data="<%= doc.id_proof_doc %>" data-doc-name="<%= doc.id_proof_name.split('_').map(&:capitalize).join(' ') %>" data-verified="<%= doc.verified? %>">
+              <%= document_badge((doc.id_proof_doc != '') ? true : false, 'fas fa-user-lock', doc.id_proof_name.split('_').map(&:capitalize).join(' ')) %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+
+      <% if @tenancy.is_guarantor_available? %>
+        <hr>
+        <h3>Guarantor Uploads</h3>
+        <% if @tenancy.guarantor&.photo_id || @tenancy.guarantor&.utility_bill %>
+          <div class="row text-center">
+            <% if @tenancy.guarantor&.photo_id %>
+              <!-- Mobile -->
+              <%= link_to asset_path(@tenancy.guarantor&.photo_id), class: 'col-sm-6 col-lg-2 docs d-block d-lg-none', target: '_blank' do %>
+                <%= document_badge((@tenancy.guarantor&.photo_id != '') ? true : false, 'fas fa-id-card', 'Photo ID') %>
+              <% end %>
+              <!-- Desktop -->
+              <div class="col-sm-6 col-lg-2 docs doc-prv d-none d-lg-block" data="<%= @tenancy.guarantor&.photo_id %>" data-doc-name="photo_id">
+                <%= document_badge((@tenancy.guarantor&.photo_id != '') ? true : false, 'fas fa-id-card', 'Photo ID') %>
+              </div>
+            <% end %>
+
+            <% if @tenancy.guarantor&.utility_bill %>
+              <!-- Mobile -->
+              <%= link_to asset_path(@tenancy.guarantor&.utility_bill), class: 'col-sm-6 col-lg-2 docs d-block d-lg-none', target: '_blank' do %>
+                <%= document_badge((@tenancy.guarantor&.utility_bill != '') ? true : false, 'fas fa-file-invoice-dollar', 'Utility Bill') %>
+              <% end %>
+              <!-- Desktop -->
+              <div class="col-sm-6 col-lg-2 docs doc-prv d-none d-lg-block" data="<%= @tenancy.guarantor&.utility_bill %>" data-doc-name="utility_bill">
+                <%= document_badge((@tenancy.guarantor&.utility_bill != '') ? true : false, 'fas fa-file-invoice-dollar', 'Utility Bill') %>
+              </div>
+            <% end %>
+          </div>
+        <% else %>
+          <p>Guarantor has not uploaded any documents</p>
+        <% end %>
+      <% end %>
+    </section>
+
+    <%= render 'deposit_details' %>
+
+    <section id="tenancy-payment-items">
+      <h3 class="article-title">Tenancy Payment Schedule</h3>
+      <div class="actions d-flex btn-group justify-content-end push mb-4">
+        <%= link_to tenancy_payment_item_form_path(@tenancy.id), :data => {:turbolinks => false}, class: 'btn small btn-success', :remote => true, title: 'Add new payment item', style: 'min-width: 0px !important;' do %>
+          <%= fa_icon 'plus'%> Add Payment Item
+        <% end %>
+
+        <%= link_to tenancy_payment_schedule_tenancy_path(tenancy_id: @tenancy.id), class: 'btn btn-turquoise small', target: "_blank" do %>
+          <i class="fas fa-file-pdf"></i> Generate Pdf
+        <% end %>
+
+        <%= link_to send_payment_items_tenancy_path(@tenancy.id), class: 'btn small btn-turquoise', title: 'Send payment items' do %>
+          <%= fa_icon 'envelope'%> Send to Tenant
+        <% end %>
+      </div>
+
+      <% if get_tenancy_payment_items(@tenancy).count > 0 %>
+        <%= render 'tenancy_payment_items', locals: {tenancy: @tenancy} %>
+      <% else %>
+        No payment items found please update tenancy rent payment option!
+      <% end %>
+    </section>
+
+    <% if @tenancy.tenancy_is == 1 || @tenancy.professional_detail&.working_at? %>
+      <section id="employment-details">
+        <h3 class="article-title">Employment Details</h3>
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <tbody>
+            <tr>
+              <td>Working at</td>
+              <td><%= @tenancy.professional_detail&.working_at %></td>
+            </tr>
+            <tr>
+              <td>Job title</td>
+              <td><%= @tenancy.professional_detail&.job_title %></td>
+            </tr>
+
+            <tr>
+              <td>Salary</td>
+              <td><%= @tenancy.professional_detail&.salary %></td>
+            </tr>
+            <tr>
+              <td>Salary type</td>
+              <td><%= @tenancy.professional_detail&.salary_type_nice_name(@tenancy.professional_detail&.salary_type) %></td>
+            </tr>
+            <tr>
+              <td>Employment type</td>
+              <td><%= @tenancy.professional_detail&.employment_type_nice_name(@tenancy.professional_detail&.employment_type) %></td>
+            </tr>
+            <tr>
+              <td>Receive benefits</td>
+              <td><%= yes_no(@tenancy.professional_detail&.receive_benefits) %></td>
+            </tr>
+            <% if @tenancy.professional_detail&.receive_benefits == true %>
+              <tr>
+                <td>Benefit details</td>
+                <td><%= @tenancy.professional_detail&.benefit_details %></td>
+              </tr>
+            <% end %>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    <% end %>
+
+    <% if @tenancy.is_guarantor_available == true %>
+      <%= render 'guarantor_details' %>
+    <% end %>
+
+    <section id="emergency-contact">
+      <h3 class="article-title">Emergency Contact</h3>
+      <% if @tenancy.emergency_contact_name? || @tenancy.emergency_contact_number? %>
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <tbody>
+            <tr>
+              <td>Emergency Contact Name:</td>
+              <td><%= @tenancy.emergency_contact_name %></td>
+            </tr>
+            <tr>
+              <td>Emergency Contact Number:</td>
+              <td><%= tel_to(@tenancy.emergency_contact_number) %></td>
+            </tr>
+            <tr>
+              <td>Emergency Contact Address:</td>
+              <td>
+                <%= @tenancy.emergency_contact_address %><br>
+                <%= @tenancy.emergency_contact_postcode %>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      <% else %>
+        <p>No emergency contact details given</p>
+      <% end %>
+    </section>
+
+    <% if @tenancy.criminal_record == true %>
+      <section id="convictions">
+        <div class="row">
+          <div class="col-12">
+            <h3 class="article-title">Convictions</h3>
+            <div class="table-responsive">
+              <table class="table table-striped">
+                <thead>
+                <tr>
+                  <th>Conviction status</th>
+                  <th>Offence</th>
+                  <th>Date</th>
+                  <th>Judgement</th>
+                  <th></th>
+                </tr>
+
+                </thead>
+                <tbody>
+                  <%= render @tenancy.criminal_records, locals: {tenancy: @tenancy} %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+      <hr>
+    <% end %>
+
+    <% if @history %>
+      <div class="history">
+        <h3 class="article-title">Tenant History</h3>
+        <% @history.each do |tenant_history| %>
+          <tr>
+<!--            <td><%#= tenant_history %></td>-->
+            <td><%= link_to @tenancy.tenant_name, tenancy_path(tenant_history.original_id) %></td>
+            <td><%= get_tenant_year(tenant_history.original_id)  %></td>
+          </tr>
+        <% end %>
+      </div>
+    <% end %>
+
+  </article>
+
+<div class="modal fade" id="tenancy-staff-conversation-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"></div>
+
+<div class="modal fade" id="tenancy-payment-item-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"></div>
+
+<div class="modal fade" id="tenancy-doc-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"></div>
+<div class="modal fade" id="doc-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Document: <span class="doc-name"></span></h3>
+        <button type="button" class="close" data-dismiss="modal" style="font-size: 3.5rem !important;"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+      </div>
+      <div class="modal-body">
+        <object data="" type="application/pdf" width="100%" height="520px" class="doc-preview"></object>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="criminal-edit-modal" tabindex="-1" role="dialog" aria-labelledby="criminalEditLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title" id="exampleModalLabel">Tenancy Payment Items</h3>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="edit-form"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<script type="text/javascript">
+  $('#rolled').on('click', function(){
+    $('.edit-roll-link').show();
+    $(this).hide();
+  })
+  $('#cancel_rolled').on('click', function(){
+    $('.edit-roll-link').hide();
+    $('#rolled').show();
+  })
+
+</script>

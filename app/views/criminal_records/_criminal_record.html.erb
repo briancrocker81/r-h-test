@@ -1,0 +1,18 @@
+<tr>
+  <td>
+    <%= criminal_record.conviction_status %>
+  </td>
+  <td>
+    <%= criminal_record.offence %>
+  </td>
+  <td>
+    <%= criminal_record.date %>
+  </td>
+  <td>
+    <%= criminal_record.judgement %>
+  </td>
+  <td>
+    <%= link_to '<i class="fa fa-edit"></i>'.html_safe, edit_tenancy_criminal_record_path(tenancy_id: criminal_record.tenancy_id, id: criminal_record.id), :data => {:turbolinks => false}, :remote => true %> |
+    <%= link_to '<i class="fa fa-trash"></i>'.html_safe, tenancy_criminal_record_path(tenancy_id: criminal_record.tenancy_id, id: criminal_record.id), method: :delete, data: { confirm: 'Are you sure?' } %>
+  </td>
+</tr>

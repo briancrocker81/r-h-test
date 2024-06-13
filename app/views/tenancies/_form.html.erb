@@ -1,0 +1,534 @@
+<%= simple_form_for(@tenancy, html: {"data-valid": false}) do |f| %>
+  <div id="title-bar" class="sticky-top">
+    <h1><%=raw @tenancy.tenant_name.present? ? "#{@tenancy.tenant_name+"<small class='edit'>- Edit mode</small>".html_safe}" : 'New Tenancy' %> </h1>
+    <div class="actions d-flex justify-content-end push">
+      <% if current_user.admin? %>
+        <%= link_to (fa_icon (@tenancy.archived ? 'undo': 'archive')), (@tenancy.archived ? tenancy_unarchived_path(@tenancy) : tenancy_archived_path(@tenancy)), data: { confirm: 'Are you sure? This cannot be undone!' }, class: 'btn btn-danger del' unless @tenancy.new_record? %>
+      <% end %>
+      <%= link_to 'Back', :back, class: 'btn btn-secondary', :data => {:turbolinks => false} %>
+      <%= f.button :submit, 'Save', class: 'btn btn-success' %>
+    </div>
+  </div>
+  <article id="form-content">
+    <% if @tenancy.errors.any? %>
+      <div id="error_explanation" class="bg-warning">
+        <div class="row justify-content-md-center">
+          <div class="col-2 icon">
+            <i class="fas fa-exclamation-triangle fa-5x"></i>
+          </div>
+          <div class="col-6">
+            <h3 class="article-title"><%= pluralize(@tenancy.errors.count, "error") %> prohibited this tenancy from being saved:</h3>
+            <ul>
+              <% @tenancy.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+      </div>
+    <% end %>
+    <div id="error_explanation" class="bg-warning js-error" style="display: none;">
+      <div class="row justify-content-md-center">
+        <div class="col-2 icon">
+          <i class="fas fa-exclamation-triangle fa-5x"></i>
+        </div>
+        <div class="col-6">
+          <h3 class="article-title">Error prohibited this tenancy from being saved:</h3>
+          <ul class="error-list">
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="form-inputs">
+      <section>
+        <h3 class="article-title">Property</h3>
+        <div class="row">
+          <div class="col-md-6 col-lg-4">
+            <div class="form-group">
+              <label>Booking for Property</label>
+              <%= f.select :room_id, options_for_select(rooms, @tenancy.room_id), {include_blank: "Select Room"}, class: "form-control" %>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4">
+            <div class="form-group">
+              <%= f.label :booking_status, class: "form-control-label" %>
+              <%= f.select :booking_status, options_for_select(Tenancy.booking_statuses.keys.map{|c| [c.capitalize, c ]}, @tenancy.booking_status), {include_blank: "Select booking status"}, class: "form-control" %>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <hr>
+
+      <section id="tenant-details">
+          <h3 class="article-title">Rental Details</h3>
+          <div class="row">
+            <div class="col-xl-6">
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <%= f.label :tenant_type, class: "form-control-label" %>
+                    <%= f.select :tenant_type, options_for_select(Tenancy::TENANCY_TYPE.map{|tp| [tp[0], tp[1]] }, @tenancy.tenant_type), {include_blank: "Select tenant type"}, class: "form-control" %>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <%= f.input :year, collection: business_years, selected: @tenancy.year, include_blank: "Select booking year session" %>
+                </div>
+                <div class="col-md-4">
+                  <%= f.input :rent_payment_option, label: 'Rent payment', collection: [ ["Termly", 0], ["Monthly", 1], ["Full", 2] ], selected: @tenancy.rent_payment_option, include_blank: "Select rent payment option" %>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-6">
+              <div class="row">
+                <div class="col-md-6">
+                  <%= f.input :tenancy_start, start_year: Time.now.year - 1, end_year: Time.now.year + 15, order: %i(day month year) %>
+                </div>
+                <div class="col-md-6" title="Altering this date will NOT update the tenancy contracts">
+                  <%= f.input :tenancy_end, order: %i(day month year) %>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <%# if ((@tenancy.tenant_is == 'Student' || @tenancy.tenant_is == 'Professional') && @tenancy.rent_payment_option == 'weekly') %>
+          <%# if ((@tenancy.tenant_is == 'Student' || @tenancy.tenant_is == 'Professional') && @tenancy.weekly_price) %>
+
+          <%# if (@tenancy.tenancy_is == 0 && @tenancy.weekly_price) %>
+        <div class="bg-light p-3">
+          <h3>Reporting figures</h3>
+          <div class="row">
+            <div class="col-md-6 col-lg-2">
+              <%= f.input :weekly_price, label: "Weekly price (£)"%>
+            </div>
+            <div class="col-md-6 col-lg-2">
+              <%#= f.input :number_of_weeks, input_html: { value: @tenancy.number_of_weeks.present? ? @tenancy.number_of_weeks : '50' }, disabled: (true if @tenancy.signed_tenancy_agreement?) %>
+              <%= f.input :number_of_weeks %>
+            </div>
+            <%= f.hidden_field :monthly_price %>
+            <%= f.hidden_field :number_of_months %>
+
+            <div class="col-md-6 col-lg-2">
+              <%= f.input :payment_amount, label: "Monthly price (£)" %>
+            </div>
+            <div class="col-md-6 col-lg-2">
+              <%#= f.input :number_of_months, disabled: (true if @tenancy.signed_tenancy_agreement?) %>
+              <%= f.input :number_of_months %>
+            </div>
+            <%= f.hidden_field :weekly_price %>
+            <%= f.hidden_field :number_of_weeks %>
+          </div>
+          <%# end %>
+        </div>
+
+
+          <%= f.hidden_field :advanced_rent_payment_amount, value: @tenancy.tenancy_is == 0 ? f.object.advanced_rent_payment_amount : 0 %>
+          <%= f.hidden_field :total_tenancy_value %>
+          <%= f.hidden_field :number_of_payments %>
+          <%= f.hidden_field :payment_amount %>
+      </section>
+
+      <section>
+        <h3 class="article-title">Deposit & Initial Payments</h3>
+        <div class="row">
+          <div class="col-lg-4">
+            <%= f.input :deposit_date, order: %i(day month year) %>
+          </div>
+          <div class="col-lg-2">
+            <%= f.input :deposit_guarantor_amount, label: 'Deposit Amount' %>
+          </div>
+          <div class="col-lg-2">
+            <label></label>
+            <%= f.input :deposit_paid, as: :boolean %>
+          </div>
+          <div class="col-lg-2">
+            <label></label>
+            <%= f.input :deposit_protected, as: :boolean %>
+          </div>
+          <div class="col-lg-2">
+            <label></label>
+            <%= f.input :prescribed_info_sent, as: :boolean %>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-lg-3">
+            <%= f.input :initial_payment_date, order: %i(day month year)  %>
+          </div>
+          <div class="col-lg-3">
+            <%= f.input :initial_payment %>
+          </div>
+          <div class="col-lg-3">
+            <label></label>
+            <%= f.input :initial_payment_paid, as: :boolean %>
+          </div>
+        </div>
+      </section>
+
+
+      <section>
+        <h3 class="article-title">Main Tenant Details</h3>
+        <div class="row">
+          <div class="col-md-4">
+            <%= f.input :first_name %>
+          </div>
+          <div class="col-md-4">
+            <%= f.input :surname %>
+          </div>
+          <div class="col-md-4">
+            <%= f.input :dob, label: 'Date of birth', order: %i(day month year), include_blank: true, # substitute 18.years.ago to prefill year
+                        start_year: Date.today.year - 100,
+                        end_year: Date.today.year - 18 %>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-4">
+            <%= f.input :mobile %>
+          </div>
+          <div class="col-md-4">
+            <%= f.input :email %>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <%= f.label :nationality %>
+              <%= f.select :nationality, options_for_select(Nationality::Nationality.default_option("British"), :selected => f.object.nationality), { }, {class: 'form-control' } %>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <%= f.input :address, label: 'Current Address' %>
+          </div>
+          <div class="col-md-4">
+            <%= f.input :city %>
+          </div>
+          <div class="col-md-4">
+            <%= f.input :state %>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <%= f.input :special_conditions %>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 col-lg-4">
+            <%= f.input :criminal_record %>
+          </div>
+          <div class="col-md-6 col-lg-4">
+            <%= f.input :confirmed_video_viewed, label: 'Confirmed move in video / inventory' %>
+          </div>
+        </div>
+      </section>
+
+      <% if !@tenancy.new_record? && @tenancy.tenancy_is == 0 && current_user.is_admin? %>
+        <section id="student-course">
+          <h3 class="article-title">Student Course Detail</h3>
+          <div>
+            <%= f.simple_fields_for :student_course_detail do |student_course_detail| %>
+              <div class="row">
+                <div class="col-lg-6">
+                  <%= student_course_detail.input :studying_at, required: false %>
+                </div>
+                <div class="col-lg-6">
+                  <%= student_course_detail.input :student_id_number, required: false %>
+                </div>
+                <div class="col-lg-4">
+                  <%= student_course_detail.input :course, required: false %>
+                </div>
+                <div class="col-lg-4">
+                  <%= student_course_detail.input :course_start, :start_year => Time.now.year - 5, :end_year => Time.now.year + 10, discard_day: true, order: %i(month year), include_blank: true %>
+                </div>
+                <div class="col-lg-4">
+                  <%= student_course_detail.input :course_end, :start_year => Time.now.year - 5, :end_year => Time.now.year + 10, discard_day: true, order: %i(month year), include_blank: true %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </section>
+      <% end %>
+
+      <section id="criminal-record">
+        <h3 class="article-title">Criminal Records</h3>
+        <div id="criminal_record">
+          <%= f.simple_fields_for :criminal_records do |criminal_record| %>
+            <%= render 'criminal_record_fields', f: criminal_record %>
+          <% end %>
+        </div>
+        <div class="links">
+          <%= link_to_add_association 'Add an offence', f, :criminal_records, class: 'btn small btn-success' %>
+        </div>
+      </section>
+
+      <section id="additional-tenants">
+        <h3 class="article-title">Second Tenant Details</h3>
+        <%= f.simple_fields_for :additional_tenants do |additional_tenant| %>
+          <%= render 'additional_tenant_fields', f: additional_tenant %>
+        <% end %>
+
+        <% unless @tenancy.additional_tenants.count >= 1 %>
+          <div class="links">
+            <%= link_to_add_association 'Add second tenant', f, :additional_tenants, class: 'btn small btn-success' %>
+          </div>
+        <% end %>
+      </section>
+
+      <section id="agreement-status">
+        <h3 class="article-title">Agreement status</h3>
+        <p>These fields are populated via the tenancy dashboard. They should only be overwritten if the tenant has submitted a paper form</p>
+        <div class="row">
+          <div class="col-lg-3">
+            <%= f.input :form_submitted, label: 'Signed booking form' %>
+          </div>
+          <div class="col-lg-3">
+            <%= f.input :signed_tenancy_agreement %>
+          </div>
+          <div class="col-lg-3">
+            <%= f.input :read_doc, label: 'Read compliance documents' %>
+          </div>
+          <div class="col-lg-3">
+            <%= f.input :final_submission %>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h3 class="article-title">Tenant ID's</h3>
+        <div id="tenancy_identifications">
+          <%= f.simple_fields_for :tenancy_identifications do |tenancy_identification| %>
+            <%= render 'tenancy_identification_fields', f: tenancy_identification %>
+          <% end %>
+          <div class="links">
+            <%= link_to_add_association 'Add tenant identification', f, :tenancy_identifications, class: 'btn small btn-success' %>
+          </div>
+        </div>
+      </section>
+
+      <section id="compliance-docs-container">
+        <%= render partial: 'tenancy_documents', locals: {f: f, tenancy: @tenancy } %>
+      </section>
+
+      <section>
+        <h3 class="article-title">Emergency Contact Details</h3>
+        <div class="row">
+          <div class="col-lg-6 order-1">
+            <%= f.input :emergency_contact_name %>
+          </div>
+          <div class="col-lg-6 order-2">
+            <%= f.input :emergency_contact_address %>
+          </div>
+          <div class="col-lg-6 order-4 order-lg-3">
+            <%= f.input :emergency_contact_number %>
+          </div>
+          <div class="col-lg-6 order-3 order-lg-4">
+            <%= f.input :emergency_contact_postcode %>
+          </div>
+        </div>
+      </section>
+
+
+      <% if @tenancy.tenancy_is.to_i == 1 %>
+        <section>
+          <div class="row">
+            <div class="col-lg-12">
+              <h3 class="article-title">Employee Details</h3>
+              <div class="row">
+                <%= f.simple_fields_for :professional_detail do |pr_detail| %>
+                  <div class="col-lg-6">
+                    <%= pr_detail.input :working_at, required: true %>
+                    <%= pr_detail.hidden_field :validate_professional, value: true %>
+                  </div>
+                  <div class="col-lg-6">
+                    <%= pr_detail.input :job_title %>
+                  </div>
+                  <div class="col-lg-4">
+                    <%= pr_detail.input :salary %>
+                  </div>
+                  <div class="col-lg-4">
+                    <%#= pr_detail.input :salary_type %>
+                    <%= pr_detail.input :salary_type, label: 'Salary type', collection: [ ["Annual", 0], ["Monthly", 1], ["Weekly", 2] ], selected: @tenancy.professional_detail.salary_type, include_blank: "Select your salary type" %>
+                    <%#= pr_detail.select :salary_types, options_for_select(Tenancy.salary_types.keys.map{|c| [c.capitalize, c ]}, @tenancy.professional_detail.salary_type), {include_blank: "Select booking status"}, class: "form-control" %>
+                  </div>
+                  <div class="col-lg-4">
+                    <%#= pr_detail.input :salary_type %>
+                    <%= pr_detail.input :employment_type, label: 'Employment type', collection: [ ["Full Time", 0], ["Part Time", 1], ["Temporary", 2] ], selected: @tenancy.professional_detail.employment_type, include_blank: "Select your salary type" %>
+                    <%#= pr_detail.select :salary_types, options_for_select(Tenancy.salary_types.keys.map{|c| [c.capitalize, c ]}, @tenancy.professional_detail.salary_type), {include_blank: "Select booking status"}, class: "form-control" %>
+                  </div>
+                  <div class="col-lg-6">
+                    <%= pr_detail.input :receive_benefits, input_html: { class: '' }, :label_html => { class: '' }, required: false, label: 'Do you receive and benefits / financial support?' %>
+                  </div>
+
+                  <div class="col-lg-12">
+                    <%= pr_detail.input :benefit_details %>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </section>
+      <% end %>
+
+      <section>
+        <h3 class="article-title">Payment Card</h3>
+        <div class="row">
+          <div class="col-lg-4">
+            <%= f.input :payment_card_pan, input_html: { value: card_number(@tenancy.payment_card_pan) },  disabled: (true unless (admin? || finance?)) %>
+          </div>
+          <div class="col-lg-4">
+            <%= f.input :payment_card_cvc, input_html: { value: card_cvc(@tenancy.payment_card_cvc), type: 'number'}, disabled: (true unless (admin? || finance?)) %>
+          </div>
+          <div class="col-lg-4">
+            <%= f.input :payment_card_expiry, start_year: Time.now.year, end_year: Time.now.year + 15, order: %i(month year), disabled: (true unless (admin? || finance?)) %>
+            <span id="card-expiry-error" style="color: red; font-size: 12px;"></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- If guarantor -->
+      <% if !@tenancy.new_record? && @tenancy.is_guarantor_available %>
+        <section>
+          <h3 class="article-title">Guarantor Details</h3>
+          <%= f.simple_fields_for :guarantor do |g| %>
+            <div class="row">
+              <div class="col-sm-6">
+                <%= g.input :guarantor_name %>
+              </div>
+              <div class="col-sm-6">
+                <%= g.input :guarantor_address %>
+              </div>
+              <div class="col-sm-6">
+                <%= g.input :guarantor_post_code %>
+              </div>
+
+              <div class="col-sm-6">
+                <%= g.input :guarantor_email %>
+              </div>
+
+              <div class="col-sm-6">
+                <%= g.input :guarantor_mobile %>
+              </div>
+
+              <div class="col-sm-6">
+                <%= g.input :guarantor_relationship, label: 'Relationship to Proposed Tenant' %>
+              </div>
+
+              <div class="col-sm-6">
+                <br/>
+                <%= g.check_box :own_property %>
+                Do you own your own property?
+              </div>
+
+              <div class="col-sm-6">
+                <%= g.input :national_insurance_number %>
+              </div>
+
+              <div class="col-sm-6">
+                <%= g.input :contact_number, label: 'Best contact number'%>
+              </div>
+
+              <div class="col-sm-6">
+                <%= g.input :date_of_birth, start_year: Time.now.year - 80, end_year: Time.now.year - 18, order: %i(day month year), label: 'Date of Birth' %>
+              </div>
+            </div>
+            <hr>
+            <h3>Guarantor's Employer</h3>
+            <div class="row">
+              <div class="col-sm-6">
+                <%= g.input :employment_status, input_html: { id: 'employment_status' }, as: :select, collection: [['Employed', 'employed'], ['Retired', 'retired']], checked: g.object.employment_status, include_blank: "Select employment status" %>
+              </div>
+
+              <div class="col-sm-6">
+                <%= g.input :employer_name %>
+              </div>
+
+              <div class="col-sm-6">
+                <%= g.input :employer_manager %>
+              </div>
+
+              <div class="col-sm-6">
+                <%= g.input :employer_contact %>
+              </div>
+
+              <div class="col-sm-6">
+                <%= g.input :employer_address %>
+              </div>
+
+              <div class="col-sm-6">
+                <%= g.input :employer_email %>
+              </div>
+
+              <div class="col-sm-6">
+                <%= g.input :net_salary, label: "Monthly net salary" %>
+              </div>
+            </div>
+
+            <div id="enable-guarantor-dashboard" class="btn small btn-info">Show Guarantor Dashboard Options</div>
+
+            <div id="guarantor-dashboard-data">
+              <hr>
+              <h3>Guarantor Dashboard</h3>
+              <p>This section will affect the status on the Guarantor dashboard. Unchecking these options will require the guarantor to resubmit the dashboard.</p>
+              <%= g.input :confirm_guarantor %>
+              <%= g.input :confirm_signed_tenancy %>
+              <%= g.input :complete_guarantor_agreement %>
+            </div>
+
+          <% end %>
+        </section>
+      <% end %>
+      <!--end if guarantor-->
+
+    </div>
+
+  </article>
+
+<% end %>
+<div class="modal fade" id="doc-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Document: <span class="doc-name"></span></h3>, (Verified: <span class="doc-verified"></span>, Verified By: <span class="doc-verified-by"></span>)
+        <button type="button" class="close" data-dismiss="modal" style="font-size: 3.5rem !important;"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+      </div>
+      <div class="modal-body">
+        <object data="" type="application/pdf" width="100%" height="520px" class="doc-preview"></object>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  $('#secondary_contact_check').change(function(){
+    if (this.checked){
+      $('#secondary_contact').show()
+      $("#tenancy_secondary_contact_first_name, #tenancy_secondary_contact_last_name, #tenancy_secondary_contact_phone_number, #tenancy_secondary_contact_email").prop('required', 'required');
+    }
+    else{
+      $('#secondary_contact').hide()
+      $("#tenancy_secondary_contact_first_name, #tenancy_secondary_contact_last_name, #tenancy_secondary_contact_phone_number, #tenancy_secondary_contact_email").prop('required', '');
+    }
+  });
+  $('#documents').on('cocoon:before-insert', function(e, task_to_be_added) {
+    console.log(e.timeStamp, task_to_be_added);
+    var $select = $(task_to_be_added).find('select');
+    $select.on('change', function(){
+      if($(this).val() == 'credit_check'){
+        var check = "<br/><input type='checkbox' name='booking_status'>Booking Status</input>"
+        $(task_to_be_added).find('.booking_check').append(check);
+      } else {
+        $(task_to_be_added).find('.booking_check').empty();
+      }
+    })
+    /* ... do something ... */
+  })
+  $('#tenancy_payment_card_cvc').on('keyup', function(event){
+    if(!$(this).is(':disabled')){
+      $(this).val($(this).val().replace(/[^\d].+/, ""));
+      if ((event.which < 48 || event.which > 57)) {
+        event.preventDefault();
+      }
+    }
+  })
+  Tenancy();
+</script>

@@ -1,0 +1,106 @@
+<div class="row">
+  <div id="images-container" class="col-md-6">
+    <h3>Images</h3>
+    <div class="row">
+      <% if @property.attachments.present? %>
+        <% @property.attachments.each do |file| %>
+          <div class="col-6 col-lg-4 img-prv" style="margin-bottom: 30px; text-align: center;">
+            <%= image_tag file.attachment_url, class: 'img-fit' %>
+            <span class="img-title"><%= file.title %></span>
+            <div class="image-actions">
+              <%= link_to '<i class="fa fa-edit"></i>'.html_safe, property_edit_attachment_path(property_id: @property, id: file.id), remote: true, class: 'edit-btn-properties', title: 'Edit image' %>
+              <%= link_to '<i class="fa fa-trash"></i>'.html_safe, remove_property_image_path(property_id: @property, id: file.id), method: :delete, data: { confirm: 'Are you sure?' }, class: 'trash-btn-properties', title: 'Delete image' %>
+            </div>
+          </div>
+        <% end %>
+      <% else %>
+        <div class="col-sm-12">
+          <label class="badge-warning p-2">
+            No images saved against this property
+          </label>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <div class="col-md-6">
+<!--    <div class="table-responsive">-->
+      <table class="table table-striped">
+        <tbody>
+        <tr>
+          <td>Listed on:</td>
+          <td>
+            <% @property.property_listing_locations.each do |item| %>
+              <div class="row mb-3">
+                <div class="col-12 col-lg-8">
+                  <%= item.listing_type.try(:capitalize) %>
+                </div>
+                <div class="col-12 col-lg-4">
+                  <%= item.year %>
+                </div>
+              </div>
+            <% end %>
+            <% if @property.list_on_3rd_party_websites %>
+              <div class="row mb-3">
+                <div class="col-12 col-lg-8">
+                  Listed on 3rd party websites
+                </div>
+                <div class="col-12 col-lg-4">
+                  <%= yes_no @property.list_on_3rd_party_websites %>
+                </div>
+              </div>
+            <% end %>
+          </td>
+        </tr>
+        <tr>
+          <td>Property:</td>
+          <td><%= @property.property_name %></td>
+        </tr>
+        <% unless !@property.address_line_2? %>
+          <tr>
+            <td>Address line 2:</td>
+            <td><%= @property.address_line_2 %></td>
+          </tr>
+        <% end %>
+        <tr>
+          <td>City:</td>
+          <td><%= @property.city %></td>
+        </tr>
+        <tr>
+          <td>County:</td>
+          <td><%= @property.county %></td>
+        </tr>
+        <tr>
+          <td>Postcode:</td>
+          <td><%= @property.postcode %></td>
+        </tr>
+        <!--      <tr>-->
+        <!--        <td>Type:</td>-->
+        <!--        <td><%#= @property.property_type_nice_name %></td>-->
+        <!--      </tr>-->
+        <tr>
+          <td>Rental Type:</td>
+          <!--            <td><%#= rental_type(@property, '').html_safe %></td>-->
+          <td style="text-transform: capitalize;"><%= @property.rental_type %></td>
+        </tr>
+        <tr>
+          <% if @property.rental_type == 1 %>
+            <td>Room Rental Price:</td>
+            <td>£<%= @property.room_rental_price %></td>
+          <% else %>
+            <td>Home Rental Price:</td>
+            <td>£<%= @property.home_rental_price %></td>
+          <% end %>
+        </tr>
+        <tr>
+          <td>Landlord:</td>
+          <td><%= link_to @property.landlord.contact_name, @property.landlord if @property.landlord&.contact_name? %></td>
+        </tr>
+        <tr>
+          <td>Landlord contact number:</td>
+          <td><%= tel_to(@property.landlord.contact_number) rescue "" %></td>
+        </tr>
+        </tbody>
+      </table>
+<!--    </div>-->
+  </div>
+</div>

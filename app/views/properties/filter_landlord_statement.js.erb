@@ -1,0 +1,4 @@
+$('#landlord_statement').html("<%= j render 'landlord_statements', term: 'monthly' %>")
+$(".btn-filter-statement").removeClass('badge-primary').addClass('badge-secondary');
+$("#btn-statement-<%= @year_id %>").addClass('badge-primary').removeClass('badge-secondary');
+DocumentPreview();

@@ -1,0 +1,40 @@
+<div class="row">
+  <div class="col-12">
+    <div class="title-bar bg-white">
+      <div class="actions btn-group d-flex w-100">
+        Year
+        <span class="w-100 mw-50 d-flex">
+              <% business_years.each do |year| %>
+                <%= link_to year, property_get_filter_rooms_path(property_id: @property.id, year: year), class: "badge badge-#{year == @year ? 'primary' : 'secondary'} mr-2 ml-2 btn-filter-rooms", id: "btn-#{year.gsub('/', '-')}", remote: true %>
+              <% end %>
+            </span>
+        <%= link_to "Send Email to Tenants", send_email_to_tenants_property_path(@property), class:'btn small btn-info d-none d-lg-block ', method: :get, remote: true %>
+      </div>
+    </div>
+    <div class="table-responsive">
+      <table id="property-rooms" class="table table-striped" valign="middle">
+        <thead>
+        <tr>
+          <th>Renting</th>
+          <th>Dimensions</th>
+          <th>List Price</th>
+          <th>Ensuite</th>
+          <th width="150" class="tenancy"> Name</th>
+          <th width="150" class="tenancy"> Mobile</th>
+          <th width="150" class="tenancy"> Type</th>
+          <th class="tenancy"> Start</th>
+          <th class="tenancy"> End</th>
+          <th> </th>
+        </tr>
+        </thead>
+        <tbody id="rooms">
+        <%= render 'rooms' %>
+        </tbody>
+      </table>
+    </div>
+    <div class="actions d-flex btn-group justify-content-end push">
+      <%= link_to "Send Email to Tenants", send_email_to_tenants_property_path(@property), class:'btn small btn-info d-block d-lg-none ', method: :get, remote: true %>
+      <%= link_to (fa_icon 'plus')+' New Room', new_property_room_path(@property), class: 'btn small btn-success push' %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,61 @@
+<div class="modal-header">
+  <h3 class="modal-title">New Property Expense</h3>
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<%= simple_form_for([@property, @property_expense], html: { class: '', remote: true }) do |f| %>
+  <div class="modal-body">
+    <div id="property_expense_error" class="text-danger">
+    </div>
+
+    <article>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <%= f.input :expense_date, class: "datepicker", as: :string %>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <%= f.input :name, label: "Expense" %>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <%= f.input :category, collection: PropertyExpense.categories.keys, prompt: 'Select Expense' %>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <%= f.input :amount, input_html: { min: 0 } %>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <%= f.input :file, as: :file %>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="form-group">
+            <br/>
+            <%= f.input :recurring %>
+          </div>
+        </div>
+        <div class="col-md-6 numbert_of_months_expense">
+          <div class="form-group">
+            <%= f.input :number_of_months, input_html: { disabled: true, min: 0 } %>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+  <div class="modal-footer">
+    <%= f.submit "Save", class: 'btn btn-primary'%>
+    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+  </div>
+<% end %>

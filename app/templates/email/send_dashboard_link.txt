@@ -1,0 +1,11 @@
+Hi {{ first_name }}
+
+This email is to give you a access your tenancy dashboard to complete your further information.
+
+Click on the link to complete your documentation, {{ tenancy_dashboard_link }}
+
+Let us know if you have any questions or if you were planning on re-booking
+
+*Thanks*
+Team
+CityLets

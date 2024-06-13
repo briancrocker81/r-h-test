@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= yield(:title) %></title>
+    <meta name="viewport" content="width=device-width" />
+    <%= csrf_meta_tags %>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <%= favicon_link_tag 'favicon-32x32.png' %>
+    <%= stylesheet_link_tag    'print', media: 'print', 'data-turbolinks-track': 'reload' %>
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <link href="https://fonts.googleapis.com/css?family=Quicksand&display=swap" rel="stylesheet">
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+  </head>
+
+  <body class="<%= controller.controller_name %> <%= action_name %>">
+    <div class="wrapper">
+      <% if user_signed_in? %>
+        <%= render partial: "layouts/sidebar" %>
+      <% end %>
+
+      <div id="content">
+        <%= render partial: "layouts/nav" %>
+
+        <% if notice %>
+          <div class="container">
+            <div class="col-12">
+              <p class="alert alert-success alert-dismissible fade show"><%= notice %>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </p>
+            </div>
+          </div>
+        <% end %>
+        <% if alert %>
+          <div class="container">
+            <div class="col-12">
+              <p class="alert alert-danger alert-dismissible fade show"><%= alert %>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </p>
+            </div>
+          </div>
+        <% end %>
+        <div id="main" class="container">
+          <% if user_signed_in? %>
+            <div id="sidebar-toggle" class="d-block d-md-none">
+              <i class="fas fa-angle-double-right"></i>
+            </div>
+          <% end %>
+          <%= yield %>
+          <div id="remote_container"></div>
+        </div>
+      </div>
+
+<!--      <footer>-->
+<!--        Version 2.3-->
+
+<!--      </footer>-->
+    </div>
+  </body>
+</html>

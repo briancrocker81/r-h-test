@@ -1,0 +1,50 @@
+<% if conversations.present? %>
+  <% conversations.each_with_index do |conversation, conv_index| %>
+    <% messages = get_conversation_thread(conversation.id) %>
+    <% messages.each_with_index do |message, index| %>
+      <% if index == 0 %>
+        <%= render 'conversations/list_style', message: message %>
+      <% else %>
+        <div class="row">
+          <div class="col-md-1"></div>
+          <div class="col-md-11">
+            <%= render 'conversations/list_style', message: message %>
+          </div>
+        </div>
+      <% end %>
+      <% if (messages.count-1) == index && (conversations.count-1) != conv_index %>
+        <hr>
+      <% end %>
+    <% end %>
+  <% end %>  
+<% else %>
+  <p>
+    <strong>No Conversations.</strong>
+  </p>
+<% end %>
+<hr>
+<%= render 'conversations/form', property: @property %>
+
+<style type="text/css">
+  .media img {
+    width: 40px;
+    height: auto
+  }
+</style>
+
+<script>
+  $(document).ready(function(){
+    $(".edit-form-show").click(function(){
+      var form_id = $(this).data('id');
+      $("#edit-form-"+form_id).toggle(1000);
+    });
+    $('.edit-form').hide();
+
+    $(".reply-form-show").click(function(){
+      var form_id = $(this).data('id');
+      $("#reply-form-"+form_id).toggle(1000);
+    });
+    $('.reply-form').hide();
+    $(window).on("load", function (e) { $("html, body").animate({ scrollTop: $(document).height() }, 1000); })
+  });
+</script>

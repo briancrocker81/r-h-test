@@ -1,0 +1,47 @@
+<div class="container">
+
+  <p id="notice"><%= notice %></p>
+  <div id="title-bar" class="sticky-top">
+    <h1><%= @room.property.property_name %></h1>
+    <div class="actions d-flex btn-group justify-content-end push">
+      <%= link_to 'Back', property_path(@room.property), class: 'btn btn-secondary' %>
+      <%= link_to 'Edit', edit_room_path(@room), class: 'btn btn-success' %>
+    </div>
+  </div>
+
+  <article>
+    <section>
+      <h3 class="article-title">Room Details</h3>
+      <table class="table">
+        <tbody>
+        <tr>
+          <td>Room Number:</td>
+          <td><%= @room.number %></td>
+        </tr>
+        <tr>
+          <td>Description:</td>
+          <td><%= @room.description %></td>
+        </tr>
+        <tr>
+          <td>Dimensions:</td>
+          <td><%= @room.dimensions %></td>
+        </tr>
+        <tr>
+          <td>List Price:</td>
+          <td>£<%= number_with_delimiter(sprintf("%.2f",@room.list_price.to_f), delimiter: ',') %></td>
+        </tr>
+        <tr>
+          <td>Ensuite:</td>
+          <td><%= yes_no @room.ensuite %></td>
+        </tr>
+        <tr>
+          <td>Availability:</td>
+          <td><%= yes_no @room.availability %></td>
+        </tr>
+        </tbody>
+
+      </table>
+    </section>
+
+  </article>
+</div>

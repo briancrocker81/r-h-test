@@ -1,0 +1,36 @@
+<div class="nested-fields">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="form-group id-proof-div">
+        <%#= f.label "ID", class: "form-control-label"%>
+
+        <%= f.input :id_proof_name, collection: [ ['Passport', 'passport'], ['Uni letter', 'uni_letter'],
+                                                  ['Driving License', 'driving_license'],
+                                                  ['Student ID', 'student_id'], ['Visa', 'visa'],
+                                                  ['Birth Certificate', 'birth_certificate'], [ 'Bank statement', 'bank-statement'],
+                                                  ['Payslip', 'payslip'],
+                                                  ['Other', 'other'] ]  %>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <% if f.object.present? && f.object.id_proof_doc.present? %>
+        <div class="docs doc-prv" data="<%=f.object.id_proof_doc%>" data-doc-name="<%=f.object.id_proof_name.split('_').map(&:capitalize).join(' ')%>" data-verified="<%=f.object.verified?%>" data-verified-by="<%= f.object.verified? ? f.object.users.full_name : 'N/A' %>" style = "margin-top: 20px;">
+          <%= document_badge((f.object.id_proof_doc != '') ? true : false, 'fas fa-user-lock', f.object.id_proof_name.split('_').map(&:capitalize).join(' ')) %>
+        </div>
+      <% else %>
+        <%= f.input :id_proof_doc, as: :file %>
+      <% end %>
+    </div>
+<!--    <div id="verified" class="col-md-3">-->
+      <%#= f.input :verified, as: :boolean %>
+<!--    </div>-->
+    <div class="col-md-2">
+      <%= link_to_remove_association "Remove", f, class: "btn btn-warning remove mb-3" %>
+    </div>
+    <% if user_signed_in? && current_user.is_admin? %>
+      <div style="display: none;">
+        <%= f.hidden_field :staff_id, value: current_user.id %>
+      </div>
+    <% end %>
+  </div>
+</div>

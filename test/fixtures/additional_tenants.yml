@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  first_name: MyString
+  surname: MyString
+  phone_number: MyString
+  address: MyText
+  email: MyString
+  signature: MyString
+  signed_date: 2021-12-04
+  accept_agreement: false
+
+two:
+  first_name: MyString
+  surname: MyString
+  phone_number: MyString
+  address: MyText
+  email: MyString
+  signature: MyString
+  signed_date: 2021-12-04
+  accept_agreement: false

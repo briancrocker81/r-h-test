@@ -1,0 +1,503 @@
+<% content_for :tenancy_dashboard_title, "Tenancy Agreement" %>
+<%= render 'dashboard_header' %>
+<%= simple_form_for @tenancy, :url => submit_agreement_form_path(@tenancy.uri_string), :method => :post, html: {multipart: true, id: 'editTenancy'} do |f| %>
+
+  <div id="title-bar" class="sticky-top">
+    <div class="actions btn-group d-flex justify-content-end push">
+      <%= link_to :back, class: 'btn btn-secondary', id: 'back' do %>
+        <i class="fas fa-backward d-block d-md-none"></i>
+        <span class="d-none d-md-block">Back</span>
+      <% end %>
+      <%= link_to '<i class="fas fa-print"></i>'.html_safe, '', onclick: 'window.print();return false;', class: 'btn btn-info del print'%>
+      <%= f.button :submit, "Submit tenancy agreement", class: 'cmn-submit-btn agreement-submit tenancy-dashboard-btn signature_pad_save' %>
+    </div>
+  </div>
+  <%= f.error_notification %>
+  <%= render "tenancy_error" %>
+  <article id="tenancy-agreement">
+    <h2 class="article-title">Agreement Details</h2>
+    <div class="row">
+      <div class="col-md-12">
+
+        <section id="tenant-notice">
+          <h3 class="article-title">Important notice to tenants</h3>
+          <p>This Agreement shall be legally binding. Before signing you are strongly advised to read this agreement carefully.</p>
+          <p>Please consult with a solicitor, Citizens Advice or Housing Advice Centre if you do not understand, or you are not prepared to agree to, any of the terms and conditions set out herein.</p>
+        </section>
+
+        <section id="landlord-details">
+          <h3 class="article-title">The Landlord:</h3>
+          <p> <%= @tenancy&.room&.property&.landlord&.landlord_name%>
+            <% if @tenancy&.room&.property&.landlord&.address.present? %>
+              <%= @tenancy&.room&.property&.landlord&.address %>
+            <% end %>
+          </p>
+          <address>
+            c/o
+            <% if @company&.address&.present? %>
+              <%= @company.address %>
+            <% else %>
+              <%= t('company_details.address') %>
+            <% end %>
+          </address>
+          <p><b>Telephone:</b>
+            <% if @company&.phone_number&.present? %>
+              <%= tel_to(@company.phone_number) %>
+            <% else %>
+              <%= tel_to(t('company_details.phone_number')) %>
+            <% end %>
+          </p>
+          <p><b>Email:</b>
+            <% if @company&.main_email&.present? %>
+              <%= mail_to(@company.main_email) %>
+            <% else %>
+              <%= mail_to(t('company_details.email')) %>
+            <% end %>
+          </p>
+          <p>
+            Company registration number:
+            <% if @company&.registration_number&.present? %>
+              <%= @company.registration_number %>
+            <% else %>
+              <%= t('company_details.registration_number') %>
+            <% end %>
+          </p>
+          <p>
+            Company VAT number:
+            <% if @company&.vat_number&.present? %>
+              <%= @company.vat_number %>
+            <% else %>
+              <%= t('company_details.vat_number') %>
+            <% end %>
+          </p>
+        </section>
+
+        <section id="tenant-details">
+          <h3 class="article-title">Tenancy Address</h3>
+          <address>
+            <% if @tenancy.room.number %>
+              <% @tenancy&.room&.property&.rental_type == 'room' ? 'Room ' : '' %>
+              <%= @tenancy.room.number %>,<br>
+            <% end %>
+            <%= @tenancy.room.property.number %> <%= @tenancy.room.property.street %>,<br>
+            <% if @tenancy.room.property.address_line_2? %>
+              <%= @tenancy.room.property.address_line_2 %>,<br>
+            <% end %>
+            <% if @tenancy.room.property.city? %>
+              <%= @tenancy.room.property.city %>,<br>
+            <% end %>
+            <% if @tenancy.room.property.postcode? %>
+              <%= @tenancy.room.property.postcode %>
+            <% end %>
+          </address>
+        </section>
+
+        <section id="tenancy-term">
+          <h3 class="article-title">Tenancy Key Information</h3>
+          <p>Fixed Term: Commencing at 15.00 HOURS on the <%= l(@tenancy.tenancy_start, format: :default, default: '') %> and ending AT MIDDAY on the <%= l((@tenancy.tenancy_end), format: :default, default: '') %></p>
+        </section>
+
+        <section id="tenancy-rent">
+          <h3 class="article-title">Rent</h3>
+          <% if @tenancy.tenancy_is == 0 && @tenancy.deposit_term == 'termly' %>
+            <p>Your rent is <strong>£<%= ((@tenancy.total_tenancy_value.to_i - @tenancy.advanced_rent_payment_amount.to_i) / @tenancy.rent_installment_term.to_i) %></strong> per <strong><%= @tenancy.rent_installment_term %> term(s)</strong>, plus your advanced rent payment (if applicable).</p>
+            <p><strong><%= uk_price(@tenancy.total_tenancy_value) %></strong> Total for the Fixed Term period, payable in advance in accordance with the rent payment schedule.</p>
+          <% elsif @tenancy.tenancy_is == 0 %>
+            <p>Your rent is <strong>£<%= @tenancy.payment_amount %></strong> for <strong><%= @tenancy.number_of_payments %> months</strong>, plus your advanced rent payment.</p>
+            <p><strong><%= uk_price(@tenancy.total_tenancy_value) %></strong> Total for the Fixed Term period, payable in advance in accordance with the rent payment schedule.</p>
+          <% else %>
+            <p>You total fixed term tenancy amount is <strong>£<%= @tenancy.payment_amount %></strong> for <strong><%= @tenancy.number_of_payments %> months</strong>, <strong><%= uk_price(@tenancy.total_tenancy_value) %></strong>
+              combined with your initial rent payment (if applicable)
+              <% if @tenancy.initial_payment %>
+                ,<strong><%= uk_price(@tenancy.initial_payment) %></strong>
+              <% end %>
+              .
+            </p>
+            <%= @tenancy.total_tenancy_value %>
+          <% end %>
+          <br>
+
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>Payment date</th>
+                <th>Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Deposit</td>
+                <% if @tenancy.deposit_guarantor_amount && @tenancy.deposit_date %>
+                  <td><%= @tenancy.deposit_date&.strftime("%d/%m/%Y") %></td>
+                  <td><%= uk_price(@tenancy.deposit_guarantor_amount) %></td>
+                <% else %>
+                  <td>n/a</td>
+                  <td>n/a</td>
+                <% end %>
+              </tr>
+
+              <tr>
+                <td>Initial Payment</td>
+                <% if @tenancy.initial_payment %>
+                  <td><%= @tenancy.initial_payment_date&.strftime("%d/%m/%Y") %></td>
+                  <td><%= uk_price(@tenancy.initial_payment) %></td>
+                <% else %>
+                  <td>n/a</td>
+                  <td>n/a</td>
+                <% end %>
+              </tr>
+
+              <tr>
+                <td>Advanced Rent</td>
+                <% if @tenancy_avr %>
+                  <td><%= @tenancy_avr.due_date&.strftime("%d/%m/%Y") %></td>
+                  <td><%= uk_price(@tenancy_avr.amount_due.to_f) %></td>
+                <% else %>
+                  <td>n/a</td>
+                  <td>n/a</td>
+                <% end %>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section id="monthly-payments">
+          <% deposit_term =  @tenancy.deposit_term.to_s.titleize %>
+          <h3 class="article-title">Rent Payment Schedule</h3>
+          <p>Your rent payment schedule:</p>
+          <div class="table-responsive">
+            <table class="table table-bordered">
+              <thead>
+              <tr>
+                <th>Item:</th>
+                <th>Payment Date</th>
+                <th><%= deposit_term %> Payment Amount (£)</th>
+                <th>Number of <%= deposit_term %> Payments:</th>
+              </tr>
+              </thead>
+              <tbody>
+              <% if @tenancy.tenancy_payment_items.size > 0 %>
+                <% @tenancy.tenancy_payment_items.order(:due_date).each_with_index do |pay_item, index| %>
+                  <tr>
+                    <td><%= pay_item.item %></td>
+                    <td><%= pay_item&.due_date&.strftime("%d/%m/%Y") %>
+                    <td><%= '£'+ number_with_delimiter(sprintf("%.2f",pay_item.amount_due.to_f), delimiter: ',') %></td>
+                    <td><%= ((index + 1).ordinalize)%></td>
+                  </tr>
+                <% end %>
+              <% else %>
+                <tr>
+                  <td colspan="4">
+                    No payment items found. Please contact your letting agent
+                  </td>
+                </tr>
+              <% end %>
+              </tbody>
+            </table>
+          </div>
+          <br>
+          <p><strong>The Rent is payable to:</strong></p>
+          <% unless @tenancy.room.property.landlord.nil? %>
+            <% landlord = check_landlord @tenancy.room.property.landlord %>
+            <% if @tenancy.room.property.landlord.partnership_format == 'Owned' %>
+              <% if landlord != "not_set" %>
+                <div class="table-responsive">
+                  <table class="table table-bordered">
+                    <tbody>
+                    <tr>
+                      <td class="title">Bank Name</td>
+                      <td><%= landlord[:bank_name] %></td>
+                      <td class="title">Account name</td>
+                      <td><%= landlord[:account_name] %></td>
+                    </tr>
+                    <tr>
+                      <td class="title">Bank address</td>
+                      <td><%= landlord[:bank_address] %></td>
+                      <td class="title">Account no</td>
+                      <td><%= landlord[:account_number] %></td>
+                    </tr>
+                    <tr>
+                      <td class="title">Payment ref:</td>
+                      <td>
+                        <%#= @tenancy.first_name.to_s[0].to_s %><%#= @tenancy.surname.to_s.capitalize %><%#= @tenancy.room.number ? "R#{@tenancy.room.number}" : "" %><%#= @tenancy.room.property.number %><%#= @tenancy.room.property.street %>
+                        FGJ code generated by PayProp
+                      </td>
+                      <td class="title">Sort code</td>
+                      <td><%= landlord[:sort_code]  %></td>
+                    </tr>
+                    <tr>
+                      <td class="title">IBAN</td>
+                      <td><%= landlord[:iban] %></td>
+                      <td class="title">BIC</td>
+                      <td><%= landlord[:bic] %></td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              <% else %>
+                <p>Not set - Please Contact City Lets before completing this agreement.</p>
+              <% end %>
+            <% else %>
+              <div class="table-responsive">
+                <table class="table table-bordered">
+                  <tbody>
+                  <tr>
+                    <td class="title">Bank Name</td>
+                    <td>
+                      <% if @company&.bank_name&.present? %>
+                        <%= @company.bank_name %>
+                      <% else %>
+                        <%= t('company_details.bank') %>
+                      <% end %>
+                    </td>
+                    <td class="title">Account name</td>
+                    <td>
+                      <% if @company&.bank_account_name&.present? %>
+                        <%= @company.bank_account_name %>
+                      <% else %>
+                        <%= t('company_details.account_name') %>
+                      <% end %>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="title">Bank address</td>
+                    <td>
+                      <% if @company&.bank_address&.present? %>
+                        <%= @company.bank_address %>
+                      <% else %>
+                        <%= t('company_details.bank_address') %>
+                      <% end %>
+                    </td>
+                    <td class="title">Account no</td>
+                    <td>
+                      <% if @company&.bank_account_number&.present? %>
+                        <%= @company.bank_account_number %>
+                      <% else %>
+                        <%= t('company_details.bank_account_number') %>
+                      <% end %>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="title">Payment ref:</td>
+<!--                    <td>-->
+                      <%#= @tenancy.first_name.to_s[0].to_s %><%#= @tenancy.surname.to_s.capitalize %><%#= @tenancy.room.number ? "R#{@tenancy.room.number}" : "" %><%#= @tenancy.room.property.number %><%#= @tenancy.room.property.street %>
+<!--                    </td>-->
+                    <td>
+                      <% if @company&.bank_payment_reference&.present? %>
+                        <%= @company.bank_payment_reference %>
+                      <% else %>
+                        <%= t('company_details.bank_payment_reference') %>
+                      <% end %>
+                    </td>
+
+                    <td class="title">Sort code</td>
+                    <td>
+                      <% if @company&.bank_sort_code&.present? %>
+                        <%= @company.bank_sort_code %>
+                      <% else %>
+                        <%= t('company_details.sort_code') %>
+                      <% end %>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="title">IBAN</td>
+                    <td>
+                      <% if @company&.bank_iban&.present? %>
+                        <%= @company.bank_iban %>
+                      <% else %>
+                        <%= t('company_details.bank_iban') %>
+                      <% end %>
+                    </td>
+                    <td class="title">BIC</td>
+                    <td>
+                      <% if @company&.bank_bic&.present? %>
+                        <%= @company.bank_bic %>
+                      <% else %>
+                        <%= t('company_details.bank_bic') %>
+                      <% end %>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            <% end %>
+          <% end %>
+
+        </section>
+
+
+        <section id="utilities">
+          <h3 class="article-title">Utilities & Services</h3>
+          <% unless @tenancy_utilities_inc_count == 0 %>
+            <h3>Utilities & Services <b>included</b> with your tenancy</h3>
+            <p>The below services are managed within your contracted rental figure. The landlord contributes a fixed financial allowance per utility/tax detailed below.
+              The allowance is determined per utility/service and based on average usage costs at time of signing. If the cost of the utility/service alters within the tenancy
+              period, the liability falls to the tenant/s to reimburse the landlord as required.</p>
+            <p>If looking at fixed/long term increases to utility/service costs, any increase to the allowances must be agreed by both parties and will simultaneously increase
+              the total rental figure to compensate for the agreed upon amount.</p>
+            <p>For avoidance of doubt, any amount above the agreed Landlord Contribution will be the liability of the tenant and invoiced for immediate payment.
+              If residing in a shared property (with a communal metre or charge i.e. council tax), this liability will be joint and several with any other liable tenants. This
+              allows for any shared service with additional charges to be split equally between all liable parties.</p>
+
+            <table class="table table-striped">
+              <thead>
+              <tr>
+                <th>Service / Utility</th>
+                <th>Contribution</th>
+                <th>Frequency</th>
+              </tr>
+              </thead>
+              <tbody>
+              <% if @tenancy_utilities_inc_count > 0 %>
+                <% @tenancy.room.property.property_utilities.where(included: true).each do |utility| %>
+                  <tr>
+                    <td><%= utility.utility_name %></td>
+                    <td><%= utility.landlord_contribution? ? uk_price(utility.landlord_contribution) : '' %></td>
+                    <td><%= utility.frequency %></td>
+                  </tr>
+                <% end %>
+              <% else %>
+              <tr>
+                <td colspan="3"><small>There are no utilities or services included with this tenancy</small></td>
+              </tr>
+              <% end %>
+              </tbody>
+            </table>
+            <hr>
+          <% end %>
+
+          <% unless @tenancy_utilities_not_inc_count == 0 %>
+            <h3>Utilities & Services <b>excluded</b> from your tenancy</h3>
+            <p>The Rent and tenancy does not include the below utilities. The tenant/s holds full responsibility for
+              arranging and paying for supply and any related costs for the below utilities/services:</p>
+            <table class="table table-striped">
+              <thead>
+              <tr>
+                <th>Service / Utility</th>
+                <th></th>
+              </tr>
+              </thead>
+              <tbody>
+              <% @tenancy.room.property.property_utilities.where(included: false).each do |utility| %>
+                <tr>
+                  <td><%= utility.utility_name %></td>
+                  <td>Excluded</td>
+                </tr>
+              <% end %>
+              </tbody>
+            </table>
+          <% end %>
+        </section>
+
+        <h2 class="article-title">Tenancy Terms & Conditions</h2>
+        <%= render partial: 'tenancy_terms' %>
+        <hr>
+
+        <section id="form-conditions">
+          <h3 class="article-title"><%= t('tenancies.tenancy_terms.important_notice.title') %></h3>
+          <% p = 1 %>
+          <% while p <= 4 do %>
+            <p><%= t("tenancies.tenancy_terms.important_notice.p#{p}") %></p>
+            <% p += 1 %>
+          <% end %>
+          <ol>
+            <% l = 1 %>
+            <% while l <= 6 do %>
+              <li><%= t("tenancies.tenancy_terms.important_notice.bullets.b#{l}") %></li>
+              <% l += 1 %>
+            <% end %>
+          </ol>
+        </section>
+
+
+        <section id="form-conditions">
+          <h3 class="article-title">Tenancy Signature</h3>
+          <div class="row">
+            <% if @tenancy.additional_tenants.count >= 1 %>
+              <div class="col-md-6">
+                <h3><%= @tenancy.first_name %> <%= @tenancy.surname %></h3>
+                <div class="form-group">
+                  <%= f.input_field :tenancy_agreement_signature, as: :hidden, class: 'signature_pad_input' %>
+                  <div class="signature_pad">
+                    <div class="signature_pad_body">
+                      <canvas id="one"></canvas>
+                    </div>
+                    <div class="signature_pad_footer">
+                      <button type="button" class="btn btn-danger signature_pad_clear">Clear signature</button>
+                    </div>
+                  </div>
+                  <span id="signature_error" style="color: red; font-size: 12px;"></span>
+                </div>
+                <div class="form-inline inline-me">
+                  <%= f.input :accept_agreement, input_html: { class: 'confirm-checkbox' }, :label_html => { class: 'confirm-label' }, required: true, label: 'I confirm that I accept this agreement' %>
+                  <span id="accept_agreement_error" style="color: red; font-size: 12px;"></span>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <h3><%= @tenancy.additional_tenants.first.first_name %> <%= @tenancy.additional_tenants.first.surname %></h3>
+                <%= f.simple_fields_for :additional_tenants do |additional_tenant| %>
+                  <%= render 'agreement_form_additional_tenants', f: additional_tenant %>
+                <% end %>
+              </div>
+
+            <% else %>
+              <div class="col-md-12">
+                <div class="form-group">
+                  <%= f.input_field :tenancy_agreement_signature, as: :hidden, class: 'signature_pad_input' %>
+                  <div class="signature_pad">
+                    <div class="signature_pad_body">
+                      <canvas id="one"></canvas>
+                    </div>
+                    <div class="signature_pad_footer">
+                      <button type="button" class="btn btn-danger signature_pad_clear">Clear signature</button>
+                    </div>
+                  </div>
+                  <span id="signature_error" style="color: red; font-size: 12px;"></span>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="form-group">
+                  <div class="form-inline inline-me">
+                    <%= f.input :accept_agreement, input_html: { class: 'confirm-checkbox' }, :label_html => { class: 'confirm-label' }, required: true, label: 'I confirm that I accept this agreement' %>
+                    <span id="accept_agreement_error" style="color: red; font-size: 12px;"></span>
+                  </div>
+                </div>
+              </div>
+              <%= f.input :signed_date, as: :hidden, input_html: { value: Time.now.strftime('%Y-%m-%d') } %>
+            <% end %>
+          </div>
+        </section>
+
+        <section id="form-conditions">
+          <h3 class="article-title">Citylets Signature</h3>
+          <p>
+            Signed on behalf of
+            <% if @company&.name&.present? %>
+              <%= @company.name %>
+            <% else %>
+              <%= t('company_details.company_name') %>
+            <% end %>
+            by
+            <% if @company&.main_contact&.present? %>
+              <%= @company.main_contact %>
+            <% else %>
+              <%= t('company_details.main_contact') %>
+            <% end %>
+
+          </p>
+          <%= image_tag "james-signature.png", class: "img-responsive" %>
+          <p><strong>Date: </strong><%= Date.today.to_s(:long) %></p>
+        </section>
+      </div>
+    </div>
+  </article>
+  <div class="form-actions d-flex justify-content-end">
+    <%= f.button :submit, "Submit tenancy agreement", class: 'cmn-submit-btn btn-success agreement-submit tenancy-dashboard-btn signature_pad_save signature_pad_save_two' %>
+  </div>
+<% end %>
+<script type="text/javascript">
+  console.log( "Type: <%= @tenancy&.room&.property&.rental_type %>" );
+  console.log( "Tenancy is: <%= @tenancy.tenancy_is %>" );
+</script>

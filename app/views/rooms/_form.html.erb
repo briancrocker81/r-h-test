@@ -1,0 +1,61 @@
+<%= simple_form_for([@property, @room], html: { class: '' }) do |f| %>
+  <div id="title-bar" class="sticky-top">
+    <h1><%=raw @room.number.present? ? "#{@room.property.property_name}"+'-'+"#{@room.number+"<small class='edit'>- Edit mode</small>".html_safe}" : "#{@property.property_name}"+'-'+"New Room" %> </h1>
+    <div class="actions d-flex justify-content-end push">
+      <% if current_user.admin? %>
+        <%= link_to (fa_icon 'trash'), @room, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger del' unless @room.new_record? %>
+      <% end %>
+      <%= link_to 'Back', :back, class: 'btn btn-secondary' %>
+      <%= f.submit (@room.new_record? ? 'Create New Room' : 'Update Room'), class: 'btn btn-success' %>
+    </div>
+  </div>
+  <% if room.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(room.errors.count, "error") %> prohibited this room from being saved:</h2>
+
+      <ul>
+      <% room.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <article>
+    <section>
+      <h3 class="article-title">Room Details</h3>
+      <div class="form-group">
+        <%= f.label :number, 'Room No. / Name' %>
+        <%= f.text_field :number, id: :room_number, class: 'form-control' %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :description %>
+        <%= f.text_area :description, id: :room_description, class: 'form-control', rows: 6 %>
+      </div>
+
+      <div class="form-group">
+        <%= f.input :dimensions, class: 'form-control' %>
+      </div>
+
+      <div class="form-group">
+        <div class="row">
+          <div class="col">
+            <%= f.label :list_price %>
+            <%= f.text_field :list_price, id: :room_list_price, class: 'form-control' %>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :ensuite %>
+        <%= f.input_field :ensuite, as: :boolean %>
+      </div>
+      <!--    <div class="form-group">-->
+      <%#= f.label :availability %>
+      <%#= f.input_field :availability, as: :boolean %>
+      <!--    </div>-->
+    </section>
+
+  </article>
+<% end %>

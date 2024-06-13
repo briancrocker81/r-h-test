@@ -1,0 +1,14 @@
+<%= form_tag message_path(message.id), :method => :put, html: {multipart: true} do %>
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-lg-12 form-inputs">
+        <div class="form-group">
+          <%= text_area_tag "body", message.body,"cols" => 50, "rows" => 4, class: "form-control form-inputs", placeholder: "Type here your message....." %><br>
+          <%= button_tag(type: "submit", class: "btn btn-warning") do %>
+            <i class="fa fa-paper-plane"></i>&nbsp; Send
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

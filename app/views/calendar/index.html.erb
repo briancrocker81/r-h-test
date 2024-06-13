@@ -1,0 +1,7 @@
+<% content_for :title, 'Calendar' %>
+
+<div id='calendar'></div>
+
+<div class='events'>
+  <%= render "index", collection: @events %>
+</div>

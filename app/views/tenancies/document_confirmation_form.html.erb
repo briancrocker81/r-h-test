@@ -1,0 +1,80 @@
+<% content_for :tenancy_dashboard_title, "#{I18n.t :'tenancies.dashboard.document_confirmation_form.title'}" %>
+<%= render 'dashboard_header' %>
+<%= simple_form_for @tenancy, :url => document_confirmation_path(@tenancy.uri_string), :method => :post, html: {multipart: true, id: 'editTenancy'} do |f| %>
+
+  <div id="title-bar" class="sticky-top">
+    <div class="actions btn-group d-flex justify-content-end push">
+      <%= link_to :back, class: 'btn btn-secondary', id: 'back' do %>
+        <i class="fas fa-backward d-block d-md-none"></i>
+        <span class="d-none d-md-block">Back</span>
+      <% end %>
+      <%= f.button :submit, "Submit compliance documents", class: 'cmn-submit-btn agreement-form-submit tenancy-dashboard-btn' %>
+    </div>
+  </div>
+  <%= f.error_notification %>
+  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+  <%= render "tenancy_error" %>
+  <article id="docs-confirmation-form">
+    <section>
+      <h3 class="article-title">Compliance documents</h3>
+      <div class="row">
+        <div class="col-md-12">
+          <p><b>Please download each document. Read them carefully before agreeing the terms</b></p>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <p><b>Property compliance documents:</b> </p>
+                <div class="row text-center">
+                  <% @tenancy.room.property.compliance_documents.each do |doc| %>
+                    <% if doc.document_name.present? && doc.document_file.present? %>
+                      <div class="col-sm-6 col-lg-3 docs doc-prv" title="Will show document on click soon" data="<%=doc.document_file%>" data-doc-name="<%=doc.document_name.split('_').map(&:capitalize).join(' ')%>" data-verified="" data-verified-by="">
+                        <%= document_badge((doc.document_file != '' && !doc.document_file.nil?) ? true : false, 'fas fa-file-pdf', doc.document_name.split('_').map(&:capitalize).join(' ')) %>
+                      </div>
+                    <% end %>
+                  <% end %>
+                </div>
+                <hr>
+                <p><b>Tenancy compliance documents:</b> </p>
+                <div class="row text-center">
+                  <% @tenancy.tenancy_documents.each do |doc| %>
+                    <% if doc.document_name.present? && doc.document_file.present? %>
+                      <div class="col-sm-2 docs doc-prv" data="<%=doc.document_file%>" data-doc-name="<%=doc.document_name.split('_').map(&:capitalize).join(' ')%>" data-verified="<%=doc.verified?%>" data-verified-by="<%= doc.verified? ? doc.users.full_name : 'N/A' %>">
+                        <%= document_badge((doc.document_file != '' && !doc.document_file.nil?) ? true : false, 'fas fa-file-pdf', doc.document_name.split('_').map(&:capitalize).join(' ')) %>
+                      </div>
+                    <% end %>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <div class="form-inline inline-me">
+                  <%= f.input :read_doc, input_html: { class: 'confirm-checkbox' }, :label_html => { class: 'confirm-label' }, label: 'I can confirm I have had sight of all of the above documents' %>
+                  <span id="read_doc_error" style="color: red; font-size: 12px;"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </article>
+  <div class="form-actions d-flex justify-content-end">
+    <%= f.button :submit, "Submit compliance documents", class: 'cmn-submit-btn btn-success agreement-form-submit tenancy-dashboard-btn' %>
+  </div>
+<% end %>
+<div class="modal fade" id="doc-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Document: <span class="doc-name"></span></h3> <span class="doc-verified"></span> <span class="doc-verified-by"></span>
+        <button type="button" class="close" data-dismiss="modal" style="font-size: 3.5rem !important;"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+      </div>
+      <div class="modal-body">
+        <object data="" type="application/pdf" width="100%" height="520px" class="doc-preview"></object>
+      </div>
+    </div>
+  </div>
+</div>

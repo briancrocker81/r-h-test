@@ -1,0 +1,2 @@
+class AdminVariable < ApplicationRecord
+end

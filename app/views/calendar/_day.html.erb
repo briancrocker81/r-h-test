@@ -1,0 +1,28 @@
+<div class="tab-pane fade show active" id="today" role="tabpanel" aria-labelledby="today-tab">
+  <%= calendar number_of_days: 1, events: @events do |date, events| %>
+    <h4>Today's events: <%= events.count %></h4>
+    <!--          Maintainence: <%#= events.count.where(event_type: 2) %>-->
+    <table id="todays-events" class="table">
+      <thead>
+      <tr>
+        <th></th>
+        <th>Agent</th>
+        <th>Details</th>
+        <th>Address</th>
+        <th>Time</th>
+      </tr>
+      </thead>
+      <% events.each do |event| %>
+        <% unless event.event_type == 4 %>
+          <tr class="event-row">
+            <td class="event_type <%= event.event_name.downcase %>"><i class="fas"></i></td>
+            <td>AGENT NAME</td>
+            <td><%= link_to event.title, event %></td>
+<!--            <td><%#= link_to event.property.property_name, event.property %></td>-->
+            <td><%= l event.start_time, :format => :mini %></td>
+          </tr>
+        <% end %>
+      <% end %>
+    </table>
+  <% end %>
+</div>

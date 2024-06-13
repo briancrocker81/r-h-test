@@ -1,0 +1,297 @@
+# Files in the config/locales directory are used for internationalization
+# and are automatically loaded by Rails. If you want to use locales other
+# than English, add the necessary files in this directory.
+#
+# To use the locales, use `I18n.t`:
+#
+#     I18n.t 'hello'
+#
+# In views, this is aliased to just `t`:
+#
+#     <%= t('hello') %>
+#
+# To use a different locale, set it with `I18n.locale`:
+#
+#     I18n.locale = :es
+#
+# This would use the information in config/locales/es.yml.
+#
+# The following keys must be escaped otherwise they will not be retrieved by
+# the default I18n backend:
+#
+# true, false, on, off, yes, no
+#
+# Instead, surround them with single quotes.
+#
+# en:
+#   'true': 'foo'
+#
+# To learn more, please read the Rails Internationalization guide
+# available at http://guides.rubyonrails.org/i18n.html.
+
+en:
+  admin:
+    save: 'Save'
+  room:
+    create: 'Room was successfully created.'
+  properties:
+    index:
+      title: 'Properties'
+      new: 'New Property'
+  rooms:
+    index:
+      title: 'Rooms'
+      new: 'New Room'
+  landlords:
+    index:
+      title: 'Landlords'
+      new: 'New Landlord'
+  tenancies:
+    index:
+      title: 'Tenants'
+      new: 'New Tenant'
+    tenancy_terms:
+      security:
+        title: "Security"
+        p1: "Within 14 days of booking we will require all agreed paperwork to be returned and submitted . This will include one or more of the following"
+        bullets:
+          b1: "Signed booking form. This will temporarily secure the property based on an agreed holding deposit."
+          b2: "Signed tenancy agreement. This document is a standalone binding commitment to the property. The landlord reserves the right to cancel this agreement if the agreed support documents or payments are not received."
+          b3: "Signed & completed documentation from a Guarantor who will pay your rent if you fail to do so, or pay for any damages or contracted costs."
+          b4: "A Security Deposit. The amount to be agreed based on booking. The standard figure will be the equivalent of one months rent unless agreed otherwise and stated with in the tenancy agreement front page"
+          b5: "If a suitable guarantor is not supplied with in the 14 day period, the tenant, confirm that they will be liable for the cost of a suitable guarantor service."
+          b6: "The landlord retains the right to cancel or proceed with the tenancy agreement at their discretion if the agreed requirements are not met by the tenant."
+      agreement:
+        title: "The Landlord and the Tenant agree that:-"
+        bullets:
+          b1: "This is a Fixed Term Tenancy subject to the terms and conditions set out in this Agreement"
+          b2: "The Landlord hereby agrees with the Tenant that the Tenant shall quietly possess and enjoy the Property during the Term without interruption from the Landlord subject to the Tenant paying the rent and performing and observing the terms and conditions set out in this Agreement"
+          b3: "The Landlord may bring the tenancy to an end by serving on the Tenant a formal written Notice Seeking Possession under Section 8 of the Housing Act 1988 (as amended) (“the 1988 Act”) on grounds 2, 3, 4, 5, 6, 7 or 8 in Part 1 of Schedule 2 to 1988 Act or on grounds 10, 11, 12, 13, 14, 15, 16 or 17 in Part 2 of the 1988 Act."
+      management_regulations:
+        title: "Management Regulations"
+        bullets:
+          b1: "The Tenant shall comply with the rules and regulations reasonably required by the Landlord for the proper management of the Property."
+          b2: "The Landlord is entitled to assume that the Tenant understands and acknowledges and agrees to comply with the contents of any sign or sign or notice or notices that the Landlord shall from time to time post in the Communal Areas for the attention of the tenants relating to the management regulations. It is the Tenant’s responsibility to ensure that he is aware of any signs and/or notices as the Landlord shall from time to time place in the Property for the attention of the tenants."
+      landlord_furniture:
+        title: "Landlord’s Furniture and Effects"
+        bullets:
+          b1: "This tenancy includes use of the Landlord’s fixtures and fittings. At the end of the tenancy these are to be left in the same room in which they were at the start of the tenancy. Fixtures and fittings will be recorded prior to commencement of tenancy by the landlord/agent. The tenant is required to raise any missing or altered items with in 7 days of taking possession of the property."
+      security_guarantee:
+        title: "Security/Guarantee"
+        bullets:
+          b1: "This tenancy is granted SUBJECT TO the Tenant’s agreement to provide adequate security to the Landlord to protect the Landlord from financial loss arising from the tenant’s breach or default of obligations under this Agreement."
+          b2: "Prior to commencement of this Agreement the Tenant shall (i) pay a Security Deposit AND/OR (ii) deliver to the Landlord a written guarantee agreement duly signed by a Home Owner Guarantor OR (iii) Provide both."
+          b3: "If a suitable guarantor is not supplied with in the 14 day period and the landlord proceeds with tenancy, the tenant confirms that they will be liable for the cost of a suitable guarantor service. For avoidance of doubt, the landlord/agent will apply for a guarantor/insurance service at the cost of the tenant."
+      security_deposit:
+        title: "Security Deposit"
+        bullets:
+          b1: "If applicable, upon receipt of cleared funds, the Landlord shall register the Security Deposit with a government- approved tenancy deposit scheme."
+          b2: "The tenant pays the deposit as security for performance of the tenants obligations and it may be used to pay to compensate the landlord or agent for the reasonable costs of any breach or failure to comply with any obligations, damage done during the tenancy, outstanding rent or any costs associated with recovering the deposit from the tenancy deposit scheme. The tenant cannot use the deposit to pay the rent during the tenancy."
+          b3: "At the end of the tenancy, the landlord may use the deposit to pay unpaid accounts or charges for TV licence, electricity or gas or other fuels used by the tenant (over and above the fair use amount) in the premises, unless lawfully withheld by the tenant."
+          b4: "Otherwise, at the end of the tenancy and after the return of all keys, the landlord or agent shall repay the deposit (without interest and subject to any reasonable deductions made under this agreement) within 10 days starting from when the amounts of all deductions (if any) are known to the landlord."
+      guarantee:
+        title: "Guarantee"
+        bullets:
+          b1: "Where required prior to commencement of the tenancy, the Tenant shall provide to the Landlord details of a person who is resident in the UK and who is willing to guarantee the Tenant’s performance under this Agreement"
+          b2: "The Landlord shall be entitled to demand payment of a Security Deposit from the Tenant in the event that the person nominated by the Tenant to act as guarantor, in the opinion of the Landlord, is not suitable or is otherwise incapable of satisfying the financial obligations that the role of guarantor shall require."
+          b3: "The Landlord shall be under no obligation to permit the Tenant’s occupation of the Property where prior payment of the Security Deposit has not been made or where the Landlord is not in possession a written agreement signed by the Tenant’s guarantor."
+          b4: "If a suitable guarantor is not supplied with in the 14 day period and the landlord proceeds with tenancy, the tenant confirms that they will be liable for the cost of a suitable guarantor service. For avoidance of doubt, the landlord/agent will apply for a guarantor/insurance service at the cost of the tenant."
+          b5: "I understand that my guarantor’s obligations under this Agreement shall commence on the Tenancy Commencement Date and shall continue throughout the period that the property is occupied by the tenant or any licensee and is not limited the term specified in the agreement. The Guarantee will continue throughout the tenancy or any extension/renewal in the property or other properties, or re-grant continuation of the Agreement whether for a fixed term or periodic tenancy and whether it is created by agreement between the landlord and the tenant or by operation of the law or otherwise."
+      communication:
+        title: "Communication"
+        bullets:
+          b1: "Where the Tenant has provided to the Landlord an email address the Landlord is entitled to assume that all communication in connection with this Agreement, the Landlord’s Property and any other matters concerning the Tenant’s occupation of the Landlord’s Property is acceptable to the Tenant if sent by email."
+          b2: "The Address of Service for the Landlord is set out on page 1 of this agreement. "
+          b3: "For formal notice required by post, the Tenant shall be contacted at the address of the property noted on page 1"
+          b4: "After the property is vacated the tenant will be contacted via the next of kin details supplied"
+          b5: "The tenant is obligated to provide a forwarding address on vacation of property"
+      joint_liability:
+        title: "Joint and several liability"
+        bullets:
+          b1: "The Tenant and the Other Occupiers of the Property shall be jointly and severally liable for any breach of the Fair Usage Policy (relating to over usage of gas, electric services and water), damage, abuse or any breakages to the Landlord’s property, fixtures, fittings and effects and cleaning. All such expenditures reasonably incurred by the Landlord shall be charged to the tenants jointly and severally at any time during the term fixed by this Agreement and particularly at the end of the fixed term period."
+          b2: "Joint and several liability for damages or abuse is applicable to all tenants for communally accessible areas of the property. This includes but is not exclusive to hallways, corridors, garden and property frontage, any shared communal rooms such as kitchens, laundry areas, lounge and bathrooms/toilets."
+          b3: "Any costs/invoices raised will be split evenly between all tenants unless responsibility and payment is volunteered by individual parties."
+          b4: "The tenant joint and severally responsible for end of tenancy communal cleaning and rectifying of any damages. This responsibility is in place until the end time and date of the agreement. If the tenant vacates early, this does not negate the communal area responsibilities."
+          b5: "Where utilities are provided on shared metres, the tenant is joint and severally liable for an equal share of any over usage. If in a bedroom or self contained apartment, without separate metering, the joint and several liability extends to a shared utility supply."
+      tenant_obligations:
+        title: "Tenants obligations and responsibilities during the tenancy"
+        bullets:
+          b1: "The Tenant shall maintain the Property and all fixtures, fittings, effects and equipment provided by the Landlord for the Tenant’s use and enjoyment in the same state of cleanliness and condition as they are in as at the commencement of the tenancy and to wash and clean all items that should become soiled during the tenancy and replace or reinstate the Landlord’s Property and any of the Landlord’s fixtures, fittings, effects and equipment that shall become broken, damaged or otherwise unusable as a result of the Tenant’s abuse, misuse or neglect AND for the avoidance of doubt the Tenant shall be liable for the replacement of the bed base and mattress at the end of the tenancy if these shall become soiled, torn, marked or otherwise damaged in any way as a result of the Tenant’s use and the Tenant’s failure to adequately protect them from such soiling, tearing, marking or other damage."
+          b2: " Make good all damages and breakages to the Property and its contents that shall be caused by the act or default of the Tenant or the Tenant’s family, agents or invitees and in respect of which the Tenant is responsible"
+          b3: "Promptly notify the Landlord or the Landlord’s agent of any defects to the Property (whether or not caused by any act, default or neglect of the Tenant) of which the Tenant becomes aware."
+          bs1: "Maintenance will be reported via email with suitable detail of the issues"
+          bs2: "By reporting a maintence issue the Tenant is requesting the landlord or representative to attend and forgoes the standard 24h notice period for access. For avoidance of doubt, the relevant individual will attend the property with out prior notice to resolve the reported issue. They will not access areas of the property that are not required to resolve the reported works."
+          bs3: "The tenant understand that if maintenance is not reported correctly in line with the landlord/agents policy and procedure (viewable on the agents website), maintenance works may not commence."
+          b4: "Not to cause or allow to cause any obstruction of the Communal Areas and in particular not to leave anything at any time whatsoever in the communal hallways, landings or stairways that may impede the escape of Other Occupiers from the Property in the event of an emergency"
+          b5: "Not to cause or do anything to cause blockage of the drains and pipes, gutters and channels in or about the property and to take all reasonable precautions to prevent damage occurring to any pipes or other installations to the property that may be caused by frost"
+          b6: "Not to place or exhibit any notice board or notice visible from outside the Property advertising any profession, trade or business or sale of any goods or services or to carry on any profession, trade or business at or within the Property, or permit anyone else to do so"
+          b7: "Not to use or possess any illegal substances in the premises or use the premises for any illegal or immoral purposes"
+          b8: "Not to hang any window box, flags, banners, signs or posters from any window or balcony of the Property so as to be visible from the outside of the building"
+          b9: "To ensure that the Property is properly aired and ventilated at all times for the prevention of condensation and build-up of black spot mould or similar. If mould spotting or similar issues occur, it is the responsibility of the tenant to attempt basic treatment of cleaning and airing prior to reporting and elevating to the landlord."
+          b10: "To comply with any notice served on the Tenant by the Landlord or its agents or representatives and to attend to all repairs or maintenance for which the Tenant is responsible"
+          b11: "To keep the internal surface of the windows clean"
+          b12: "Not to keep any dangerous or flammable goods, materials or substances in or on the Property or in the Communal Areas of the Property. Not to use candles anywhere in the property."
+          b13: "Not to paint the internal walls of the Property or carry out any internal or external decorating of the Property at any time unless specifically instructed to do so by the Landlord for the purposes of remedying any breach of the Tenant’s obligations under this Agreement"
+          b14: "Not to use the Property or allow others to use the Property in a way which causes a nuisance, annoyance or damage to the owners and occupiers of any neighbouring, adjoining or adjacent property"
+          b15: "Not to play any musical instrument, radio or television or make any other noise or sound or cause any other sound or noise to be made so as to be audible outside the Property and cause complaint or issue for neighbours or public. "
+          b16: "To inform the Landlord promptly of any outbreak of fire or of burglary or attempted burglary"
+          b17: "Not to keep any pets or animals in the Property or in the Communal Areas of the Property or allow animals of the Tenant’s family or invitees to enter upon the Property unless written permission from the landlord or agent is supplied. If permission is granted, the landlord retains the right to retract permissions at any point."
+          b18: "Not to allow children to live at the Property unless written permission from the landlord or agent is supplied."
+          b19: "Not to permit frequent (more than once) overnight guests or visitors without the prior consent of the Landlord"
+          b20: "Not to leave the Property unoccupied for more than 7 days without prior notification to the Landlord"
+          b21: "To provide the Landlord with a forwarding address at the end of the Tenancy"
+          b22: "Not to make any structural additions or alterations to the Property"
+          b23: "To use the Property in a Tenant-like manner"
+          b24: "To use the Property as a private dwelling only and as the main or principal home of the Tenant"
+          b25: "Not to use the Property as a holiday let or take in any paying guests or lodgers at any time"
+          b26: "To observe and comply at all times with the Landlord’s Anti-Social Behaviour Code (a copy of which can be seen on the landlords/Agents website)"
+          b27: "Not do or permit to be done in or about the Property any act or thing which may render void or voidable the Landlord’s policy of insurance or otherwise increase the ordinary insurance premium. NOTE: The Landlord’s insurance does not cover the Tenant’s possessions. The Tenant must insure his own personal possessions."
+          b28: "To permit the Landlord or its agent or contractors or those authorised by the Landlord upon giving at least 24 hours notice in writing (except in the case of an emergency) to enter the Property at all reasonable times for the purpose of inspection and repair"
+          b29: "On giving the Tenant 24 hours notice in writing, to allow the Landlord or any person acting on behalf of the Landlord, access to view the Property at reasonable times accompanying a prospective tenant of the property. Please Note: advance notice by the Landlord is not required to be given with regard to the Communal Areas of the Property, access to which areas the Landlord shall be absolutely entitled at all reasonable times as and when required."
+          b30: "Not assign, underlet or part with or share possession of the whole or any part of the Property at any time during the tenancy (unless with the landlords permission in writing)."
+          b31: "Multiple occupancy is not permitted under this Tenancy Agreement at any time or under any circumstances, during the tenancy"
+          b32: "Comply with the Landlord’s checking out procedure which will be notified in writing to the tenant prior to the end of the fixed term."
+          b33: "To remove all personal effects and belongings from the Property at the end of the tenancy and be liable for meeting all removal, disposal and/or storage costs and charges reasonably incurred by the Landlord to remove any of the Tenant’s personal effects and belongings"
+          b34: "Not use the internet connection provided for any immoral or illegal activity."
+          b35: "Acknowledge that there is a no smoking policy in force at the property. If smoking is suspected or any smoking paraphernalia is clearly displayed in the property, the tenant understands they will be liable for any costs associated with a deep clean to rectify smell and any damage caused by the smoking. This will include but not be limited to a professional carpet and upholstery clean for all relevant areas"
+          b36: "To compensate the Landlord within 7 days of demand for the reasonable costs incurred by the Landlord in remedying any breach or failure of the Tenant to comply with all the obligations under this Agreement including non-payment of rent."
+          b37: "When using the 24 hour emergency support services supplied by the landlord or agent, the tenant understands any costs incurred due to misuse or issues caused by the tenant will be charged to the tenant. The service is for emergencies, and any issue able to be safely survived by the tenant, until standard working hours, will not be attended. If misused the cost will be the responsibility of the contacting tenant. The standard call out cost is £35+vat charge."
+      ending_the_tenancy:
+        title: "Ending the tenancy / surrendering the tenancy"
+        bullets:
+          b1: "The Landlord and the Tenant agree that this is a fixed term contract"
+          b2: "The Tenant shall have no entitlement to continue to occupy the Property at the end of the Fixed Term"
+          b3: "The Landlord and Tenant agree that the tenancy shall commence at 15.00 hours on the Commencement Date and shall end at Midday on the last day of the Fixed Term as set out on Page 1 of this Agreement."
+          b4: "This agreement will automatically revert to a monthly rolling tenancy with the written agreement of both parties. At this point the landlord is entitled to present a rent review and adjustment of terms before continuing past the fixed term end date."
+          b5: "At the end of the Fixed Term the Tenant shall give vacant possession of the Property to the Landlord, unless both parties have agreed in writing to continue the terms of the agreement in a monthly rolling format."
+          b6: "The Tenant is not entitled to unilaterally surrender this Agreement"
+          b7: "The Landlord’s agreement to the surrender of this Agreement shall be subject to the Tenant, at its own cost, taking all reasonable steps to re-advertise the Property as being available to let and introducing a suitable replacement student tenant to the Landlord or the Landlord’s agent"
+          b8: "The Tenant shall remain liable for all rent and other sums properly due and payable to the Landlord under this Agreement until the date of the formal surrender"
+          b9: "The date of formal surrender shall be the date upon which a replacement tenant takes occupation of the Property under the terms of a Tenancy Agreement granted by the Landlord"
+          b10: "In consideration of the Landlord’s agreement to the surrender of this Agreement (novation), the Tenant shall pay to the Landlord the sum of ￡50 (fifty pounds) and such sum shall cover the Landlord’s reasonable costs for producing the formal surrender deed and for all matters in connection with the granting of a new tenancy"
+          b11: "The landlord is not bound to agree a novation or release of a fixed term tenancy at any point. Terms will be agreed based on a suitable replacement or agreed actions prior to confirmation of a novation of tenancy."
+          b12: "Once the Tenant has formally surrendered the tenancy, the Landlord shall have full rights of possession of the Property under Section 5 of the Housing Act 1988 and the Tenant shall have no right to make any claim or accusation against the Landlord for unlawful eviction."
+          b13: "The tenant agrees to pre book an end of tenancy check out appointment directly with the agent. If an appointment tis not available the tenant will catalogue photographs at the end of the fixed term tenancy and supply to the agency via email."
+      notice_period:
+        title: "Tenant Notice Period"
+        bullets:
+          b1: "The tenant is unable to give notice prior to the final day of their fixed term agreement (see page 1 of tenancy for relevant date)"
+          b2: "The tenant agrees to supply one months minimum notice if vacating the property at the end of their fixed term agreement"
+          b3: "If outside of the fixed term of tenancy, the tenant agrees to supply one calendars months’ notice prior to vacating the property"
+          b4: "Notice must be served on the date of rental payment. For avoidance of doubt, if the tenant pays their rent on the 1st of the calendar month, the will require the tenant to give one months notice from that date. "
+      take_back_entitlement:
+        title: "Landlord’s entitlement to take back possession of the Property"
+        bullets:
+          b1: "The Housing Act 1988 provides 17 grounds on which the Landlord may seek possession of his Property before the fixed term of the tenancy has come to an end"
+          b2: " In the event of a breach by the Tenant of any of the Tenant’s obligations under this Agreement, in respect of which the Tenant fails to remedy, the Landlord shall be entitled to serve notice on the Tenant under Section 8 of the Housing Act"
+          b3: "The notice shall confirm the Landlord’s intention to seek possession of the Property and shall set out the ground or grounds upon which possession is sought and the reasons why the Landlord is relying on those particular grounds."
+          b4: "The Tenant shall be required to remedy the breach on or before the expiry date set out in the notice"
+          b5: "In the event that the Tenant fails to remedy the breach, the Landlord shall make an application to the Court for a Possession Order."
+      supply_of_services:
+        title: "Supply of services"
+        bullets:
+          b1: "The utilities and services expressed to be included in the agreed Rent are set out on the Utilities and Services section of this Tenancy Agreement. PROVIDED THAT the Tenant’s use of included utilities and services does not exceed the landlord contribution. The landlords contribution is fixed and are set out in the Utilities and Services section of this tenancy."
+          b2: "Any cost incurred above the agreed Landlord Contribution are the responsibility of the tenant and will be required to be paid within 14 days of the landlord issuing invoice."
+          b3: "Where a utility or service are excluded from the rental figure, the tenant will indemnify the Landlord against the cost of any actions, claims or proceedings against the Landlord arising from the Tenant’s omission to arrange, or pay relevant charges or fees related to the excluded utility or service."
+          b4: "It is the responsibility of the tenant to supply metre reads monthly basis, for any inclusive utility. The tenant accepts and understands that the landlord will endeavour to supply updates when requested on usage levels and any spends above the Landlord Contribution."
+          b5: "The landlord reserves the rights to charge on a monthly basis or at end of tenancy for excess spend on included utilities and services."
+          b6: "It is the responsibility of the tenants to provide a TV Licence for the television receiving equipment provided by the Landlord for communal use and located in the Communal Areas. The Tenant is also liable for obtaining a Television Licence and paying the appropriate Licence Fee in connection with the TV receiving equipment installed in the Property by the Landlord or the Tenant for the Tenant’s personal and private use"
+          b7: "The Tenant will indemnify the Landlord against the cost of any actions, claims or proceedings against the Landlord arising from the Tenant’s omission to obtain and maintain a current TV Licence and pay the appropriate Licence Fee throughout the fixed term of the tenancy"
+      rent_obligations:
+        title: "Rent, interest & costs for breach of failure to comply with Tenants obligations"
+        p1: "The Tenant shall:-"
+        bullets:
+          b1: "Pay the rent on the due dates and in the manner set out in this agreement and shall not make any unlawful deductions"
+          b2: "Pay interest on any rent in arrears for 14 days or more at the rate of 3% per annum calculated from the date upon which the Rent was due for payment until the payment date"
+          b3: "Where invoices and charges related to damages, utilities or services payments are not paid with in the agreed time scale (14 days), the tenant will be responsible for covering the landlords additional costs related to agency or external parties pursuing payment. This includes but in not limited to administrational invoices incurred by the landlord from any 3rd party (agency included)"
+          b4: "Indemnify the Landlord from any loss arising from any claim made against the Landlord as a consequence of any breach by the Tenant of any of the Tenant’s obligations under this Agreement"
+          b5: "Pay, unless a court orders otherwise, the Landlord’s reasonable legal costs and expenses (including VAT) properly incurred in enforcing any of the Terms in this Agreement"
+          b6: "The tenant permissions the landlord/agent to use card details supplied via VDA agreement for any charges relating to the tenancy agreement. For example, if a maintenance cost is deemed tenant responsibility the agent will utilise the VDA to collect over due invoice amounts. "
+      locks_keys_security:
+        title: "Locks and keys and security"
+        bullets:
+          b1: "The Tenant shall not, without the prior written consent of the Landlord, add any new locks or change existing locks to the Property"
+          b2: "In the event that the locks to the Property are changed due to any act, omission or fault of the Tenant, the Tenant will pay all reasonable costs incurred by the Landlord in providing such new locks and (if appropriate in the circumstances) replacement keys to all Other Occupiers within the Property together with additional and/or spare keys as the Landlord, in his discretion, shall consider appropriate and necessary."
+          b3: "The Tenant shall return the keys to the Property to the Landlord at the end of the tenancy. The Tenant shall pay the Landlord’s reasonable charges for securing the Property against re-entry where keys are not returned. A charge may be made for non-return of keys or for providing a replacement set (minimum charge ￡25.00)."
+          b4: "The Tenant shall keep the doors of the Property locked and secure at all times when not in the Property for the purposes of the safety and security of the Tenant personally and all Other Occupiers and any theft of the Landlord’s property or effects shall be the responsibility of the Tenant failing to act in accordance with this provision and the Tenant shall be liable for any damage to the Property arising from the Tenant’s failure to comply with this provision."
+          b5: "If the tenant misplaces or is unable to access their key and requires support to access their room, a call out charge will be applied. All call out charges will be required to be paid up front to the individual attending the property. "
+          b6: "If the tenant is unable to pay for the call out they will be required to visit the Landlord/agent office during office opening hours to secure a new key. The key replacement cost is the responsibility of the tenant and as a standard but not limited to £25.00 per key."
+      data_protection:
+        title: "Data Protection"
+        bullets:
+          b1: "The tenant gives irrevocable permission for any relevant authority to disclose the tenants whereabouts if the tenant has left the property with rent or other monies owing."
+          b2: "Any information about the tenant, tenancy or guarantor may be held, processed, used and disclosed by the landlord / agent, to any third parties. The information may also be used for reference purposes in the future and may be used after the tenancy has ended for the purpose of informing other landlords or agents about the conduct of the tenancy."
+          b3: "The tenant understands and permissions that their name, email and contact number will be shared with 3rd party contractors for the purpose of any works or access to the property during the duration of their occupation. These will be used for communications regarding maintenance or access only."
+      important_notice:
+        title: "IMPORTANT NOTICE TO TENANTS"
+        p1: "This Agreement is legally binding and its terms and conditions must be observed throughout the Term of your tenancy. If you do not understand, or you are not prepared to agree to any of the terms and conditions set out herein, we recommend that you seek professional advice prior to signing."
+        p2: "You might consider consulting a solicitor, Citizens Advice or Housing Advice Centre."
+        p3: "In signing this Agreement you confirm that you have read and understood the contents of this Agreement in full and that if you have not taken professional advice in relation to this Agreement you acknowledge and confirm that you have been advised to do so."
+        p4: "In signing this Agreement you are making a declaration that you are not:-"
+        bullets:
+          b1: "Claiming housing benefit, rent rebate or rent allowance, unless agreed in writing by the landlord/agent"
+          b2: "An asylum seeker"
+          b3: "A person who has, or may have, acquired diplomatic immunity"
+          b4: "A social landlord, unless agreed in writing by the landlord/agent"
+          b5: "Intending to use the Property as a holiday let, unless agreed in writing by the landlord/agent"
+          b6: "An agent for any of the above, unless agreed in writing by the landlord/agent"
+    dashboard:
+      final_submission_text: 'Congratulations! You are all booked in! Thank you for completing your tenancy agreement, your guarantor should of received their agreement now.
+        We will be in contact shortly!'
+      reservation_warning: 'Please note, the property is not reserved until you have completed all three sections below'
+      booking_form:
+        title: 'Tenancy Booking Form'
+      agreement_form:
+        title: 'Tenancy Agreement'
+      document_confirmation_form:
+        title: 'Tenancy Documents'
+  events:
+    index:
+      title: 'Events'
+      new: 'New Event'
+    form:
+      title: 'Event details'
+  users:
+    index:
+      title: 'Users'
+      new: 'New User'
+  date:
+    formats:
+      default: "%d/%m/%Y"
+      short: "%b %d"
+      long: "%d %B %Y"
+      nice: "%d %b %y"
+      year: "%y"
+  time:
+    am: am
+    formats:
+      default: "%a, %d %b %Y %I:%M:%S %p %Z"
+      long: "%B %d, %Y %I:%M %p"
+      short: "%d %b %I:%M %p"
+      mini: "%H:%M"
+      date_month_year_concise: '%d %B %Y'
+    pm: pm
+  number:
+    format:
+      delimiter: ' '
+      precision: 2
+      separator: '.'
+  company_details:
+    company_name: 'CityLets Plymouth'
+    account_name: 'Citylets (Plymouth) Limited'
+    bank: 'National Westminster Bank Plc'
+    bank_account_number: '29919436'
+    bank_address: 'Liverpool St Station, Chatham Customer Service Centre Western Avenue Waterside Court Chatham Maritime, ME4 4RT'
+    sort_code: '50-00-00'
+    bank_iban: 'GB87NWBK50000029919436'
+    bank_bic: 'NWBKGB2102M'
+    bank_payment_reference: 'FGJ code generated by PayProp'
+    vat_number: '381953076'
+    registration_number: '11962168'
+    address: 'Beechwood House, Beech Avenue, Cattedown, Plymouth, PL4 0QQ'
+    phone_number: '01752 604242'
+    email: 'info@cityletsplymouth.co.uk'
+    main_contact: 'James Deacon'
+  reporting:
+    no_expenses: 'There were no expenses during this period'
+    no_income: 'There are no income items during this period'

@@ -1,0 +1,629 @@
+$("#set-tenancy-modal").html("<%= j(render 'set_tenancy_form')%>");
+$("#set-tenancy-modal").modal("show");
+
+//*Tenancies seting params by staff
+
+/* -------------------------
+  Add Additional Tenant(s)
+------------------------- */
+
+$('#second-tenant-toggle').on('click', function() {
+  $('#second-tenant-fields').show();
+});
+
+//  $('#third-tenant-toggle').on('click', function() { // Not adding this at present
+//    $('#third-tenant-fields').show();
+//  });
+
+/* -------------------------
+       Tenancy Details
+------------------------- */
+$(document).ready(function(){
+  $('#second-tenant-button').on('click', function() {
+    $(this).hide();
+  });
+
+  $('#tenancy-details button').on('click', function() {
+    $('#guarantor-options').fadeIn();
+  });
+
+  // Guarantor
+  $('#guarantor-options button').on('click', function() {
+    $('#tenancy-dates').fadeIn();
+  });
+
+  $(".tenancy-is").on('click load', function() {
+
+      var tenancy_is_id = $(this).data("tenancy-is");
+
+      $('#tenancy-is-val').val();
+      $('.tenancy-is').removeClass('active');
+
+      console.log('Tenancy is: ' + tenancy_is_id)
+      if (tenancy_is_id == 0){
+        $(this).addClass('active');
+        $('#tenancy-is-val').val(tenancy_is_id);
+      } else {
+        $(this).addClass('active');
+        $('#tenancy-is-val').val(tenancy_is_id);
+      }
+
+  });
+
+  $(".tenant-type").on('click load', function(){
+
+    var tenant_type_id = $(this).data("tenant-type");
+    var payment_options = $('.payment-options');
+    console.log('Tenancy type: ' + tenant_type_id)
+
+    $('#tenant-type-val').val();
+    $('.tenant-type').removeClass('active');
+
+  //  if (tenant_type_id == 1 || tenant_type_id == 3 || tenant_type_id == 5 || tenant_type_id == 4){
+    if (tenant_type_id == 1) {
+      $(this).addClass('active');
+      $('.student-deposit-terms').show();
+      $('.tenancy_weekly_price').show();
+      $('#professional-fields').hide();
+      $('#tenant-type-val').val(tenant_type_id);
+      $('.other-deposit-terms').hide();
+      $('.guarantor').removeClass('active');
+      $('.general-deposit-terms').hide();
+
+  //    if (tenant_type_id == 3 || tenant_type_id == 5 || tenant_type_id == 4){
+    } else if (tenant_type_id == 2) {
+      $(this).addClass('active');
+      $('.professional-term').hide();
+      $('#student-fields').hide();
+      $('#professional-fields').show();
+    } else {
+      $('.professional-term').show();
+      $('#student-fields').show();
+      $('#professional-fields').hide();
+    }
+
+    if (tenant_type_id == 5 || tenant_type_id == 4 || tenant_type_id == 3) {
+      $('#payment-type').hide();
+      $('#payment-type').find('#monthly-btn.payment-btn').addClass('active');
+      $('.weekly-fields').hide();
+      $('.monthly-fields').show();
+      $('#other-tenancy-value').show();
+      $('#other-tenancy-value').find('input').prop("disabled", false);
+      $('.student-tenancy-values').hide();
+      $('.student-tenancy-values').find('input').prop("disabled", true)
+      payment_options.show();
+    } else {
+      $('#payment-type').fadeIn();
+      $('.monthly-fields').hide();
+      $('.weekly-fields').hide();
+      $('#other-tenancy-value').hide();
+      $('.other-tenancy-values').hide();
+      $('#other-tenancy-value').find('input').prop("disabled", true);
+      $('.student-tenancy-values').show();
+      $('.student-tenancy-values').find('input').prop("disabled", false)
+      payment_options.show();
+    }
+  //  calc_price();
+  });
+
+  // Tenancy Dates
+
+  $('#tenancy-year select').on('change', function(){
+    $('#payment-options').fadeIn();
+  });
+
+  //$('.general-deposit-terms').show(); // hiden due to not knowing what the hell this is
+  $('.tenant-type').removeClass('active');
+  $('.guarantor').removeClass('active');
+  $('.deposit-term').removeClass('active');
+
+  $('.guarantor').on('click', function(){
+    var is_guarantor = $(this).data('is-guarantor');
+    $('#guarantor-val').val(true);
+    $('.guarantor').removeClass('active');
+    if(is_guarantor=="no"){
+      $(this).addClass('active');
+      $('#guarantor-val').val(false);
+    }else{
+      $(this).addClass('active');
+    }
+  });
+
+  $('.btn.btn-secondary.deposit-term.due-date-term').on('click', function(){
+    var deposit_term = $(this).data("deposit-term");
+    console.log('Deposit term:' + deposit_term)
+    if (deposit_term == "termly") {
+      $('#tenancy_rent_payment_option').val('0');
+      $('#student-field-months').hide();
+      $('.student-term-date').show();
+      $('.rent-installment').show();
+      $(".due-date-term-data").show();
+      $('.tenancy_rent_due_date').hide();
+      $('#tenancy_number_of_payments').val('3');
+    } else if (deposit_term == "monthly"){
+      $('#tenancy_rent_payment_option').val('1');
+      $('#student-field-months').show();
+      $('.tenancy_rent_installment_term').hide();
+      $(".due-date-term-data").show();
+      $('.student-term-date').hide();
+      $('.tenancy_rent_due_date').show();
+      $('#tenancy_number_of_payments').val('0');
+    } else {
+      $('#tenancy_rent_payment_option').val('2');
+      $('#student-field-months').hide();
+      $('.tenancy_rent_installment_term').show();
+      $(".due-date-term-data").hide();
+      $('.tenancy_rent_due_date').hide();
+      $('#tenancy_number_of_payments').val('0');
+    }
+      calc_price();
+  })
+
+  $('.deposit-term').on('click', function(){
+    var deposit_term = $(this).data('deposit-term');
+    $('.deposit-term').removeClass('active');
+    $(this).addClass('active');
+    if(deposit_term=="one_month_no_guarantor"){
+      $('#guarantor-val').val(false);
+    }else if (deposit_term=="half_month_guarantor"){
+      $('#guarantor-val').val(true);
+    }else if (deposit_term=="no_deposit_no_guarantor"){
+      $('#guarantor-val').val(false);
+    }
+    $('#deposit-term-val').val(deposit_term);
+  });
+
+  $('#set-tenancy-form').submit(function(event){
+    if(!validate_tenancy_form()){
+      event.preventDefault();
+      return false;
+    } else {
+      $("#set-tenancy-modal").modal("hide");
+    }
+  });
+
+  function validate_tenancy_form(){
+    if($('#tenancy_first_name').val()==""){
+      $('.tenancy_first_name').append('<span id="first-name-error" style="color: red; font-size: 12px;">Applicant first name required!</span>');
+      return false;
+    }
+    if($('#tenancy_email').val()==""){
+      $('.tenancy_email').append('<span id="first-name-error" style="color: red; font-size: 12px;">Applicant email required!</span>');
+      return false;
+    }
+    if($('#tenancy_rate').val()==""){
+      $('.tenancy_rate').append('<span id="first-name-error" style="color: red; font-size: 12px;">Tenancy rate required!</span>');
+      return false;
+    }
+    if($('#tenant-type-val').val()==""){
+      $('.tenant-type-div').append('<span id="first-name-error" style="color: red; font-size: 12px;">Tenancy type required!</span>');
+      return false;
+    }
+    if($('#tenant-type-val').val()==""){
+      $('.tenant-is-div').append('<span id="first-name-error" style="color: red; font-size: 12px;">Tenant type is required!</span>');
+      return false;
+    }
+    if($('#guarantor-val').val()==""){
+      $('#guarantor-error').text("Please choose Guarantor or No guarantor");
+      return false;
+    }
+    if($('#deposit-term-val').val()=="") {
+  //    console.log($('#deposit-term-val').val());
+      $('.deposit-term-error').text("Choose deposit term!");
+      return false;
+    }
+    if($('#tenancy_payment_amount').val() <= 0.00 ){
+      $('#tenancy-payment-amount-error').text("The payment amount must be greater than 0");
+      return false;
+    }
+    if(!$(".payment-btn").hasClass('active')){
+      $('#price-error').text("Please choose monthly or weekly listing type for pricing!");
+      return false;
+    }
+    return true;
+  }
+
+  $(".tenant-type").on('click load', function(){
+    var tenant_type = $(this).data("tenant-type");
+    if (tenant_type==1){
+      student_tenancy_length();
+    }else{
+      tenancy_length();
+    }
+  });
+
+  var day, month, year;
+
+  //on load set the dates
+  $("#set-tenancy-modal").on('shown.bs.modal', function(e){
+    // set_the_termly_due_dates($('#tenancy_number_of_weeks').val());
+  })
+
+  //set the termly due dates
+  function set_the_termly_due_dates(weeks){
+    day = $('#tenancy_tenancy_start_3i').val();
+    month = $('#tenancy_tenancy_start_2i').val();
+    year = $('#tenancy_tenancy_start_1i').val();
+    var endDate = moment(day + '-' + month + '-' + year, "DD-MM-YYYY").add(parseInt(weeks), 'weeks');
+    var startDate = moment(day +'-' + month + '-' + year, "DD-MM-YYYY");
+    months = endDate.diff(startDate, 'months')
+  //  $('#tenancy_tenancy_end_1i').val(endDate.year());
+  //  $('#tenancy_tenancy_end_2i').val((endDate.month() + 1));
+  //  $('#tenancy_tenancy_end_3i').val(endDate.day());
+    $('#tenancy_number_of_months').val(months)
+    var tenant_type     = $('#tenant-type-val').val();
+    if(tenant_type == 1) {
+      var total   = $('.student-tenancy-values').find('#tenancy_total_tenancy_value').val();
+    } else {
+      var total   = $('#other-tenancy-value').find('#tenancy_total_tenancy_value').val();
+    }
+    console.log('total', total);
+    $('#tenancy_monthly_price').val(((parseFloat(total)) / months).toFixed(2));
+    set_the_due_dates(months, year, month)
+  }
+
+
+  function set_the_date_month_wise(months) {
+    day = $('#tenancy_tenancy_start_3i').val();
+    month = $('#tenancy_tenancy_start_2i').val();
+    year = $('#tenancy_tenancy_start_1i').val();
+    var endDate = moment(day + '-' + month + '-' + year, "DD-MM-YYYY").add(parseInt(months), 'months');
+    var startDate = moment(day + '-' + month + '-' + year, "DD-MM-YYYY")
+    var weeks = endDate.diff(startDate, 'weeks');
+    $('#tenancy_number_of_weeks').val(weeks)
+  //  console.log('set_the_date_month_wise END: ' + endDate.year(), endDate.month(), endDate.day());
+  //  $('#tenancy_tenancy_end_1i').val(endDate.year());
+  //  $('#tenancy_tenancy_end_2i').val((endDate.month() + 1));
+  //  $('#tenancy_tenancy_end_3i').val(endDate.day());
+    var tenant_type = $('#tenant-type-val').val();
+    if(tenant_type == 1) {
+      var total   = $('.student-tenancy-values').find('#tenancy_total_tenancy_value').val();
+    } else {
+      var total   = $('#other-tenancy-value').find('#tenancy_total_tenancy_value').val();
+    }
+  //  console.log('set_the_date_month_wise TOTAL: ' + total);
+    $('#tenancy_weekly_price').val((parseFloat(total) / parseFloat(weeks)).toFixed(2));
+    set_the_due_dates(months, year, month)
+  }
+  //set the due dates
+  function set_the_due_dates(months, year, month){
+    if(months > 6){
+      $('.tenancy_term_due_dates_due_date_3').show();
+      $('#tenancy_rent_installment_term').val('3')
+
+      if(parseInt(month) > 9) {
+        $('#tenancy_term_due_dates_due_date_1_3i').val("31");
+        $('#tenancy_term_due_dates_due_date_1_2i').val("1")
+        $('#tenancy_term_due_dates_due_date_1_1i').val(parseInt(year) + 1)
+        $('#tenancy_term_due_dates_due_date_2_3i').val("30");
+        $('#tenancy_term_due_dates_due_date_2_2i').val("4")
+        $('#tenancy_term_due_dates_due_date_2_1i').val(parseInt(year) + 1)
+        $('#tenancy_term_due_dates_due_date_3_3i').val("30")
+        $('#tenancy_term_due_dates_due_date_3_2i').val("9")
+        $('#tenancy_term_due_dates_due_date_3_1i').val(parseInt(year) + 1);
+      } else {
+        $('#tenancy_term_due_dates_due_date_1_3i').val("30");
+        $('#tenancy_term_due_dates_due_date_1_2i').val("9")
+        $('#tenancy_term_due_dates_due_date_1_1i').val(parseInt(year))
+        $('#tenancy_term_due_dates_due_date_2_3i').val("31");
+        $('#tenancy_term_due_dates_due_date_2_2i').val("1")
+        $('#tenancy_term_due_dates_due_date_2_1i').val(parseInt(year) + 1)
+        $('#tenancy_term_due_dates_due_date_3_3i').val("30")
+        $('#tenancy_term_due_dates_due_date_3_2i').val("4")
+        $('#tenancy_term_due_dates_due_date_3_1i').val(parseInt(year) + 1);
+      }
+    } else {
+      $('#tenancy_rent_installment_term').val('3')
+      //    $('.tenancy_term_due_dates_due_date_3').hide();
+      if(parseInt(month) > 9) {
+        $('#tenancy_term_due_dates_due_date_1_3i').val("31");
+        $('#tenancy_term_due_dates_due_date_1_2i').val("1")
+        $('#tenancy_term_due_dates_due_date_1_1i').val(parseInt(year) + 1)
+        $('#tenancy_term_due_dates_due_date_2_3i').val("30");
+        $('#tenancy_term_due_dates_due_date_2_2i').val("4")
+        $('#tenancy_term_due_dates_due_date_2_1i').val(parseInt(year) + 1)
+      } else {
+        $('#tenancy_term_due_dates_due_date_1_3i').val("30");
+        $('#tenancy_term_due_dates_due_date_1_2i').val("9")
+        $('#tenancy_term_due_dates_due_date_1_1i').val(parseInt(year))
+        $('#tenancy_term_due_dates_due_date_2_3i').val("31");
+        $('#tenancy_term_due_dates_due_date_2_2i').val("1")
+        $('#tenancy_term_due_dates_due_date_2_1i').val(parseInt(year) + 1)
+      }
+    }
+  }
+
+  $('.tenancy_tenancy_start').on('change', function(){
+    var tenant_type = $('#tenant-type-val').val();
+    var payment_type    = $('#payment-type').find('.payment-btn.active').data('payment-type');
+    if(tenant_type == 1 && payment_type == 'weekly') {
+      set_the_termly_due_dates($('#tenancy_number_of_weeks').val())
+    } else {
+      set_the_date_month_wise($('#tenancy_number_of_months').val())
+    }
+  })
+
+
+
+  $(".payment-btn").on('click load', function() {
+    var payment_type = $(this).data("payment-type");
+    //    alert(payment_type);
+    if ( payment_type == 'weekly' ) {
+      $('.monthly-fields').hide();
+      $('.weekly-fields').show();
+      $('.payment-btn').removeClass('active');
+      $('#weekly-btn').addClass('active');
+
+    } else {
+      $('.weekly-fields').hide();
+      $('.monthly-fields').show();
+      $('.payment-btn').removeClass('active');
+      $('#monthly-btn').addClass('active');
+    }
+    calc_price();
+
+  });
+
+  function calc_price(){
+    var payment_options = $('.payment-options');
+
+    var weekly_payment  = $('#tenancy_weekly_price');
+    var weeks           = $('#tenancy_number_of_weeks');
+
+    var num_payments    = $('#tenancy_number_of_payments');
+    var payment_type    = $('#payment-type').find('.payment-btn.active').data('payment-type');
+    var tenant_type     = $('#tenant-type-val').val();
+    var monthly_payment = $('#tenancy_monthly_price');
+    var months          = $('#tenancy_number_of_months');
+    console.log('PAYMENT TYPE: ' + payment_type);
+//    alert('TENANT TYPE: ' + tenant_type);
+    if (payment_type == 'weekly') {
+  //      alert('weekly');
+      $('#tenancy_payment_amount').val( (weekly_payment.val() * weeks.val() ).toFixed(2) );
+    }
+    if (payment_type == 'monthly'){
+      $('#tenancy_payment_amount').val((monthly_payment.val() * months.val()).toFixed(2));
+    }
+
+    if ( tenant_type==1 ) {
+      console.log('Tenant: Student');
+      var tenancy_total   = $('.student-tenancy-values').find('#tenancy_total_tenancy_value');
+      var advanced_rent = $('#tenancy_advanced_rent_payment_amount');
+
+      if( tenancy_total.val() !=''  && num_payments.val() !='' && advanced_rent.val() != '') {
+        $('#tenancy_payment_amount').val( ( tenancy_total.val() / num_payments.val() ).toFixed(2) );
+        calc_total_value();
+      }
+
+      tenancy_total.on('change keyup', function(){
+        $('#tenancy_payment_amount').val( ( tenancy_total.val() / num_payments.val() ).toFixed(2) );
+        calc_total_value();
+      });
+
+      num_payments.on('change keyup', function(){
+        $('#tenancy_payment_amount').val( ( (tenancy_total.val() - advanced_rent.val() ) / num_payments.val() ).toFixed(2) );
+        // calc_total_value(false);
+      });
+
+      payment_options.on('change keyup', function(){
+        $('#tenancy_payment_amount').val( ( (tenancy_total.val() - advanced_rent.val() ) / num_payments.val() ).toFixed(2) );
+        // calc_total_value();
+      });
+
+    } else {
+      console.log('Tenant: Other');
+      var tenancy_total   = $('#other-tenancy-value').find('#tenancy_total_tenancy_value');
+      if( tenancy_total.val() !=''  && num_payments.val() !='' ) {
+        $('#tenancy_payment_amount').val( ( (tenancy_total.val()) / num_payments.val() ).toFixed(2) );
+        calc_total_value();
+      }
+
+      tenancy_total.on('change keyup', function(){
+        $('#tenancy_payment_amount').val( ( (tenancy_total.val()) / num_payments.val() ).toFixed(2) );
+      });
+
+      num_payments.on('change keyup', function(){
+        $('#tenancy_payment_amount').val( ( (tenancy_total.val()) / num_payments.val() ).toFixed(2) );
+      });
+
+      payment_options.on('change keyup', function(){
+        $('#tenancy_payment_amount').val( ( (tenancy_total.val()) / num_payments.val() ).toFixed(2) );
+      });
+
+    }
+  }
+
+  function calc_total_value() {
+    var weekly_payment  = $('#tenancy_weekly_price');
+    var weeks           = $('#tenancy_number_of_weeks');
+    var monthly_payment = $('#tenancy_monthly_price');
+    var months          = $('#tenancy_number_of_months');
+    var num_payments    = $('#tenancy_number_of_payments');
+    var payment_type    = $('#payment-type').find('.payment-btn.active').data('payment-type');
+    var tenant_type     = $('#tenant-type-val').val();
+    var advanced_rent   = $('#tenancy_advanced_rent_payment_amount');
+    var total_minus_avr = $('#tenancy-adv');
+    var student_calc    = tenancy_calc = 0
+//    console.log(payment_type);
+
+    if(payment_type == 'monthly') {
+      student_calc = ((monthly_payment.val() * months.val()) - advanced_rent.val()).toFixed(2);
+      tenancy_calc = ((monthly_payment.val() * months.val())).toFixed(2);
+    } else {
+      student_calc    = ( (weekly_payment.val() * weeks.val()) - advanced_rent.val() ).toFixed(2);
+      tenancy_calc    = ( (weekly_payment.val() * weeks.val()) ).toFixed(2);
+    }
+
+    if(tenant_type == 1) {
+      var tenancy_total   = $('.student-tenancy-values').find('#tenancy_total_tenancy_value');
+      total_minus_avr.text( student_calc );
+    } else {
+      var tenancy_total   = $('#other-tenancy-value').find('#tenancy_total_tenancy_value');
+    }
+    tenancy_total.val( tenancy_calc );
+//    console.log(student_calc );
+//    console.log(tenancy_calc );
+  }
+
+  var weekly_payment  = $('#tenancy_weekly_price');
+  var weeks           = $('#tenancy_number_of_weeks');
+  var monthly_payment = $('#tenancy_monthly_price');
+  var months          = $('#tenancy_number_of_months');
+  var advanced_rent   = $('#tenancy_advanced_rent_payment_amount');
+  var num_payments    = $('#tenancy_number_of_payments');
+
+  weekly_payment.on('change keyup', function(){
+    calc_total_value();
+  });
+
+  weeks.on('change keyup', function(){
+    calc_total_value();
+  });
+
+  monthly_payment.on('change keyup', function(){
+    calc_total_value();
+  });
+
+  months.on('change keyup', function(){
+    calc_total_value();
+  });
+
+  num_payments.on('change keyup', function(){
+    calc_price();
+    calc_total_value();
+  });
+
+  advanced_rent.on('change keyup', function(){
+    var tenancy_total   = $('#tenancy_total_tenancy_value');
+    var advanced_rent   = $('#tenancy_advanced_rent_payment_amount');
+    var total_minus_avr = $('#tenancy-adv');
+
+    total_minus_avr.text((tenancy_total.val() - advanced_rent.val()).toFixed(2));
+    // calc_total_value();
+  });
+
+
+  // Get the weeks
+  $('#tenancy_number_of_months').on('keyup', function(){
+    set_the_date_month_wise($(this).val())
+  })
+
+  // Get the months
+  $('#tenancy_number_of_weeks').on('keyup', function(){
+    set_the_termly_due_dates($(this).val())
+  })
+
+  //  if( $('#tenancy_weekly_price').val() !='' ) {
+  //    $('#tenancy_monthly_price').val((parseFloat($('#tenancy_weekly_price').val()) * 4.34524).toFixed(2));
+  //  }
+  //  $('#tenancy_weekly_price').on('change keyup', function(){
+  //   $('#tenancy_monthly_price').val((parseFloat($('#tenancy_weekly_price').val()) * 4.34524).toFixed(2));
+  //  });
+  //
+  //  if( $('#tenancy_monthly_price').val() !='' ) {
+  //    $('#tenancy_weekly_price').val((parseFloat($('#tenancy_monthly_price').val()) / 4.34524).toFixed(2));
+  //  }
+  // $('#tenancy_monthly_price').on('change keyup', function(){
+  //   $('#tenancy_weekly_price').val((parseFloat($('#tenancy_monthly_price').val()) / 4.34524).toFixed(2));
+  //  });
+  $('[data-toggle="tooltip"]').tooltip();
+});
+
+
+function tenancy_length(){
+  //Start tenanct**************
+  // $("#tenancy_tenancy_start_1i").children('option').remove();
+  // $("#tenancy_tenancy_end_1i").children('option').remove();
+  // var year = 2019;
+  // for (var i = 17 - 1; i >= 0; i--) {
+  //   $("#tenancy_tenancy_start_1i").append('<option value="'+year+'">'+year+'</option>');
+  //   $("#tenancy_tenancy_end_1i").append('<option value="'+year+'">'+year+'</option>');
+  //   year += 1;
+  // }
+  //
+  // $("#tenancy_tenancy_start_2i").children('option').remove();
+  // $("#tenancy_tenancy_end_2i").children('option').remove();
+  // var monthNames = ["1", "February", "March", "4", "May", "June", "July", "August", "9", "October", "November", "December"];
+  // for(var i = 0; i < monthNames.length; i++){
+  //   $("#tenancy_tenancy_start_2i").append('<option value="'+(i+1)+'">'+monthNames[i]+'</option>');
+  //   $("#tenancy_tenancy_end_2i").append('<option value="'+(i+1)+'">'+monthNames[i]+'</option>');
+  // }
+  //
+  // $("#tenancy_tenancy_start_3i").children('option').remove();
+  //
+  // for (i = 1; i < 32; i++) {
+  //   $("#tenancy_tenancy_start_3i").append('<option value="'+i+'">'+i+'</option>');
+  //   $("#tenancy_tenancy_end_3i").append('<option value="'+i+'">'+i+'</option>');
+  // }
+}
+
+function student_tenancy_length(){
+  var d = new Date();
+  current_year = d.getFullYear();
+  next_year = d.getFullYear()+1;
+  //Start tenanct**************
+  // $('#tenancy_tenancy_start_1i').val(current_year);
+  // $('#tenancy_tenancy_start_2i').val("9");
+  // $('#tenancy_tenancy_start_3i').val("1");
+
+  //End Tenancy****************
+  // $('#tenancy_tenancy_end_1i').val(next_year);
+  // $('#tenancy_tenancy_end_2i').val("8");
+  // $('#tenancy_tenancy_end_3i').val("17");
+}
+
+
+// Close to working months calculator
+//$('#tenancy_tenancy_start_3i, #tenancy_tenancy_start_2i, #tenancy_tenancy_start_1i, #tenancy_tenancy_end_3i, #tenancy_tenancy_end_2i, #tenancy_tenancy_end_1i').on('change', function(){
+//  var d = parseInt( $('#tenancy_tenancy_start_3i option:selected').val() );
+//  var d = $('#tenancy_tenancy_start_3i').val();
+//  if (d < 10) {
+//    d = '0' + d;
+//  }
+//  var m = $('#tenancy_tenancy_start_2i').val();
+//  add_zero(m);
+//  if (m < 10) {
+//      m = '0' + m;
+//  }
+//  var y = $('#tenancy_tenancy_start_1i').val();
+
+//  var e_d = $('#tenancy_tenancy_end_3i').val();
+//  if (e_d < 10) {
+//      e_d = '0' + e_d;
+//  }
+//  var e_m = $('#tenancy_tenancy_end_2i').val();
+//  if (e_m < 10) {
+//      e_m = '0' + e_m;
+//  }
+//  var e_y = $('#tenancy_tenancy_end_1i').val();
+
+//  console.log('S Day: ' + d);
+//  console.log('S Month: ' + m);
+//  console.log('S Year: ' + y);
+
+//  console.log('E Day: ' + e_d);
+//  console.log('E Month: ' + e_m);
+//  console.log('E Year: ' + e_y);
+
+//  var start = new Date(y, m, d);
+//  var end   = new Date(e_y, e_m, e_d);
+
+//  var num_months = MonthDifference(start, end);
+
+//  $('#tenancy_number_of_months').val(num_months);
+
+//});
+
+function add_zero(n) {
+  return (n < 10 ? '0' : '') + n;
+}
+
+function MonthDifference(d1, d2) {
+    var months;
+    months = (d2.getFullYear() - d1.getFullYear()) * 12;
+    months -= d1.getMonth();
+    months += d2.getMonth();
+
+    console.log(months);
+    return months <= 0 ? 0 : months;
+}

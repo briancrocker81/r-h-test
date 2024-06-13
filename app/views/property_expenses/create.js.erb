@@ -1,0 +1,10 @@
+<% if @property_expense.save %>
+  $("#notice").html("<div class='alert alert-success alert-dismissible fade show'> Expense has been saved successfully!<button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div>")
+  $('#commonModal').modal('hide');
+  $("#notice").show();
+  $('#new_property_expense')[0].reset();
+  $('#property_expense').html("<%= j render 'properties/property_expenses' %>")
+<% else %>
+  $('#property_expense_error').html("<h2 class='text-danger'><%= pluralize(@property_expense.errors.count, 'error') %> prohibited this expense from being saved:</h2><ul><% @property_expense.errors.full_messages.each do |message| %><li><%= message %></li><% end %></ul>")
+<% end %>
+DocumentPreview();

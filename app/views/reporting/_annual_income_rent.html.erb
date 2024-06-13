@@ -1,0 +1,64 @@
+<div class="col-md-12 mt-2">
+  <div class="row">
+    <div class="table-responsive">
+      <table class="table table-striped annual-rent">
+        <% date = Date.parse("01/08/#{Date.today.year.to_s[0..1]}#{@year[0..1]}") %>
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>Advanced Rent</th>
+            <% (1..12).each do |i| %>
+              <th><%= (date + i.month).strftime("%b")%></th>
+            <% end %>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% total = {} %>
+          <% @annual_data.each do |key, annual_data| %>
+            <tr>
+              <td><%= key %></td>
+              <td>£<%= number_with_delimiter(sprintf("%.2f",annual_data["AvR"]), delimiter: ',') %></td>
+              <% (1..12).each do |i| %>
+                <% total[(date + i.month).strftime("%b, %Y")] = 0.0 unless total[(date + i.month).strftime("%b, %Y")] %>
+                <% if annual_data['income'][(date + i.month).strftime("%b, %Y")] %>
+                  <td>£<%= number_with_delimiter(sprintf("%.2f",annual_data['income'][(date + i.month).strftime("%b, %Y")]), delimiter: ',') %></td>
+                  <% total[(date + i.month).strftime("%b, %Y")] += annual_data['income'][(date + i.month).strftime("%b, %Y")]%>
+                <% else %>
+                  <td>£0.0</td>
+                <% end %>
+              <% end %>
+              <td>£<%= number_with_delimiter(sprintf("%.2f",annual_data['total_income']), delimiter: ',') %></td>
+            </tr>
+          <% end %>
+
+          <tr>
+<!--            <td>Subtotal</td>-->
+            <td>Total</td>
+            <td>£<%= @total_avr %></td>
+            <% (1..12).each do |i| %>
+              <td>£<%= number_with_delimiter(sprintf("%.2f",total[(date + i.month).strftime("%b, %Y")]), delimiter: ',') %></td>
+            <% end %>
+            <td>£<%= number_with_delimiter(sprintf("%.2f",@sum), delimiter: ',') %></td>
+          </tr>
+<!--          <tr>-->
+<!--            <td>VAT</td>-->
+<!--            <td>£<%#= (@total_avr * 0.2) %></td>-->
+            <%# (1..12).each do |i| %>
+<!--              <td>£<%#= number_with_delimiter(sprintf("%.2f",(total[(date + i.month).strftime("%b, %Y")]) * 0.2), delimiter: ',') %></td>-->
+            <%# end %>
+<!--            <td>£<%#= number_with_delimiter(sprintf("%.2f",(@sum* 0.2)), delimiter: ',') %></td>-->
+<!--          </tr>-->
+<!--          <tr>-->
+<!--            <td>Total</td>-->
+<!--            <td>£<%#= (@total_avr + (@total_avr * 0.2)) %></td>-->
+            <%# (1..12).each do |i| %>
+<!--              <td>£<%#= number_with_delimiter(sprintf("%.2f",(total[(date + i.month).strftime("%b, %Y")]) + ( ( total[(date + i.month).strftime("%b, %Y")]) * 0.2 )), delimiter: ',') %></td>-->
+            <%# end %>
+<!--            <td>£<%#= number_with_delimiter(sprintf("%.2f", (@sum + (@sum * 0.2)) ), delimiter: ',') %></td>-->
+<!--          </tr>-->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

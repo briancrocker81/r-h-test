@@ -1,0 +1,38 @@
+<section id="rooms-list">
+  <h2 class="article-title">Rooms</h2>
+  <div id="filterrific_results">
+
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>Property</th>
+        <th>Room No. / Name</th>
+        <th>List Price</th>
+        <th>Ensuite</th>
+  <!--      <th>Tenant Name</th>-->
+        <th colspan="3"></th>
+      </tr>
+      </thead>
+
+      <tbody>
+      <% @rooms.uniq.each do |room| %>
+        <%# @rooms.map(&:property_id).uniq.each do |room| %>
+        <tr>
+          <td><%= link_to room.property.property_name, room %></td>
+          <td><%= room.number %></td>
+          <td>&#163;<%= number_with_delimiter(sprintf("%.2f",room.list_price.to_f ), delimiter: ',') %></td>
+          <td><%= room.ensuite %></td>
+  <!--        <td><%#= get_tenants_name(room) %></td>-->
+          <!-- <td><%= link_to (fa_icon 'sync-alt'), sync_property_room_path(@property, room), remote: true %></td> -->
+          <td><%= link_to (fa_icon 'search'), room %></td>
+          <td><%= link_to (fa_icon 'edit'), edit_room_path(room) %></td>
+          <td><%= link_to (fa_icon 'trash'), room, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+<!--    <div class="pagy-container">-->
+      <%#= pagy_bootstrap_nav(@pagy).html_safe %>
+<!--    </div>-->
+  </div>
+</section>

@@ -1,0 +1,15 @@
+<%= form_tag conversations_path(property_id: property.id), :method => :post, html: {multipart: true} do %>
+  <div class="form-inputs">
+    <div class="row">
+      <div class="col-lg-12 form-inputs">
+        <div class="form-group">
+          <b>New message: </b>
+          <%= text_area_tag "body", nil,"cols" => 50, "rows" => 4, class: "form-control form-inputs", placeholder: "Type here your message....." %><br>
+          <%= button_tag(type: "submit", class: "btn btn-turquoise") do %>
+            <%= fa_icon 'plus'%> &nbsp; Submit
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

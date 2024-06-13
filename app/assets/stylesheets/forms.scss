@@ -1,0 +1,134 @@
+
+// FORMS
+
+input:-webkit-autofill {
+  -webkit-box-shadow:0 0 0 50px white inset; /* Change the color to your own background color */
+  -webkit-text-fill-color: #333;
+}
+
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 50px white inset;/*your box-shadow*/
+  -webkit-text-fill-color: #333;
+}
+.simple_form {
+  .form-group {
+    margin-bottom: 2rem;
+    input[type="checkbox"], input[type="radio"] {
+      //margin-right: 12px;
+      vertical-align: middle;
+      position: relative;
+      margin-bottom: 4px;
+    }
+    #event_event_type {
+      height: 36px;
+    }
+    select {
+      &.form-control {
+        &:not([size]):not([multiple]) {
+          height: auto;
+        }
+      }
+    }
+    label, legend {
+      display: inline-block;
+      margin-bottom: .2rem;
+      //text-transform: uppercase;
+      font-size: 14px;
+      font-weight: bold;
+      abbr[title] {
+        color: red;
+        text-decoration: none;
+      }
+    }
+    label {
+      &.checkbox-inline {
+        input {
+          margin-right: 5px;
+        }
+      }
+      &.collection_radio_buttons {
+        margin-left: 5px;
+      }
+      &.form-check-label {
+        margin-left: 5px;
+      }
+    }
+    .form-control {
+      font-size: 1.4rem;
+      background: $white;
+      &:focus {
+        background: $white;
+      }
+      &:disabled {
+        background: $disabled;
+      }
+    }
+  }
+
+  .form-error {
+    color: red;
+    font-size: 12px;
+  }
+}
+
+
+.tab-pane {
+  margin-bottom: 50px;
+}
+
+.actions {
+  .btn {
+    margin-right: 10px;
+    min-width: 150px;
+    &:last-child {
+      margin-right: 0;
+    }
+    &.del {
+      width: auto;
+      min-width: unset;
+    }
+    &.btn-50-50 {
+      min-width: calc(50% - 7px);
+    }
+  }
+}
+
+@media (min-width: $screen-lg-min) {
+  .actions {
+    .btn {
+      min-width: 180px;
+      &:last-child {
+        //margin-right: 0;
+      }
+      &.del {
+
+      }
+    }
+  }
+}
+
+.error-no-rooms {
+  color: red;
+  font-size: 12px;
+}
+.rental-type{
+  color: green;
+  font-size: 12px;
+}
+.rental-type-msg{
+  color: blue;
+  font-size: 18px;
+}
+.btn {
+  height: 35px;
+}
+
+.confirm-checkbox{
+  // zoom: 1.5;
+  width: 20px;
+  height: 20px;
+}
+.confirm-label{
+  font-weight: bolder;
+  font-size: 16px !important;
+}

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <p>Hi <%= @tenancy.first_name %></p>
+
+    <p>Congratulations you are now all complete for your booking at <%= @tenancy&.room&.property&.property_name %> Please find attached your copies of the completed documents!</p>
+    <p><b>Save these documents to your device immediately!</b></p>
+    <p>If you have any questions don't hesitate to get in contact, if not we look forward to seeing you on your moving in day!</p>
+    <p>
+      <b> Thanks </b><br>
+      Team <br>
+      CityLets
+    </p>
+    <p>Phone: <%= link_to "01752 604242", "tel:#{'01752604242'}" %></p>
+    <p>Email: <%= mail_to "info@cityletsplymouth.co.uk" %></p>
+  </body>
+</html>

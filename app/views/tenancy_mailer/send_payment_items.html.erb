@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <p>Hi, <%= @tenancy.tenant_name %></p>
+
+    <p>Payment Schedule of the <%= @tenancy&.room&.number %> <%= @tenancy&.room&.property&.property_name %></p>
+
+    <h3>Payment Item Schedule </h3>
+
+    <br/>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Due Date </th>
+          <th>Amount Due</th>
+          <th>Amount Paid</th>
+          <th>Arrears</th>
+          <th>Method</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if @tenancy_payment_items.count > 0 %>
+          <% total_amount_due = 0 %>
+          <% total_amount_paid = 0 %>
+          <% total_arrears = 0.0 %>
+          <% arrears_outstanding = 0.0  %>
+          <% @tenancy_payment_items.each do |pay_item| %>
+            <% if pay_item.due_date < Time.now.to_date %>
+              <% pay_item = check_for_arrears_update(pay_item) %>
+            <% else %>
+              <% pay_item.update_arrears_to_nil %>
+            <% end %>
+            <% total_arrears += pay_item.arrears.to_f %>
+            <tr>
+              <td><%= pay_item.item %></td>
+              <td><%= pay_item.due_date.strftime('%d %B %Y') %></td>
+              <td><%= pay_item.amount_due.present? ? '£'+number_with_delimiter(sprintf("%.2f",pay_item.amount_due.to_f), delimiter: ',') : ''%></td>
+              <td><%= pay_item.amount_paid.present? ? '£'+number_with_delimiter(sprintf("%.2f",pay_item.amount_paid.to_f), delimiter: ',') : ''%></td>
+              <td><%= pay_item.arrears.present? ?  "£#{number_with_delimiter(sprintf("%.2f",pay_item.arrears.to_f), delimiter: ',')}" : '' %></td>
+              <td><%= pay_item.payment_method %></td>
+            </tr>
+            <% total_amount_due += !pay_item.amount_due.nil? ? pay_item.amount_due : 0 %>
+            <% total_amount_paid += !pay_item.amount_paid.nil? ? pay_item.amount_paid : 0 %>
+            <% arrears_outstanding += !pay_item.arrears.nil? ? pay_item.arrears.to_f : 0 %>
+          <% end %>
+          <tr>
+            <td><strong>Payment Amount: </strong> £<%= @tenancy.payment_amount %></td>
+            <td><b>Rent payment type:</b> <%= !@tenancy.rent_payment_option.nil? ? rent_option(@tenancy.rent_payment_option) : 'N/A' %></td>
+            <td>
+              <% unless total_amount_due.to_i == total_amount_paid.to_i %>
+                <b>Total Amount Due: </b> £<%= number_with_delimiter(sprintf("%.2f",(total_amount_due*10).ceil/10.0), delimiter: ',') %>
+              <% end %>
+            </td>
+            <td><b>Total Amount Paid: </b> £<%= number_with_delimiter(sprintf("%.2f",(total_amount_paid*10).ceil/10.0), delimiter: ',') %></td>
+            <td><b>Current Arrears:</b> £<%= number_with_delimiter(sprintf("%.2f",arrears_outstanding.round(2)), delimiter: ',') %></td>
+            <td colspan="2"></td>
+            <!-- <b>Current Arrears: </b> £<%= number_with_delimiter(sprintf("%.2f",total_arrears), delimiter: ',') %> -->
+          </tr>
+        <% else %>
+          <tr>
+            <td colspan="6">No payment items found please update tenancy rent payment option!</td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <p>Let us know if you have any query.</p>
+    <p>
+      <b> Thanks </b><br>
+      Team <br>
+      CityLets
+    </p>
+  </body>
+</html>
+<style media="screen">
+  table {
+    border: 1px solid black;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  table thead tr {
+    background-color: #28a745;
+  }
+  table tr td, table tr th {
+    text-align: center;
+    padding: 5px;
+  }
+  h3 {
+    background: #8C91AB;
+    border-color: #8C91AB;
+    color: #ffffff;
+    padding: 5px;
+  }
+</style>

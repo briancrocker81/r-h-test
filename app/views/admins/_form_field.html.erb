@@ -1,0 +1,25 @@
+<div class="row mt-4 new_documents">
+  <div class="col-md-4">
+    <label> File </label>
+    <% if @generic_document.document_file.present? %>
+      <br/>
+      <%=text_field_tag "document_file[]", @generic_document.document_file.path.split("/").last, id:"label_file_#{@generic_document&.id}", disabled: true, style: 'border: 0; width: 78%', calss: 'from-control' %>
+      <%= button_tag :change, type: 'button', id: "change_file_#{ @generic_document&.id}", class: 'btn btn-sm btn-warning' %>
+    <% end %>
+    <%= file_field_tag 'document_file[]', class: 'form-control', required: @generic_document.document_file.blank?, style: "display: #{@generic_document.document_file.present? ? 'none' : 'block'}", id: "file_#{ @generic_document&.id}" %>
+    <%= button_tag :remove_file, type: 'button', id: "remove_file_#{ @generic_document&.id}", class: 'btn btn-sm btn-danger', style: "display: #{(@generic_document.document_file.present? || @generic_document.new_record?) ? 'none' : 'block'}" %>
+    <%= hidden_field_tag 'id[]', @generic_document&.id, class: 'form-control'%>
+  </div>
+  <div class="col-md-3">
+    <label> Name </label>
+    <%= select_tag 'document_name[]', options_for_select(GenericDocument::GENERIC_DOCUMENT_TYPES.to_a.map(&:reverse)), { class: 'form-control', prompt: 'Select Document', required: true } %>
+  </div>
+  <div class="col-md-3">
+    <label> Expiry Date </label>
+    <%= text_field_tag 'document_expiry[]', @generic_document.document_expiry ? @generic_document.document_expiry.strftime('%Y-%m-%d') : Date.today.strftime('%Y-%m-%d'), class: 'form-control date datepicker', 'data-date-format': "yyyy-mm-dd" %>
+  </div>
+  <div class="col-md-2">
+    <br/>
+    <%= button_tag 'Cancel', type: 'button', class: 'btn btn-danger remove-document' %>
+  </div>
+</div>

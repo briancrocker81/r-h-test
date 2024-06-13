@@ -1,0 +1,179 @@
+.btn {
+  font-size: 1.5rem;
+  padding: 6px 18px;
+  border-radius: 2px;
+  height: fit-content;
+  &.small {
+    padding: 3px 10px;
+    font-size: 12px;
+    //height: auto;
+  }
+}
+
+.btn-primary {
+  background: $pm-blue;
+  border-color: $pm-blue;
+  &:not(:disabled):not(.disabled):active {
+    background: $pm-blue;
+    border-color: $pm-blue;
+  }
+  &:hover {
+    background: darken($pm-blue, 3%);
+    border-color: $pm-blue;
+  }
+  &:focus {
+    @include box-shadow($pm-blue, 0.2);
+  }
+}
+.btn-secondary {
+  background: $grey-button;
+  border-color: $grey-button;
+  &:not(:disabled):not(.disabled):active {
+    background: $grey-button;
+    border-color: $grey-button;
+  }
+  &:hover {
+    background: darken($grey-button, 3%);
+    border-color: $grey-button;
+  }
+  &:focus {
+    @include box-shadow($grey-button, 0.2);
+  }
+}
+
+.btn-turquoise {
+  background: $turquoise;
+  border-color: $turquoise;
+  color: $white;
+  &:not(:disabled):not(.disabled):active {
+    background: $turquoise;
+    border-color: $turquoise;
+  }
+  &:hover {
+    background: darken($turquoise, 3%);
+    border-color: $turquoise;
+    color: $white;
+  }
+  &:focus {
+    @include box-shadow($turquoise, 0.2);
+  }
+}
+
+.btn-orange {
+  background: $flamingo;
+  border-color: $flamingo;
+  color: $white;
+  &:not(:disabled):not(.disabled):active {
+    background: $flamingo;
+    border-color: $flamingo;
+  }
+  &:hover {
+    background: darken($flamingo, 3%);
+    border-color: $flamingo;
+    color: $white;
+  }
+  &:focus {
+    @include box-shadow($flamingo, 0.2);
+  }
+}
+
+.btn-success {
+  background: $success;
+  border-color: $success;
+  color: $white;
+  &:not(:disabled):not(.disabled):active {
+    background: $success;
+    border-color: $success;
+  }
+  &:hover {
+    background: darken($success, 3%);
+    border-color: $success;
+    color: $white;
+  }
+  &:focus {
+    @include box-shadow($success, 0.2);
+  }
+}
+
+//
+//.btn-turquoise {
+//  background: $turquoise;
+//  border-color: $turquoise;
+//  color: $white;
+//  &:not(:disabled):not(.disabled):active {
+//    background: $turquoise;
+//    border-color: $turquoise;
+//  }
+//  &:hover {
+//    background: darken($turquoise, 3%);
+//    border-color: $turquoise;
+//    color: $white;
+//  }
+//  &:focus {
+//    @include box-shadow($turquoise, 0.2);
+//  }
+//}
+
+
+
+.btn-arsenic {
+  background: $arsenic;
+  border-color: $arsenic;
+  color: $white;
+  &:not(:disabled):not(.disabled):active {
+    background: $arsenic;
+    border-color: $arsenic;
+  }
+  &:hover {
+    background: darken($arsenic, 5%);
+    border-color: $arsenic;
+    color: $white;
+  }
+  &:focus {
+    @include box-shadow($arsenic, 0.2);
+  }
+}
+.btn-khaki {
+  background: $khaki;
+  border-color: $khaki;
+  color: $white;
+  &:not(:disabled):not(.disabled):active {
+    background: $khaki;
+    border-color: $khaki;
+  }
+  &:hover {
+    background: darken($khaki, 5%);
+    border-color: $khaki;
+    color: $white;
+  }
+  &:focus {
+    @include box-shadow($khaki, 0.2);
+  }
+}
+
+.btn-light {
+  //background: $arsenic;
+  //border-color: $arsenic;
+  //color: $white;
+  &:not(:disabled):not(.disabled):active, &:not(:disabled):not(.disabled).active {
+    background: $purple;
+    border-color: $purple;
+    color: $white;
+  }
+  &:hover {
+    background: darken($purple, 5%);
+    border-color: $purple;
+    color: $white;
+  }
+  &:focus {
+    @include box-shadow($purple, 0.2);
+  }
+}
+
+.btn-white {
+  background-color: $white;
+  color: $font-colour;
+  &:hover {
+    background-color: darken($white, 3%);
+  }
+}

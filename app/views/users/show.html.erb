@@ -1,0 +1,48 @@
+<% content_for :title, 'Create new User' %>
+<% content_for :title, "User - #{@user.full_name}" %>
+<p id="notice"><%= notice %></p>
+
+<div class="container">
+  <div id="title-bar" class="sticky-top">
+    <h1><%= @user.full_name %></h1>
+    <%#= link_to 'New Landlord', new_landlord_path, class: 'btn btn-primary push' %>
+    <div class="actions d-flex btn-group justify-content-end push">
+      <%= link_to 'Back', users_path, class: 'btn btn-secondary' %>
+      <%= link_to 'Edit', edit_user_path(@user), class: 'btn btn-primary' %>
+    </div>
+  </div>
+  <article>
+    <table class="table table-striped">
+      <tbody>
+        <tr>
+          <td>Name</td>
+          <td><%= @user.first_name %> <%= @user.surname %></td>
+        </tr>
+        <tr>
+          <td>Username</td>
+          <td><%= @user.username %></td>
+        </tr>
+        <tr>
+          <td>Email</td>
+          <td><%= @user.email %></td>
+        </tr>
+        <tr>
+          <td>Mobile</td>
+          <td><%= @user.mobile %></td>
+        </tr>
+        <tr>
+          <td>Role</td>
+          <td><%= @user.role %></td>
+        </tr>
+        <tr>
+          <td>Picture</td>
+          <td><%= image_tag(url_for(@user.avatar)) if @user.avatar.attached? %></td>
+        </tr>
+        <tr>
+          <td>Admin</td>
+          <td><%= @user.is_admin? ? '<span class="badge badge-success">Yes</span>'.html_safe : '<span class="badge badge-warning">No</span>'.html_safe %></td>
+        </tr>
+      </tbody>
+    </table>
+  </article>
+</div>

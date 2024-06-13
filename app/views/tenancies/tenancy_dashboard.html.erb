@@ -1,0 +1,88 @@
+<% content_for :tenancy_dashboard_title, "My Tenancy Dashboard" %>
+<%= render 'dashboard_header' %>
+<%= render "tenancy_error" %>
+<div id="tenancy-block" class="row text-center">
+  <% #if @tenancy.booking_status == 'complete' %>
+    <!-- <div class="container">
+      <%# <p class="alert alert-info">Congratulations! Guarantor <b><%= @tenancy&.guarantor&.guarantor_name %> </b> completed your booking process! %>
+        We will be in contact shortly!
+      </p>
+    </div> -->
+  <% if @tenancy.final_submission %>
+    <div class="container">
+      <p class="alert alert-info"><%= t 'tenancies.dashboard.final_submission_text' %></p>
+    </div>
+  <% else %>
+
+    <div class="col-12">
+      <div id="notification">
+        <div class="row justify-content-md-center">
+          <div class="col-md-1 icon">
+            <i class="fas fa-exclamation-triangle"></i>
+          </div>
+          <div class="col-md-7">
+            <h2><%= t 'tenancies.dashboard.reservation_warning' %></h2>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% if @tenancy.form_submitted %>
+      <div class="col-lg-4 block booking-green-btn">
+        <div class="box">
+          <i class="fa fa-check-circle" title="Form submitted"></i>
+          <p>Booking form submitted</p>
+        </div>
+      </div>
+    <% else %>
+      <div class="col-lg-4 block">
+        <%= link_to booking_form_path(@tenancy.uri_string), :data => {"turbolinks" => false}, style: "color: #212529;" do %>
+          <i class="far fa-edit"></i>
+          <p>Complete my booking form</p>
+        <% end %>
+      </div>
+    <% end %>
+    <% if @tenancy.signed_tenancy_agreement %>
+      <div class="col-lg-4 block booking-green-btn">
+        <div class="box">
+          <i class="fa fa-check-circle" title="Form submitted"></i>
+          <p>Tenancy agreement signed</p>
+        </div>
+      </div>
+    <% else %>
+      <div class="col-lg-4 block">
+        <%= link_to agreement_form_path(@tenancy.uri_string), :data => {"turbolinks" => false}, style: "color: #212529;" do %>
+          <i class="fas fa-signature"></i>
+          <p>Sign my tenancy agreement</p>
+        <% end %>
+      </div>
+    <% end %>
+
+    <% if @tenancy.read_doc %>
+      <div class="col-lg-4 block booking-green-btn">
+        <div class="box">
+          <i class="fa fa-check-circle" title="Form submitted"></i>
+          <p>Compliance document completed!</p>
+        </div>
+      </div>
+    <% else %>
+      <div class="col-lg-4 block">
+        <%= link_to document_confirmation_form_path(@tenancy.uri_string), :data => {"turbolinks" => false}, style: "color: #212529;" do %>
+          <i class="fas fa-file-contract"></i>
+          <p>View my compliance documents</p>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+  <% end %>
+
+<div class="row">
+  <div class="col-12 text-right">
+    <% if (@tenancy.read_doc && @tenancy.signed_tenancy_agreement && @tenancy.form_submitted) %>
+      <% unless @tenancy.final_submission %>
+        <div id="submit-application">
+          <%= link_to 'Complete my application', submit_tenancy_form_path(@tenancy.uri_string), class: 'btn btn-success tenancy-dashboard-btn' %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,108 @@
+<%= simple_form_for(@user) do |f| %>
+  <div id="title-bar" class="sticky-top">
+    <h1>
+      <%=raw @user.first_name.present? ? "#{@user.first_name+"<small class='edit'>- Edit mode</small>".html_safe}" : 'New User' %>
+    </h1>
+    <div class="actions d-flex justify-content-end push">
+      <% if current_user.admin? %>
+        <%= link_to (fa_icon 'trash'), @user, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger del' unless @user.new_record? %>
+      <% end %>
+      <%= link_to 'Back', :back, class: 'btn btn-secondary' %>
+      <%= f.button :submit, 'Save', class: 'btn btn-primary' %>
+    </div>
+  </div>
+
+  <article id="form-content">
+    <%= f.error_notification %>
+    <section id="user-details">
+      <h3 class="article-title">User details</h3>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <%= f.input :first_name %>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <%= f.input :surname %>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <%= f.input :username %>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <%= f.input :email, required: true, autofocus: true %>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <%= f.input :mobile %>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>User profile pic</label>
+        <% if @user.avatar.attached? %>
+          <div class="row">
+            <div class="col-md-4">
+              <%= link_to image_tag(url_for(current_user.avatar), id: 'user-profile', class: 'img-fluid mb-3 md-mb-0'), user_path(current_user.id), :class => 'edit-user navbar-link thumb', :data => {:turbolinks => false} %>
+            </div>
+            <div class="col-md-6">
+              <button class="btn btn-info small" type="button" data-toggle="collapse" data-target="#new-user-image" aria-expanded="false" aria-controls="new-user-image">
+                Replace image
+              </button>
+              <div class="collapse" id="new-user-image">
+                <div class="card card-body pl-0">
+                  <%= f.file_field :avatar %>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% else %>
+          <div class="row">
+            <div class="col-md-6">
+              <%= f.file_field :avatar %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </section>
+
+    <section id="user-permissions">
+      <h3 class="article-title">User permissions</h3>
+      <div class="form-group">
+        <div class="custom-control custom-radio">
+          <%= f.input :role, as: :radio_buttons, collection: %w(Staff Agent Finance Cleaner Maintenance) %>
+        </div>
+
+        <%# unless current_user.role == 'Agent' %>
+        <%#= f.label :colour, 'Calendar Colour' %>
+        <!--        <ul id="colour-picker">-->
+        <!--          <li class="colour purple-bg <%#=  @colors['purple'] ? 'disabled' : '' %>" data-colour-val="purple"><%#= @colors['purple'] if @colors['purple']%></li>-->
+        <!--          <li class="colour orange-bg <%#= @colors['orange'] ? 'disabled' : '' %> " data-colour-val="orange"><%#= @colors['orange'] if @colors['orange']%></li>-->
+        <!--          <li class="colour manatee-bg <%#= @colors['manatee'] ? 'disabled' : '' %>" data-colour-val="manatee"><%#= @colors['manatee'] if @colors['manatee']%></li>-->
+        <!--          <li class="colour blue-bg <%#= @colors['blue'] ? 'disabled' : '' %>" data-colour-val="blue"><%#= @colors['blue'] if @colors['blue']%></li>-->
+        <!--          <li class="colour turquoise-bg <%#= @colors['turquoise'] ? 'disabled' : '' %>" data-colour-val="turquoise"><%#= @colors['turquoise'] if @colors['turquoise']%></li>-->
+        <!--          <li class="colour arsenic-bg <%#= @colors['arsenic'] ? 'disabled' : '' %>" data-colour-val="arsenic"><%#= @colors['arsenic'] if @colors['arsenic']%></li>-->
+        <!--          <li class="colour pea-green-bg <%#= @colors['pea-green'] ? 'disabled' : '' %>" data-colour-val="pea-green"><%#= @colors['pea-green'] if @colors['pea-green']%></li>-->
+        <!--          <li class="colour suva-grey-bg <%#= @colors['suva-grey'] ? 'disabled' : '' %>" data-colour-val="suva-grey"><%#= @colors['suva-grey'] if @colors['suva-grey']%></li>-->
+        <!--          <li class="colour iceberg-blue-bg <%#= @colors['iceberg-blue'] ? 'disabled' : '' %>" data-colour-val="iceberg-blue"><%#= @colors['iceberg-blue'] if @colors['iceberg-blue']%></li>-->
+        <!--          <li class="colour pink-bg <%#= @colors['pink'] ? 'disabled' : '' %>" data-colour-val="pink"><%#= @colors['pink'] if @colors['pink']%></li>-->
+        <!--          <li class="colour beaver-bg <%#= @colors['beaver'] ? 'disabled' : '' %>" data-colour-val="beaver"><%#= @colors['beaver'] if @colors['beaver']%></li>-->
+        <!--          <li class="colour khaki-bg <%#= @colors['khaki'] ? 'disabled' : '' %>" data-colour-val="khaki"><%#= @colors['khaki'] if @colors['khaki']%></li>-->
+        <!--        </ul>-->
+        <%#= f.hidden_field :colour %>
+        <%# end %>
+        <% if current_user.is_admin? %>
+          <%= f.input :admin, as: :boolean %>
+        <% end %>
+      </div>
+    </section>
+
+  </article>
+
+<% end %>

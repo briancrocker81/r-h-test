@@ -1,0 +1,41 @@
+<nav id="sidebar" class="active">
+  <div id="sidebar-header-block">
+    <div class="sidebar-header">
+      <div class="company-logo">
+        <%= link_to image_tag('citylets-logo.png'), root_path %>
+      </div>
+    </div>
+  </div>
+
+  <ul class="list-unstyled components sticky-top">
+    <li class="<%= current_page?(calendar_index_path) ? 'active' : 'link' %>">
+      <%= link_to fa_icon('calendar', text: 'Calendar'), calendar_index_path %>
+    </li>
+    <li class="<%= current_page?(listings_path) ? 'active' : 'link'%>">
+      <%= link_to fa_icon('list', text: 'Listings'), listings_path %>
+    </li>
+<!--    <li class="<%#= current_page?(tenancies_path) ? 'active' : 'link' %>">-->
+      <%#= link_to fa_icon('user', text: 'Tenants'), tenancies_path %>
+<!--    </li>-->
+    <li class="<%= current_page?(landlords_path) ? 'active' : 'link' %>">
+      <%= link_to fa_icon('users', text: 'Landlords'), landlords_path %>
+    </li>
+    <li class="<%= current_page?(properties_path) ? 'active' : 'link'%>">
+      <%= link_to fa_icon('home', text: 'Properties'), properties_path %>
+    </li>
+    <li>
+      <%= link_to fa_icon('chart-line', text: 'Reports'), reporting_index_path %>
+    </li>
+<!--    <li class="<%#= current_page?(tenancies_path) ? 'active' : 'link' %>">-->
+      <%#= link_to fa_icon('user', text: 'Archived Tenants'), tenancies_path(archived: true) %>
+<!--    </li>-->
+
+    <li class="<%= current_page?(admin_path) ? 'active' : 'link'%>">
+      <%= link_to fa_icon('user-shield', text: 'Admin'), admin_path %>
+    </li>
+
+  </ul>
+  <span id="version">
+    V: 2.3.8
+  </span>
+</nav>

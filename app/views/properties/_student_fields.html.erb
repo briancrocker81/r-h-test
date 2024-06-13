@@ -1,0 +1,108 @@
+<article class="details">
+  <div class="row">
+    <div class="col-12">
+      <h2><i class="fas fa-university" title="Student"></i>Student details</h2>
+    </div>
+    <div class="col-md-6">
+      <table class="table">
+        <tbody>
+        <tr>
+          <td>Front Photo</td>
+          <td><img src="<%= @property.property_list_student.front_photo rescue "" %>" style = "width: 200px;"></td>
+        </tr>
+        <tr>
+          <td>List Price</td>
+          <td>£<%= @property.property_list_student.list_price rescue "" %></td>
+        </tr>
+        <tr>
+          <td>Price listed is</td>
+          <td><% if @property.property_list_student.list_weekly %>
+                Weekly
+              <% else %>
+                Monthly
+              <% end %>
+          </td>
+        </tr>
+        <tr>
+          <td>Let available date</td>
+          <td><%= !@property.property_list_student.let_available_date.nil? ? (l @property.property_list_student.let_available_date, format: :long) : "" %></td>
+        </tr>
+        <tr>
+          <td>Deposit</td>
+          <td>£<%= @property.property_list_student.deposit rescue "" %></td>
+        </tr>
+        <tr>
+          <td>Minimum term (in months)</td>
+          <td><%= @property.property_list_student.minimum_term rescue "" %></td>
+        </tr>
+        <tr>
+          <td>Location</td>
+          <td><%= @property.property_list_student.location rescue "" %></td>
+        </tr>
+        <tr>
+          <td>College</td>
+          <td><%= @property.property_list_student.college rescue "" %></td>
+        </tr>
+        <tr>
+          <td>Style</td>
+          <td><%= @property.property_list_student.style rescue "" %></td>
+        </tr>
+        <tr>
+          <td>Walk to city campus (in minutes)</td>
+          <td><%= @property.property_list_student.walk_to_city_campus rescue "" %></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-md-6">
+      <table class="table">
+        <tbody>
+        <tr>
+          <td colspan="2">Description</td>
+        </tr>
+        <tr>
+          <td colspan="2" style="font-weight: normal"><%= @property.property_list_student.description rescue "" %></td>
+        </tr>
+
+        <% if @property.property_list_student.additional_features_1.present? %>
+          <tr>
+            <td>Additional feature 1</td>
+            <td><%= @property.property_list_student.additional_features_1 rescue "" %></td>
+          </tr>
+        <% end %>
+        <% if  @property.property_list_student.additional_features_2.present? %>
+          <tr>
+            <td>Additional feature 2</td>
+            <td><%= @property.property_list_student.additional_features_2 rescue "" %></td>
+          </tr>
+        <% end %>
+        <% if  @property.property_list_student.additional_features_3.present? %>
+          <tr>
+            <td>Additional feature 3</td>
+            <td><%= @property.property_list_student.additional_features_3 rescue "" %></td>
+          </tr>
+        <% end %>
+        <% if  @property.property_list_student.additional_features_4.present? %>
+          <tr>
+            <td>Additional feature 4</td>
+            <td><%= @property.property_list_student.additional_features_4 rescue "" %></td>
+          </tr>
+        <% end %>
+        <% if @property.property_list_student.additional_features_5.present? %>
+          <tr>
+            <td>Additional feature 5</td>
+            <td><%= @property.property_list_student.additional_features_5 rescue "" %></td>
+          </tr>
+        <% end %>
+        <% if  @property.property_list_student.additional_features_6.present? %>
+          <tr>
+            <td>Additional feature 6</td>
+            <td><%= @property.property_list_student.additional_features_6 rescue "" %></td>
+          </tr>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</article>
+<!--<hr>-->

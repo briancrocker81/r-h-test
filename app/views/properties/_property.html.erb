@@ -1,0 +1,428 @@
+<section>
+  <h3 class="article-title">Property Details</h3>
+  <div class="row">
+    <div class="col-md-6">
+      <h2>Property Address</h2>
+      <div class="form-group">
+        <div class="row">
+          <div class="col-sm-3">
+            <%= f.label :number %>
+            <%= f.text_field :number, id: :property_number, class: 'form-control' %>
+            <span id="property_number_error" style="color: red; font-size: 12px;"></span>
+          </div>
+          <div class="col-sm-9">
+            <%= f.label :street %>
+            <%= f.text_field :street, id: :property_street, class: 'form-control' %>
+            <span id="property_street_error" style="color: red; font-size: 12px;"></span>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <%= f.input :address_line_2 %>
+        <span id="property_address_line_2_error" style="color: red; font-size: 12px;"></span>
+      </div>
+      <div class="form-group">
+        <%= f.label :city %>
+        <%= f.text_field :city, id: :city, class: 'form-control' %>
+        <span id="property_city_error" style="color: red; font-size: 12px;"></span>
+      </div>
+      <div class="form-group">
+        <%= f.label :county %>
+        <%= f.text_field :county, id: :property_county, class: 'form-control' %>
+        <span id="property_county_error" style="color: red; font-size: 12px;"></span>
+      </div>
+      <div class="form-group">
+        <%= f.label :postcode %>
+        <%= f.text_field :postcode, id: :property_postcode, class: 'form-control' %>
+        <span id="property_postcode_error" style="color: red; font-size: 12px;"></span>
+      </div>
+      <div class="form-group">
+        <%= f.input :property_status_type, collection: [['Student Year', 0], ['Co Living', 1], ['Home', 2]], include_blank: "Select type" %>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <h2>Room breakdown</h2>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group room_price">
+            <%= f.input :room_rental_price, class: 'form-control', input_html: { value: f.object.room_rental_price } %>
+            <span id="property_room_rental_price_error" style="color: red; font-size: 12px;"></span>
+          </div>
+          <div class="form-group ">
+            <%= f.input :number_of_bedrooms, id: :number_of_bedrooms, class: 'form-control' %>
+            <span id="property_number_of_bedrooms_error" style="color: red; font-size: 12px;"></span>
+          </div>
+          <div class="form-group">
+            <%= f.input :number_of_kitchens, id: :number_of_kitchens, class: 'form-control' %>
+          </div>
+          <div class="form-group">
+            <%= f.input :number_of_lounges, id: :number_of_lounges, class: 'form-control' %>
+          </div>
+          <div class="form-group">
+            <%= f.input :number_of_dining_rooms, id: :number_of_dining_rooms, class: 'form-control' %>
+          </div>
+          <div class="form-group">
+            <%= f.input :number_of_toilets, id: :number_of_toilets, class: 'form-control' %>
+          </div>
+          <div class="form-group">
+            <%= f.input :number_of_showers, id: :number_of_showers, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <%= f.input :number_of_bathrooms %>
+            <span id="property_number_of_bathrooms_error" style="color: red; font-size: 12px;"></span>
+          </div>
+          <div class="form-group">
+            <%= f.input :number_of_gardens %>
+          </div>
+          <div class="form-group">
+            <%= f.input :number_of_studies %>
+          </div>
+          <div class="form-group">
+            <%= f.input :number_of_utility_rooms %>
+          </div>
+          <div class="form-group">
+            <%= f.input :number_of_studio_apartments %>
+          </div>
+          <div class="form-group">
+            <%= f.input :other %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h3 class="article-title">Additional Details</h3>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="row">
+        <div class="col-sm-6 col-md-3">
+          <div class="form-group">
+            <%= f.input :parking, label: 'parking?', input_html: { id: 'parking' }, as: :select, collection: [['Private', 0], ['Off street', 1], ['Permit', 2], ['Nearby', 3], ['None', 4]], checked: property.parking %>
+          </div>
+        </div>
+        <div class="col-sm-6 col-md-3">
+          <div class="form-group">
+            <%= f.input :outside_space, input_html: { id: 'outside_space' }, as: :select, collection: [['Garden', 0], ['Yard', 1], ['Outside space', 2], ['None', 3]], checked: property.outside_space %>
+          </div>
+        </div>
+        <div class="col-sm-6 col-md-3">
+          <div class="form-group">
+            <%= f.input :ensuite, input_html: { id: 'ensuite' }, as: :select, collection: [['All', 0], ['Some', 1], ['None', 2]], checked: property.ensuite %>
+          </div>
+        </div>
+        <div class="col-sm-6 col-md-3">
+          <div class="form-group">
+            <%= f.input :style, label: 'Property Style', collection: [ "Apartment", "House (unspecified)", "Flat share", "House share", "Studio flat", "Garages", "Serviced apartment", "Commercial Property" ] %>
+          </div>
+        </div>
+        <div class="col-sm-6 col-md-3">
+          <div class="form-group">
+            <%= f.input :pets, label: 'Pets allowed?', as: :radio_buttons, checked: property.pets %>
+          </div>
+        </div>
+        <div class="col-sm-6 col-md-3">
+          <div class="form-group">
+            <%= f.input :furnished, collection: [['Furnished', 0], ['Part-furnished', 1], ['Unfurnished', 2]], include_blank: "Select furnished status" %>
+          </div>
+        </div>
+        <div class="col-sm-6 col-md-3">
+          <div class="form-group">
+            <%= f.input :epc_rating, as: :select, collection: ["A", "B", "C", "D", "E", "F", "G"], checked: property.epc_rating %>
+          </div>
+        </div>
+        <div class="col-sm-6 col-md-3">
+          <div class="form-group">
+            <%= f.input :council_tax_band, as: :select, collection: ["A", "B", "C", "D", "E", "F", "G", "H"], checked: property.council_tax_band %>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<%= render partial: 'utilities', locals: {f: f, property: @property} %>
+
+<section>
+  <h3 class="article-title">Listing Types:</h3>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-inline inline-me">
+        <%= f.input :property_type, as: :check_boxes, collection: %w(Student Graduate Professional Family), checked: property.property_type %>
+        <span id="property_type_error" style="color: red; font-size: 12px;"></span>
+      </div>
+    </div>
+    <div class="col-md-6">
+
+    </div>
+  </div>
+</section>
+
+<section class="student-property-type">
+  <h3 class="article-title">Student list details</h3>
+  <%= f.simple_fields_for :property_list_student do |list_type_student| %>
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="form-group">
+          <%= list_type_student.input :front_photo, as: :file %>
+          <%#- if @property.property_list_student.front_photo.present? -%>
+<!--            <img src="<%#= @property.property_list_student.front_photo%>" style = "width: 200px;">-->
+            <%#= list_type_student.input :remove_front_photo, label: 'Remove Photo', as: :boolean %>
+          <%#- end -%>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="form-group">
+          <%= list_type_student.input :description, :input_html => {rows: 8} %>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="row">
+          <div class="col-lg-4">
+            <%= list_type_student.input :list_price %>
+          </div>
+          <div class="col-lg-4 list-type">
+            <%= list_type_student.input :list_weekly %>
+            <%= list_type_student.input :list_monthly %>
+          </div>
+          <div class="col-lg-4">
+            <%= list_type_student.input :deposit %>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-6">
+            <%= list_type_student.input :let_available_date, order: %i(day month year), start_year: Date.today.year, end_year: Date.today.year + 2, include_blank: true %>
+          </div>
+          <div class="col-lg-6">
+            <%= list_type_student.input :minimum_term, label: "Minimum term (in months)" %>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-6">
+            <div class="form-group">
+              <%= list_type_student.input :college %>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="form-group">
+              <%= list_type_student.input :walk_to_city_campus, label: "Walk to city campus (in minutes)" %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="form-group">
+          <%= list_type_student.input :location, collection: PropertyListStudent::LOCATIONS, include_blank: "Select location" %>
+        </div>
+        <div class="form-group">
+          <%= list_type_student.input :style %>
+        </div>
+        <div class="form-group">
+          <%= list_type_student.input :additional_features_1 %>
+          <%= list_type_student.input :additional_features_2 %>
+          <%= list_type_student.input :additional_features_3 %>
+          <%= list_type_student.input :additional_features_4 %>
+          <%= list_type_student.input :additional_features_5 %>
+          <%= list_type_student.input :additional_features_6 %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</section>
+
+<section class="graduate-property-type">
+  <h3 class="article-title">Graduate list details</h3>
+  <%= f.simple_fields_for :property_list_graduate do |list_type_graduate| %>
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="form-group">
+          <%= list_type_graduate.input :front_photo, as: :file %>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <%= list_type_graduate.input :description, :input_html => {rows: 8} %>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="row">
+          <div class="col-lg-4">
+            <%= list_type_graduate.input :list_price %>
+          </div>
+          <div class="col-lg-4 list-type">
+            <%= list_type_graduate.input :list_weekly, as: :boolean %>
+            <%= list_type_graduate.input :list_monthly, as: :boolean %>
+          </div>
+          <div class="col-lg-4">
+            <%= list_type_graduate.input :deposit %>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xl-6">
+            <%= list_type_graduate.input :let_available_date, order: %i(day month year), start_year: Date.today.year, end_year: Date.today.year + 2, include_blank: true %>
+          </div>
+          <div class="col-xl-6">
+            <%= list_type_graduate.input :minimum_term, label: "Minimum term (in months)" %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= list_type_graduate.input :student_allowed, as: :boolean %>
+        </div>
+        <div class="form-group">
+          <%= list_type_graduate.input :bus_route %>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="form-group">
+          <%= list_type_graduate.input :location, collection: PropertyListStudent::LOCATIONS, include_blank: "Select location" %>
+        </div>
+        <div class="form-group">
+          <%= list_type_graduate.input :additional_features_1 %>
+          <%= list_type_graduate.input :additional_features_2 %>
+          <%= list_type_graduate.input :additional_features_3 %>
+          <%= list_type_graduate.input :additional_features_4 %>
+          <%= list_type_graduate.input :additional_features_5 %>
+          <%= list_type_graduate.input :additional_features_6 %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</section>
+
+<section class="professional-property-type">
+  <h3 class="article-title">Professional list details</h3>
+  <%= f.simple_fields_for :property_list_professional do |list_type_professional| %>
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="form-group">
+          <%= list_type_professional.input :front_photo, as: :file %>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <%= list_type_professional.input :description, :input_html => {rows: 8} %>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="row">
+          <div class="col-lg-4">
+            <%= list_type_professional.input :list_price %>
+          </div>
+          <div class="col-lg-4 list-type">
+            <%= list_type_professional.input :list_weekly, as: :boolean %>
+            <%= list_type_professional.input :list_monthly, as: :boolean %>
+          </div>
+          <div class="col-lg-4">
+            <%= list_type_professional.input :deposit %>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xl-6">
+            <%= list_type_professional.input :let_available_date, order: %i(day month year), start_year: Date.today.year, end_year: Date.today.year + 2, include_blank: true %>
+          </div>
+          <div class="col-xl-6">
+            <%= list_type_professional.input :minimum_term, label: "Minimum term (in months)" %>
+          </div>
+        </div>
+        <div class="form-group">
+          <%= list_type_professional.input :bus_route %>
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="form-group">
+          <%= list_type_professional.input :location, collection: PropertyListStudent::LOCATIONS, include_blank: "Select location" %>
+        </div>
+        <div class="form-group">
+          <%= list_type_professional.input :additional_features_1 %>
+          <%= list_type_professional.input :additional_features_2 %>
+          <%= list_type_professional.input :additional_features_3 %>
+          <%= list_type_professional.input :additional_features_4 %>
+          <%= list_type_professional.input :additional_features_5 %>
+          <%= list_type_professional.input :additional_features_6 %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</section>
+
+<section class="family-property-type">
+  <h3 class="article-title">Family listing detail</h3>
+  <%= f.simple_fields_for :property_list_family do |list_type_family| %>
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="form-group">
+          <%= list_type_family.input :front_photo, as: :file %>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="form-group">
+          <%= list_type_family.input :description, :input_html => {rows: 8} %>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="row">
+          <div class="col-lg-4">
+            <%= list_type_family.input :list_price %>
+          </div>
+          <div class="col-lg-4 list-type">
+            <%= list_type_family.input :list_weekly, as: :boolean %>
+            <%= list_type_family.input :list_monthly, as: :boolean %>
+          </div>
+          <div class="col-lg-4">
+            <%= list_type_family.input :deposit %>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-xl-6">
+            <%= list_type_family.input :let_available_date, order: %i(day month year), start_year: Date.today.year, end_year: Date.today.year + 2, include_blank: true %>
+          </div>
+          <div class="col-xl-6">
+            <%= list_type_family.input :minimum_term, label: "Minimum term (in months)" %>
+          </div>
+        </div>
+        <div class="form-group">
+          <%= list_type_family.input :school %>
+        </div>
+        <div class="form-group">
+          <%= list_type_family.input :nearest_park_and_play_area %>
+        </div>
+        <div class="form-group">
+          <%= list_type_family.input :area_family_location %>
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="form-group">
+          <%= list_type_family.input :location, collection: PropertyListStudent::LOCATIONS, include_blank: "Select location" %>
+        </div>
+        <div class="form-group">
+          <%= list_type_family.input :additional_features_1 %>
+          <%= list_type_family.input :additional_features_2 %>
+          <%= list_type_family.input :additional_features_3 %>
+          <%= list_type_family.input :additional_features_4 %>
+          <%= list_type_family.input :additional_features_5 %>
+          <%= list_type_family.input :additional_features_6 %>
+        </div>
+      </div>
+
+    </div>
+
+  <% end %>
+
+</section>

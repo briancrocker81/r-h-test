@@ -1,0 +1,14 @@
+<div class="row">
+  <div class="col">
+    <%= f.input :conviction_status %>
+  </div>
+  <div class="col">
+    <%= f.input :offence %>
+  </div>
+  <div class="col">
+    <%= f.input :date, :start_year => Date.today.year - 70, order: %i(day month year) %>
+  </div>
+  <div class="col">
+    <%= f.input :judgement %>
+  </div>
+</div>

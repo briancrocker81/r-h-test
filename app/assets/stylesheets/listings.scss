@@ -1,0 +1,45 @@
+.listings {
+  &.index {
+    .years-filters {
+      button {
+        &:last-of-type {
+          background: $khaki;
+          border-color: $khaki;
+        }
+      }
+    }
+    #filterrific_results  {
+      table  {
+        tr {
+          td {
+            &.t_icon {
+              i {
+                &.fa-times-circle {
+                  text-align: center;
+                  display: flex;
+                  flex-direction: column;
+                  justify-content: center;
+                  padding: 0.25em 0;
+                  color: red;
+                }
+              }
+            }
+            &.end-date, &.start-date {
+              min-width: 80px;
+            }
+            &.list_name {
+              min-width: 120px;
+            }
+          }
+          &.expired {
+            td {
+              &.end-date {
+                background: #E99866;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

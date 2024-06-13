@@ -1,0 +1,4 @@
+<%= CSV.generate_line(['Landlord', 'Contact Number', 'Email', 'Partner Type'], { col_sep: ",", force_quotes: false }) %>
+<%- @landlords.uniq.each do | landlord | -%>
+  <%= CSV.generate_line([landlord.contact_name, (landlord.contact_number == "" ? "N/A" : landlord.contact_number), landlord.email, landlord.partnership_format], { col_sep: ",", force_quotes: false }) -%>
+<%- end -%>

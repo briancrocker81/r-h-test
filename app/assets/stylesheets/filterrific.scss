@@ -1,0 +1,261 @@
+.filterrific-form {
+  background: $white;
+  padding: 2rem 15px;
+  border: 1px solid darken($white, 10%);
+  margin-bottom: 20px;
+  border-radius: 5px;
+  box-shadow: 0 1px 5px rgba(0,0,0,.08);
+
+  .navbar {
+    padding: 0;
+    h3 {
+      margin: 0;
+    }
+    .navbar-toggler {
+      border: none;
+      i {
+        color: $black;
+        font-size: 16px;
+      }
+    }
+  }
+
+  #navbarSupportedContent {
+    margin-top: 10px;
+  }
+  #filterrific_search_query {
+    padding: 10px 65px 10px 25px;
+    background-color: #f3f4f4;
+    border-width: 0;
+    border-radius: 25px;
+  }
+  .option {
+    margin-bottom: 10px;
+  }
+
+  .booking-status {
+    padding: 0 15px;
+    width: 100%;
+    &.form-inline {
+      input[type="radio"], input[type="checkbox"] {
+        margin-right: 5px;
+      }
+      label {
+        //margin-right: 10px;
+        font-size: 14px;
+      }
+    }
+    span {
+      &:last-of-type {
+        margin-right: 0;
+      }
+    }
+  }
+  select, input {
+    font-size: 16px;
+  }
+  select {
+    &.form-control:not([size]):not([multiple]) {
+      height: 43px;
+    }
+  }
+  span {
+    margin-right: 10px;
+  }
+  .btn-group {
+
+  }
+  .btn {
+    padding: 6px 20px;
+  }
+  .filter-icons {
+    .flex-fill {
+      max-width: 25%;
+      a {
+        text-align: center;
+        display: block;
+        transition: 0.2s;
+        //border: 1px solid darken($white, 10%);
+        i {
+          font-size: 20px;
+        }
+      }
+    }
+  }
+  //.option {
+  //  margin-bottom: 20px;
+  //}
+  .reset-filter {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+  // Listings
+  .years-filters {
+    display: flex;
+    button {
+      padding: 0;
+      width: 50%;
+      height: 43px;
+      border-radius: 0;
+    }
+  }
+
+  .flex-fill {
+    -ms-flex: 1 1 auto!important;
+    flex: 1 1 auto!important;
+    margin-right: 5px;
+    border-radius: 4px;
+    a {
+      height: 43px;
+      line-height: 43px;
+      padding: 0;
+      width: 100%;
+      border-radius: 2px;
+      border: 2px solid $arsenic;
+      &:hover {
+        background: $white;
+        border: 2px solid $arsenic;
+        i {
+          color: $arsenic;
+        }
+      }
+      i {
+        color: $white;
+      }
+    }
+    &:last-of-type {
+      margin-right: 0;
+    }
+  }
+
+  #reset-filter {
+    height: 43px;
+    line-height: 43px;
+    padding: 0 15px;
+    background: $flamingo;
+    color: $white;
+    border-radius: 4px;
+    &:hover {
+      background: darken($flamingo, 5%);
+    }
+  }
+}
+
+#filterrific_results {
+  .table-responsive {
+    background: $white;
+    padding: 0;
+    border-radius: 5px;
+    box-shadow: 0 1px 5px rgba(0,0,0,.08);
+    margin-bottom: 15px;
+    table {
+      margin-bottom: 0;
+      thead {
+        background: $pm-blue;
+        color: $white;
+      }
+      tr {
+        td {
+          &.t_icon {
+            .badge {
+              width: 40px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: $screen-lg-min) {
+  .filterrific-form {
+    padding: 2rem 0px;
+    #navbarSupportedContent {
+      margin-top: 0;
+    }
+    .option {
+      margin-bottom: 0;
+    }
+    .filter-icons {
+      .flex-fill {
+        max-width: unset;
+      }
+    }
+    .flex-fill {
+      a {
+        width: 50px;
+      }
+    }
+    .booking-status {
+      padding: 0;
+      &.form-inline {
+        width: 200px;
+        span {
+          width: 50%;
+          margin-right: 0;
+          input[type="checkbox"] {
+            margin-right: 0;
+          }
+        }
+      }
+    }
+    .years {
+      max-width: 200px;
+    }
+  }
+  #filterrific_results {
+    .table-responsive {
+      padding: 0;
+      thead {
+        tr {
+          th {
+            font-size: 12px;
+          }
+        }
+      }
+      tbody {
+        tr {
+          td {
+            font-size: 14px;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: $screen-2k-min) {
+  .filterrific-form {
+    .booking-status {
+      &.form-inline {
+        width: unset;
+        span {
+          width: unset;
+          margin-right: 10px;
+        }
+      }
+    }
+    .years {
+      max-width: none;
+    }
+  }
+  #filterrific_results {
+    .table-responsive {
+      thead {
+        tr {
+          th {
+            font-size: 14px;
+          }
+        }
+      }
+      tbody {
+        tr {
+          td {
+            font-size: 16px;
+          }
+        }
+      }
+    }
+  }
+}

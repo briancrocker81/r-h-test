@@ -1,0 +1,3 @@
+$('#property_filter').html("<%= escape_javascript(render 'events/properties') %>")
+$(".btn-property").removeClass('btn-primary').addClass('btn-secondary');
+$("#btn-<%= @year_id %>").addClass('btn-primary').removeClass('btn-secondary');

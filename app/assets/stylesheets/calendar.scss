@@ -1,0 +1,173 @@
+.fc {
+  .fc-toolbar {
+    .fc-button-group {
+      .fc-button {
+        border-radius: 0;
+        background: white;
+        color: $primary;
+        box-shadow: none;
+        border-color: darken($primary, 5%);
+        &.fc-button-active {
+          background: $primary;
+          border-color: darken($primary, 5%);
+          color: white;
+        }
+        &:hover {
+          background: $primary;
+          color: white;
+          .fc-icon {
+            color: white;
+          }
+        }
+      }
+    }
+    .fc-today-button {
+      border-radius: 0;
+      background: $info;
+      border-color: darken($info, 5%);
+      &:disabled {
+        background: $grey-button;
+        border-color: darken($grey-button, 5%);
+        cursor: auto;
+      }
+    }
+    .fc-right {
+      //min-width: 190px;
+      a {
+        float: right;
+      }
+    }
+  }
+  .fc-view-container {
+    background: $white;
+    .fc-view {
+      .fc-head {
+        .fc-resource-cell {
+          padding: 5px;
+        }
+      }
+      .fc-body {
+        .fc-time-grid {
+          .fc-slats {
+            td {
+              height: 1.8em;
+            }
+          }
+          .fc-content-col {
+            .fc-event-container {
+              margin: 0 1px;
+              .fc-time-grid-event {
+                padding: 2px 5px;
+                font-weight: bold;
+                color: $white;
+                border-radius: 2px;
+                &.purple-bg {
+                  background-color: $purple;
+                  border-color: darken($purple, 5%);
+                }
+                &.turquoise-bg {
+                  background-color: $turquoise;
+                  border-color: darken($turquoise, 5%);
+                }
+                &.blue-bg {
+                  background-color: $light-blue;
+                  border-color: darken($light-blue, 5%);
+                }
+                &.orange-bg {
+                  background-color: $flamingo;
+                  border-color: darken($flamingo, 5%);
+                }
+                &.manatee-bg {
+                  background-color: $manatee;
+                  border-color: darken($manatee, 5%);
+                }
+                &.pea-green-bg {
+                  background-color: $pea-green;
+                  border-color: darken($pea-green, 5%);
+                }
+                &.suva-grey-bg {
+                  background-color: $suva-grey;
+                  border-color: darken($suva-grey, 5%);
+                }
+                &.iceberg-blue-bg {
+                  background-color: $iceberg-blue;
+                  border-color: darken($iceberg-blue, 5%);
+                }
+                &.beaver-bg {
+                  background-color: $beaver;
+                  border-color: darken($beaver, 5%);
+                }
+                &.khaki-bg {
+                  background-color: $khaki;
+                  border-color: darken($khaki, 5%);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  &.fc-unthemed {
+    td.fc-today {
+      //@include background($green, 0.05);
+      background: white;
+    }
+  }
+
+  .fc-icon {
+    font-size: 1.4rem;
+  }
+  button {
+    font-size: 1.4rem;
+  }
+  table {
+    font-size: 1.4rem;
+  }
+}
+
+/* --- Date picker --- */
+.cal-span{
+  font-size: 20px;
+  margin: 5px;
+  color: $pm-blue;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.fc-time-grid-container {
+  height: auto!important;
+}
+
+// Other Calendar css
+// Calendar Index
+
+.fc-time-grid-event {
+  .fc-time {
+    white-space: normal;
+    span {
+      //font-weight: bol?
+    }
+
+  }
+  .fc-content {
+    .fc-title {
+      i {
+        font-size: 12px;
+      }
+    }
+  }
+}
+
+@media (min-width: $screen-lg-min) {
+  .fc-time-grid-event {
+    .fc-time {
+      white-space: nowrap;
+      //span {
+      //  font-weight: bold;
+      //  font-size: 16px;
+      //}
+    }
+  }
+}

@@ -1,0 +1,81 @@
+<h2>Edit <%= resource_name.to_s.humanize %></h2>
+<% content_for :title, "Edit #{resource_name.to_s.humanize}" %>
+<div class="row">
+  <div class="col-md-12">
+    <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+      <%= f.error_notification %>
+
+      <div class="row">
+        <div class="col-6">
+          <div class="form-group">
+            <%= f.input :first_name %>
+          </div>
+          <div class="form-group">
+            <%= f.input :surname %>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="form-group">
+            <%= f.input :username %>
+          </div>
+          <div class="form-group">
+            <%= f.input :mobile %>
+          </div>
+          <div class="form-group">
+            <%= f.input :email, required: true, autofocus: true %>
+          </div>
+          <div class="form-group">
+            <%= f.input :admin %>
+          </div>
+        </div>
+      </div>
+      <div class="form-inputs">
+        <%#= f.input :avatar %>
+
+        <div class="custom-control custom-radio">
+          <%= f.input :role, as: :radio_buttons, collection: %w(Staff Agent Finance Cleaner Maintenance) %>
+        </div>
+
+        <% unless current_user.role = 'Agent' %>
+          <%= f.label :colour, 'Calendar Colour' %>
+          <ul id="colour-picker">
+            <li class="colour purple-bg" data-colour-val="purple"></li>
+            <li class="colour orange-bg" data-colour-val="orange"></li>
+            <li class="colour manatee-bg" data-colour-val="manatee"></li>
+            <li class="colour blue-bg" data-colour-val="blue"></li>
+            <li class="colour turquoise-bg" data-colour-val="turquoise"></li>
+            <li class="colour arsenic-bg" data-colour-val="arsenic"></li>
+            <li class="colour pea-green-bg" data-colour-val="pea-green"></li>
+            <li class="colour suva-grey-bg" data-colour-val="suva-grey"></li>
+            <li class="colour iceberg-blue-bg" data-colour-val="iceberg-blue"></li>
+            <li class="colour pink-bg" data-colour-val="pink"></li>
+            <li class="colour beaver-bg" data-colour-val="beaver"></li>
+            <li class="colour khaki-bg" data-colour-val="khaki"></li>
+          </ul>
+          <%= f.hidden_field :colour %>
+        <% end %>
+
+        <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+          <p>Currently waiting confirmation for: <%= resource.unconfirmed_email %></p>
+        <% end %>
+        <div class="form-group">
+          <label class="checkbox-inline">
+            <input id="change-password" type="checkbox" value="">Change my password
+          </label>
+        </div>
+
+        <div id="new-password">
+          <%= f.input :password, hint: "leave it blank if you don't want to change it", required: false, input_html: { autocomplete: "new-password" } %>
+          <%= f.input :password_confirmation, required: false, input_html: { autocomplete: "new-password" } %>
+        </div>
+
+        <%= f.input :current_password, hint: "we need your current password to confirm your changes", required: true, input_html: { autocomplete: "current-password" } %>
+      </div>
+
+      <div class="actions">
+        <%= link_to 'Back', :back, class: 'btn btn-secondary' %>
+        <%= f.button :submit, 'Update', class: 'btn btn-primary' %>
+      </div>
+    <% end %>
+  </div>
+</div>

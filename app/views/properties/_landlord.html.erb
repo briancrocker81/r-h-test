@@ -1,0 +1,46 @@
+<section id="landlord-block">
+  <h3 class="article-title">Rental Details</h3>
+  <div class="row">
+    <div class="col-md-4">
+      <h3>Landlord</h3>
+      <div class="form-group">
+        <%= f.association :landlord, collection: Landlord.all.collect{ |p| [ p.contact_name, p.id] }.sort, selected: params[:landlord_id].present? ? params[:landlord_id] : f.object.landlord_id, prompt: "Choose a Landlord"  %>
+        <span id="property_landlord_id_error" style="color: red; font-size: 12px;"></span>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <h3>Rental Type</h3>
+      <div class="form-group radio">
+        <%= f.input :rental_type, as: :radio_buttons, collection: [['By Home', 'home'], ['By Room', 'room']], checked: property.rental_type, label: '' %>
+        <span id="property_rental_type_error" style="color: red; font-size: 12px;"></span>
+      </div>
+
+      <div class="form-group" id='home-rental-price'>
+        <%= f.input :home_rental_price, id: :home_rental_price, class: 'form-control' %>
+        <span id="property_home_rental_price_error" style="color: red; font-size: 12px;"></span>
+      </div>
+    </div>
+
+    <% if property.rooms.present? %>
+      <div class="col-md-4">
+        <div class="form-group" id='add-room-btn'>
+          <h3>Rooms</h3>
+          <div>
+            <ul>
+              <% property.rooms.each do |room|%>
+                <li>
+                  <%= link_to property.property_name+' - '+room.number, room_path(room.id)%>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    <% end %>
+
+
+
+  </div>
+</section>

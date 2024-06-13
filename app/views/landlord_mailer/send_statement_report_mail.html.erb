@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <p>Hi <%= @landlord&.contact_name %></p>
+
+  <p>The landlord statement report of <b> the <%= @property&.property_name %></b> between <b><%= Date.today.prev_month.at_beginning_of_month.strftime('%d %B %Y') %></b> and <b><%= Date.today.prev_month.at_end_of_month.strftime('%d %B %Y') %></b></p>
+
+  <p>Let us know if you have any concerns about this statement.</p>
+  <p>
+    <b> Thanks </b><br>
+    Team <br>
+    CityLets
+  </p>
+</body>
+</html>

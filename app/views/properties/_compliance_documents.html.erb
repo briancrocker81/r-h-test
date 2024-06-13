@@ -1,0 +1,20 @@
+<section id="images">
+  <h3 class="article-title">Compliance Documents</h3>
+  <div class="row">
+    <div class="col-md-12">
+      <%= f.simple_fields_for :compliance_documents do |compliance_document| %>
+        <%= render 'compliance_document_fields', f: compliance_document %>
+      <% end %>
+      <div class="links">
+        <%= link_to_add_association 'Add compliance documents', f, :compliance_documents, partial: 'compliance_document_fields', class: 'btn small btn-success' %>
+      </div>
+      <% if @generic_documents %>
+        <p class="mt-2">Assign Generic Documents? </p>
+        <% @generic_documents.each do |doc| %>
+          <%= check_box_tag 'ids[]', doc.id,  (@property_generic_document_ids.include?(doc.id) || @property.new_record?) %> <%= doc.document_name.titleize %>
+          <br/>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</section>

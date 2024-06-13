@@ -1,0 +1,29 @@
+<% content_for :title, 'Email Templates' %>
+<h1>Email Templates</h1>
+
+<div id="filterrific_results">
+  <div class="table-responsive">
+    <table class="table table-striped table-hover list">
+      <thead>
+        <tr>
+          <th>Email name</th>
+          <th>Using template?</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <%- @templates.each do |template| -%>
+          <tr>
+            <td><%= link_to(template.template_name, edit_admin_email_template_path(template.template_name)) %></td>
+            <td><%= template.persisted? %></td>
+            <td>
+              <%- if template.persisted? -%>
+                <%= link_to('Reset', admin_email_template_path(template.template_name), method: :delete) %>
+              <%- end -%>
+            </td>
+          </tr>
+        <%- end -%>
+      </tbody>
+    </table>
+  </div>
+</div>

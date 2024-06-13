@@ -1,0 +1,4 @@
+$('#property_expense').html("<%= j render 'properties/property_expenses' %>")
+$(".btn-filter-expense").removeClass('badge-primary').addClass('badge-secondary');
+$("#btn-expense-<%= @year_id %>").addClass('badge-primary').removeClass('badge-secondary');
+DocumentPreview();

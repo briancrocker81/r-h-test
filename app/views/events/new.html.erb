@@ -1,0 +1,32 @@
+<% content_for :title, 'Create new calendar event' %>
+<% selected_data = session[:selected_data] %>
+<%if selected_data.present? %>
+  <input type="hidden" id="event_start_hr" value="<%= selected_data["event_start_hr"]%>">
+  <input type="hidden" id="event_start_min" value="<%= selected_data["event_start_min"]%>">
+  <input type="hidden" id="event_end_hr" value="<%= selected_data["event_end_hr"]%>">
+  <input type="hidden" id="event_end_min" value="<%= selected_data["event_end_min"]%>">
+  <input type="hidden" id="selected_agent" value="<%= selected_data["selected_agent"]%>">
+  <input type="hidden" id="event_start_date" value="<%= selected_data["event_start_date"]%>">
+  <input type="hidden" id="event_end_date" value="<%= selected_data["event_end_date"]%>">
+<% end %>
+<%= render 'form', event: @event %>
+
+<script type="text/javascript">
+
+  // Event reminder
+  // 'turbolinks:load'
+  $(document).ready(function() {
+    show_up_event_alert();
+  })
+  function show_up_event_alert(){
+
+    $.get('/events/reminder.json', function(data){
+      if(data['count'] > 0) {
+        console.log(data['ids']);
+        if(confirm('I confirm I have spoken with the tenant to confirm the appointment.')){
+          $.get('/events/done_reminder.json?ids=' + data['ids'])
+        }
+      }
+    })
+  }
+</script>

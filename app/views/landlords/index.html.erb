@@ -1,0 +1,82 @@
+<% content_for :title, 'Landlord Listings' %>
+<p id="notice"><%= notice %></p>
+
+<div id="title-bar" class="sticky-top">
+  <h1><%= t('.title') %></h1>
+  <%= link_to 'New Landlord', new_landlord_path, class: 'btn btn-success push' %>
+</div>
+
+<%= puts @filterrific.inspect %>
+<%= form_for_filterrific @filterrific, html: {class: 'filterrific-form'} do |f| %>
+
+  <nav class="navbar navbar-expand-lg navbar-light">
+    <h3 class="d-block d-lg-none">Filters</h3>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fa fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <div class="row w-100 m-0">
+        <div class="col-md-6 col-lg-3 option">
+          <%= f.text_field(
+                  :search_query,
+                  class: 'filterrific-periodically-observed form-control',
+                  placeholder: 'Search...'
+              ) %>
+        </div>
+
+        <div class="col-md-6 col-lg-3  option">
+          <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by], {}, {class: 'form-control'}) %>
+        </div>
+
+        <div class="col-md-6 col-lg-3 option filter-icons">
+          <div class="d-flex">
+            <div class="flex-fill">
+              <%= link_to '<i class="fas fa-print"></i>'.html_safe, '', onclick: 'window.print();return false;', class: 'btn-arsenic', title: 'Print page' %>
+            </div>
+            <div class="flex-fill">
+              <%= link_to '<i class="far fa-file-excel"></i>'.html_safe, '#', class: 'get-listings btn-arsenic', data: { format: "csv", mail: false}, title: 'Export to CSV' %>
+            </div>
+            <div class="flex-fill">
+              <%= link_to '<i class="far fa-file-pdf"></i>'.html_safe, '#', class: 'get-listings btn-arsenic', data: { format: "pdf", mail: false}, title: 'Export to PDF' %>
+            </div>
+          </div>
+        </div>
+
+        <div class="col text-right reset-filter push">
+          <%= link_to 'Reset', reset_filterrific_url, class: 'btn', id: 'reset-filter' %>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+<% end %>
+
+<%= render(
+        partial: 'list',
+        locals: { landlords: @landlords }
+    ) %>
+
+<%= render "shared/common_modal" %>
+
+<script type="text/javascript">
+
+  $(document).ready(function() {
+    var format = "";
+    var mail = false;
+    $('.get-listings').on('click', function(){
+      format = $(this).data("format");
+      mail = $(this).data("mail");
+      select_all_landlord(format, mail);
+      $('#filterrific_filter').submit();
+    });
+    function select_all_landlord(format, mail){
+      var room_ids = [];
+      $('.selectable:checkbox:checked').each(function(){
+        room_ids.push($(this).val());
+      });
+      $('#filterrific_with_room_ids').val([room_ids]);
+      $('#filterrific_filter').append("<input type='hidden' name='format' value='"+format+"' />");
+      $('#filterrific_filter').append("<input type='hidden' name='mail' value='"+mail+"' />");
+    }
+  });
+</script>

@@ -1,0 +1,20 @@
+<% @generic_documents.each do |doc| %>
+  <% if doc.document_name.present?  %>
+    <div class="col-lg-2 col-md-2 col-xl-2 generic-doc mr-2" id="doc-<%=doc.id%>">
+      <div class="docs doc-prv" title="<%=doc.document_file%>" data="<%=doc.document_file%>" data-doc-name="<%=doc.document_name.to_s.titleize%>" data-verified="" data-verified-by="">
+        <%= document_badge((doc.document_file != '' && !doc.document_file.nil?) ? true : false, 'fas fa-file-pdf', doc.document_name.to_s.titleize) %>
+      </div>
+      <% expiry = doc.document_expiry ? (doc.document_expiry < Date.today) : false %>
+      <% if expiry %>
+        <span class="badge badge-danger" title="Document Expiration Date <%= doc.document_expiry.strftime('%d/%m/%Y') %>">Expired</span>
+      <% end %>
+      <%= link_to edit_generic_document_admin_path(id: doc.id), remote: true, title: 'Edit if expired' do %>
+        <i class="fa fa-edit edit-document"></i>
+      <% end %>
+      <%= link_to destroy_generic_document_admin_path(id: doc.id), method: :delete, remote: true, 'data-confirm': 'Are you sure?', title: 'Delete' do %>
+        <i class="fa fa-trash delete-document"></i>
+      <% end %>
+      <%# <%= link_to "Assign", assign_generic_document_admin_path(id: doc.id), 'data-confirm': 'Are you assign to all properties?', title: 'Assign' %>
+    </div>
+  <% end %>
+<% end %>

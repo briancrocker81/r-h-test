@@ -1,0 +1,17 @@
+$('.documents').html("<%= j render 'document'%>");
+$('#generic_documents').html('');
+$('#generic_document_form')[0].reset();
+DocumentPreview();
+$("#notice").show();
+<% if @errors.present? %>
+  $("#notice").html("<div class='alert alert-danger alert-dismissible fade show'><%= @errors %><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div>")
+<% else %>
+  $("#notice").show();
+  $("#notice").html("<div class='alert alert-success alert-dismissible fade show'> <%= @message %><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div>")
+<% end %>
+$('.save-document').hide();
+if($('.documents').children('.generic-doc').length >= 3){
+  $('.add-generic').hide();
+} else {
+  $('.add-generic').show();
+}

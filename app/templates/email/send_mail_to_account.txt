@@ -1,0 +1,9 @@
+Hello,
+
+Tenancy {{ first_name }} booking/dashboard process of Room *{{ room_number }}, {{ property_name }}* has been completed by Guarantor *{{ guarantor_name_or_email }}*.
+
+Let us know if you have any questions.
+
+*Thanks*
+Team
+CityLets

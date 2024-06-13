@@ -1,0 +1,18 @@
+<p>Hello <%=@event&.client_name.to_s.titleize %></p>
+
+<p>Thank you for booking a viewing! Exciting. Below is a list of properties we have down as potential to see. Now generally we will see three properties if starting your search or one specific one if wanted. We always like to list a couple (especially if you are in a student viewing)</p>
+
+<p>All the below places are listed on our website so have a peak, and unless arranged other wise, head to our little office in the city centre (1 Eastlake street, between the uni and drake circus)just before your viewing time!</p>
+
+<p>Your viewing has been booked for <%= @event.start.strftime("%A %B %e, %Y") %> from <%= @event.start.strftime("%I:%M %p") %> - <%= @event.end.strftime("%I:%M %p") %>.</p>
+
+<ul>
+  <% @properties.each do |property| %>
+    <li><%= property.property_name %></li>
+  <% end %>
+</ul>
+
+<p>If you cannot make it then please contact <%= mail_to "info@cityletsplymouth.co.uk" %> to rearrange.</p>
+
+<p>Kind regards</p>
+<p>CityLets Plymouth</p>

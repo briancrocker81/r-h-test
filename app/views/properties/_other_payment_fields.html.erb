@@ -1,0 +1,35 @@
+<div id="professional-fields" style="display: none;">
+  <div class="row">
+    <div class="col-lg-6">
+      <%= f.input :deposit_date, label: "Deposit Date", order: [:day, :month, :year], start_year: (Time.now.year - 1), end_year: Time.now.year + 15 %>
+    </div>
+    <div class="col-lg-6">
+      <%= f.input :deposit_guarantor_amount, label: "Deposit Amount" %>
+    </div>
+
+    <div id="other-tenancy-value" class="col-lg-3 payment-options other-tenancy-values" style="display: none">
+      <%= f.input :total_tenancy_value, disable: true %>
+    </div>
+    <div id="num-of-months" class="col-lg-3 payment-options other-tenancy-values" style="display: none">
+      <%= f.input :number_of_months, label: 'Duration of tenancy (in Months)' %>
+    </div>
+    <div id="num-of-payments" class="col-lg-3 payment-options" style="display: none">
+      <%= f.input :number_of_payments %>
+    </div>
+    <div id="payment-amount" class="col-lg-3 payment-options" style="display: none">
+      <%= f.input :payment_amount %>
+      <span class="tenancy-payment-amount-error" style="color: red; font-size: 12px;"></span>
+    </div>
+
+    <div class="col-lg-6 due-date-term-data" style="display: none;">
+      <div class="row">
+        <div class="col-lg-8">
+          <%= f.input :rent_due_date, as: :select, collection: 1..31, selected: Date.today.day, label: "Rent Due Date:"%>
+        </div>
+        <div class="col-lg-4" class="" style="display: none;">
+          <%= f.input :rent_installment_term, input_html: { value: "3" } %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

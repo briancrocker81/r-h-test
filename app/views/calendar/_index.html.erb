@@ -1,0 +1,272 @@
+<%# if params[:action] == "index" && params[:visit] %>
+  <%#= render 'visit' %>
+<%# else %>
+  <script>
+    $(document).ready(function() {
+
+      var calendarEl = document.getElementById('calendar');
+      if ('<%= @selected_date.blank? %>' == 'true'){
+        var today = new Date();
+      }else{
+        var today = new Date('<%= @selected_date %>');
+      }
+      var month = (today.getMonth()+1);
+      if(/^\d$/.test(month)){
+        month = "0"+month;
+      }
+      var day = today.getDate();
+      if(/^\d$/.test(day)){
+        day = "0"+day;
+      }
+      var date = today.getFullYear()+'-'+month+'-'+day;
+      var calendar = new FullCalendar.Calendar(calendarEl, {
+        schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
+        plugins: [ 'interaction', 'resourceDayGrid', 'resourceTimeGrid' ],
+        defaultView: 'resourceTimeGridDay',
+        longPressDelay: 1,
+        defaultDate: date,
+        editable: true,
+        selectable: true,
+        minTime: '08:00',
+        maxTime: '19:00',
+        eventLimit: true, // allow "more" link when too many events
+        header: {
+          left: 'prev,next today',
+          center: 'title',
+          right: ''
+          // right: 'resourceTimeGridDay,resourceTimeGridTwoDay,resourceTimeGridWeek'
+        },
+        weekends: true,
+        allDaySlot: false,
+        resourceOrder: 'order',
+        resources: [
+          <% if current_user.role=='Agent' %>
+            { id: '<%= current_user.id %>',
+              title: '<%= current_user.first_name %>',
+              order: 1 },
+          <% end %>
+          <% @users =  @users.agent.where.not(id: current_user.id) %>
+          <% @users.each do |user| %>
+            { id: '<%= user.id %>',
+              title: '<%= user.first_name %>',
+              order: 2 },
+          <% end %>
+        ],
+        events: [
+          <% if current_user.role=='Agent' %>
+            <% user_id = User.where(id: current_user.id).pluck(:id) %>
+            <% @events_u = current_user.events.where(event_type: [1,2,3,4,5,6]) %>
+              <% @events_u.each do |event| %>
+                { id: '<%= event.id %>',
+                  resourceId: '<%= current_user.id rescue nil %>',
+                  start: '<%= event.start.strftime("%FT%T") %>',
+                  end: '<%= event.end.strftime("%FT%T") %>',
+                  classNames: ['<%= current_user.colour %>-bg'],
+                  title:  ['<%= escape_javascript event.event_title %>']
+                },
+              <% end %>
+          <% end %>
+          <% other_ids = User.where.not(id: current_user.id).pluck(:id) %>
+          <% other_users = User.where(id: other_ids)%>
+          <% other_users.each do |other_user| %>
+            <% event_ids = EventUser.where(user_id: other_user.id).pluck(:event_id) %>
+            <% @events = Event.where(id: event_ids, event_type: [1,2,3,4,5,6]) %>
+
+            <% @events.each do |event| %>
+            {
+                id: '<%= event.id %>',
+                resourceId: '<%= other_user.id rescue nil %>',
+                start: '<%= event.start.strftime("%FT%T") %>',
+                end: '<%= event.end.strftime("%FT%T") %>',
+                classNames: ['<%= other_user.colour %>-bg'],
+                title: '<%= escape_javascript event.event_title.to_s %>'
+            },
+            <% end %>
+
+
+
+          <% end %>
+        ],
+
+        select: function(arg) {
+          var start = arg.start;
+          var end = arg.end;
+          var start_date = new Date(start);
+          var end_date = new Date(end);
+
+          var start_time_hr = start_date.getHours();
+          var start_time_min = start_date.getMinutes();
+          $('#event_start_hr').val(start_time_hr);
+          $('#event_start_min').val(start_time_min);
+
+          $('#event_start_date').val(start_date);
+          $('#event_end_date').val(end_date);
+
+          var end_time_hr = end_date.getHours();
+          var end_time_min = end_date.getMinutes();
+          $('#event_end_hr').val(end_time_hr);
+          $('#event_end_min').val(end_time_min);
+
+          $('#selected_agent').val(arg.resource._resource.id);
+          var selected_agent = arg.resource._resource.id;
+          var data = {selected_data: { selected_agent: selected_agent, event_start_hr: start_time_hr, event_start_min: start_time_min, event_start_date: start_date, event_end_date: end_date, event_end_hr: end_time_hr, event_end_min: end_time_min}, modal: false }
+          $.get('<%= new_event_url %>.js', data );
+        },
+        eventClick: function(event, jsEvent, view) {
+          var data = { modal: false }
+          $.get('/events/'+event.event.id+'/edit.js', data);
+          // $.getScript('/events/'+event.event.id+'/edit/', function() {});
+          // $.ajax({
+          //   url: '/events/'+event.event.id+'/edit/',
+          //   dataType: 'html',
+          //   type: 'GET',
+          //   success: function(){
+          //     window.location.replace('/events/'+event.event.id+'/edit/')
+          //   }
+          // });
+        },
+          eventResize: function(event, delta, revertFunc) {
+              // Store original event state
+              var originalEvent = {
+                  start: event.event.start,
+                  end: event.event.end ? event.event.end : null
+              };
+
+              // Show confirmation dialog
+              var confirmation = confirm('Are you sure you want to resize this event?');
+
+              // If user clicks 'OK' in the confirmation box, proceed with the script
+              if (confirmation) {
+                  console.log('Resized Event');
+
+                  var event_data = {
+                      user_id: event.event.getResources()[0]._resource.id,
+                      event: {
+                          start: event.event.start,
+                          end: event.event.end ? event.event.end : event.event.start,
+                      }
+                  };
+
+                  $.ajax({
+                      url: '/events/' + event.event.id,
+                      data: event_data,
+                      type: 'PATCH'
+                  });
+              } else {
+                  // If user clicks 'Cancel' in the confirmation box, revert to the original state
+                  event.event.setDates(originalEvent.start, originalEvent.end);
+                  event.revert(); // Manually revert the event
+
+                  // If the above doesn't work, you can try uncommenting the following line
+                  // location.reload(); // This reloads the page, effectively reverting the changes
+
+                  // If none of the above works, you may need to handle the revert manually based on your FullCalendar version
+              }
+          }
+,
+          eventDrop: function(event, delta, revertFunc) {
+            var confirmation = confirm('Are you sure you want to move this event?');
+
+            // If user clicks 'OK' in the confirmation box, proceed with the script
+            if (confirmation) {
+                console.log('Moved Agent');
+
+                var event_data = {
+                    user_id: event.event.getResources()[0]._resource.id,
+                    event: {
+                        start: event.event.start,
+                        end: event.event.end ? event.event.end : event.event.start,
+                    }
+                };
+
+                $.ajax({
+                    url: '/events/' + event.event.id,
+                    data: event_data,
+                    type: 'PATCH'
+                });
+            } else {
+                // If user clicks 'Cancel' in the confirmation box, manually revert the event to its original position
+                event.revert();
+            }
+        },
+        dateClick: function(arg) {
+          console.log(
+            'dateClick',
+            arg.date,
+            arg.resource ? arg.resource.id : '(no resource)'
+          );
+        }
+      });
+      calendar.render();
+    });
+  </script>
+<%# end %>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        var $center = $('.fc-center');
+        var $headerToolbar = $('.fc-header-toolbar');
+
+        function formatDate(selected_date) {
+            var month = selected_date.getMonth() + 1;
+            month = month < 10 ? '0' + month : month;
+            var day = selected_date.getDate();
+            day = day < 10 ? '0' + day : day;
+            return selected_date.getFullYear() + '-' + month + '-' + day;
+        }
+
+        function updateWeekday(selected_date) {
+            var new_text = $center.text();
+            var selected_weekday = weekday[selected_date.getDay()];
+            if (selected_weekday === undefined) {
+                location.reload();
+            }
+            $center.find('h2').html(selected_weekday + ' ' + new_text);
+        }
+
+        // Event listeners for prev and next buttons
+        $('.fc-prev-button, .fc-next-button').click(function () {
+            changeWeekday();
+        });
+
+        // Initialize datepicker
+        var selectedDate = new Date($center.text());
+        var datepickerDate = formatDate(selectedDate);
+        var $datepicker = $('<div id="datepicker" class="fc-button-group date" data-date-format="yyyy-mm-dd" title="Select future date">\
+        <input type="hidden" class="cal-date" value="' + datepickerDate + '" readonly /><span class="input-group-addon cal-span"><i class="fa fa-calendar-alt"></i></span></div>');
+        $headerToolbar.find('.fc-left').append($datepicker);
+        $datepicker.datepicker({ minDate: datepickerDate, autoclose: true });
+
+        // Event listener for datepicker change
+        $('.cal-date').one('change', function (e) {
+            selectedDate = new Date($(this).val());
+            updateWeekday(selectedDate);
+            $.ajax({
+                url: "/events_by_date.js",
+                type: "GET",
+                data: { "start_date": formatDate(selectedDate) },
+                cache: false,
+            });
+            e.stopImmediatePropagation();
+            return false;
+        });
+
+        // Function to change weekday
+        function changeWeekday() {
+            selectedDate = new Date($center.text());
+            updateWeekday(selectedDate);
+            var urlDate = formatDate(selectedDate);
+            // console.log('Date: ' + selectedDate);
+            // console.log('Url: ' + urlDate);
+        }
+
+        // Add "New Event" button
+        $headerToolbar.find('.fc-right').append($('<a href="<%= new_event_url %>" class="btn btn-success new-event">New Event</a>'));
+
+        // Trigger click on calendar widget content for new event
+        $(".new-event").on('click', function () {
+            $(".fc-widget-content").first().trigger("click");
+        });
+    });
+
+</script>

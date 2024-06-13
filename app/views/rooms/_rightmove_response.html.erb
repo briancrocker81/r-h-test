@@ -1,0 +1,6 @@
+<td><%= link_to (fa_icon 'sync-alt'), sync_rightmove_property_room_path(@property, @room), remote: true %></td>
+<td>RightMove</td>
+<td><%= @room.rightmove_response['create'].present? ? JSON.parse(@room.rightmove_response['create']) : 'N/A' %></td>
+<td><%= @room.rightmove_response['create_error'].present? ? JSON.parse(@room.rightmove_response['create_error']) : 'N/A' %></td>
+<td><%= @room.rightmove_response['delete'].present? ? JSON.parse(@room.rightmove_response['delete']) : 'N/A' %></td>
+<td><%= @room.rightmove_response['delete_error'].present? ? JSON.parse(@room.rightmove_response['delete_error']) : 'N/A' %></td>

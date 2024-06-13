@@ -1,0 +1,177 @@
+<%= simple_form_for @landlord do |f| %>
+  <div id="title-bar" class="sticky-top">
+    <h1>
+      <%=raw @landlord.contact_name ? "#{@landlord.contact_name+'<small class="edit">- Edit mode</small>'}" : 'New Landlord' %>
+    </h1>
+    <div class="actions d-flex justify-content-end push">
+      <% if current_user.admin? %>
+        <%= link_to (fa_icon 'trash'), @landlord, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger del' unless @landlord.new_record? %>
+      <% end %>
+      <%= link_to 'Back', landlords_path, class: 'btn btn-secondary' %>
+      <%= f.submit t('admin.save'), class: 'btn btn-success' %>
+    </div>
+  </div>
+
+  <% if landlord.errors.any? %>
+    <div id="error_explanation" class="bg-warning">
+      <div class="row justify-content-md-center">
+        <div class="col-2 icon">
+          <i class="fas fa-exclamation-triangle fa-5x"></i>
+        </div>
+        <div class="col-6">
+          <h2><%= pluralize(landlord.errors.count, "error") %> prohibited this property from being saved:</h2>
+          <ul>
+            <% landlord.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <article>
+    <section>
+      <div class="row">
+        <div class="col-12">
+          <h3 class="article-title">Partnership details</h3>
+          <div class="row">
+            <div class="form-group radio col">
+              <%= f.input :partnership_format, as: :radio_buttons, collection: Landlord.partnership_formats, label_method: :first, value_method: :first, checked: (landlord.partnership_format if landlord.partnership_format), :input_html => { :onclick => "rate_or_fee()" } %>
+            </div>
+            <div class="form-group col">
+              <div id="rate">
+                <%= hidden_field_tag :rate_value, f.object.rate %>
+                <%= f.input :rate, label: 'Rate in %' %>
+              </div>
+              <div id="fee">
+                <%= f.input :fee, label: 'Fixed fee' %>
+              </div>
+              <span class="helper">
+              <small>Please select either rate or fee</small>
+            </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <section>
+      <div class="row">
+        <div class="col-12">
+          <h3 class="article-title">Partner details</h3>
+        </div>
+        <div class="col-lg-6">
+          <!--        <div class="form-inline inline-me">-->
+          <%#= f.input :landlord_type, as: :radio_buttons, collection: %w(Company Individual), checked: landlord.landlord_type %>
+          <!--        </div>-->
+
+          <div class="form-group">
+            <%= f.label :contact_name %>
+            <%= f.text_field :contact_name, id: :contact_name, class: 'form-control' %>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :company_name %>
+            <%= f.text_field :company_name, id: :company_name, class: 'form-control' %>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :contact_number %>
+            <%= f.text_field :contact_number, id: :landlord_contact_number, class: 'form-control' %>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :email %>
+            <%= f.text_field :email, id: :landlord_email, class: 'form-control' %>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :address %>
+            <%= f.text_area :address, id: :landlord_address, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <h3>Alternate contact details</h3>
+          <div class="form-group">
+            <%= f.input :alternate_name %>
+          </div>
+          <div class="form-group">
+            <%= f.input :alternate_email %>
+          </div>
+          <div class="form-group">
+            <%= f.label :alternate_number %>
+            <%= f.text_field :alternate_number, id: :landlord_alternate_number, class: 'form-control' %>
+          </div>
+          <!--        <div class="form-group">-->
+          <%#= f.label 'Partnership notes'%>
+          <%#= f.text_area :notes, id: :notes, class: 'form-control' %>
+          <!--        </div>-->
+          <hr>
+          <div class="form-group">
+            <%#= f.input :send_report, as: :check_boxes, checked: @landlord.send_report, class: 'form-control' %>
+            <%= f.input :send_report, label: 'Send monthly landlord report', class: 'form-control' %>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h3 class="article-title">Landlord Banking details</h3>
+      <% if current_user.role == 'Finance' || current_user.admin == true %>
+        <div class="form-inline inline-me">
+          <%= f.input :pay_direct, class: 'form-control' %>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <%= f.input :bank_name, class: 'form-control' %>
+            </div>
+            <div class="form-group">
+              <%= f.input :bank_address, class: 'form-control'%>
+            </div>
+            <div class="form-group">
+              <%= f.input :iban, class: 'form-control' %>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <%= f.input :account_name, class: 'form-control' %>
+            </div>
+            <div class="form-group">
+              <%= f.input :bank_sort_code, class: 'form-control' %>
+            </div>
+            <div class="form-group">
+              <%= f.input :bank_account_number, class: 'form-control' %>
+            </div>
+            <div class="form-group">
+              <%= f.input :bic, class: 'form-control' %>
+            </div>
+          </div>
+      <% else %>
+        Financial details restricted to Finance team and system admins.
+      <% end %>
+      </div>
+    </section>
+    <%= render partial: 'landlord_documents', locals: {f: f, landlord: @landlord} %>
+  </article>
+<% end %>
+<script>
+ $("#dropdown_property").select2({
+   theme: "bootstrap"
+  });
+  $(document).on('ready turbolinks:load', function() {
+    $('.doc-edit').on('click', function(){
+      console.log('tete')
+      $(this).parent().next().toggleClass('doc_show doc_hide')
+      $(this).parent().next().find('.btn-danger').toggleClass('doc_show doc_hide');
+      $(this).parent().toggleClass('doc_hide doc_show')
+    })
+    $('.doc-danger').on('click', function(){
+      $(this).parent().toggleClass('doc_hide doc_show');
+      $(this).toggleClass('doc_hide doc_show');
+      $("." + $(this).data('id')).toggleClass('doc_show doc_hide');
+    })
+  })
+</script>

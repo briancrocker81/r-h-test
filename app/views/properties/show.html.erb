@@ -1,0 +1,193 @@
+<% content_for :title, @property.property_name %>
+<p id="notice"><%= notice %></p>
+<div id="title-bar" class="sticky-top">
+  <h1><%= @property.property_name %></h1>
+  <div class="actions d-flex btn-group justify-content-end push">
+    <%= link_to 'Back', properties_path, class: 'btn btn-secondary' %>
+    <%= link_to 'Edit', edit_property_path(@property), data: { turbolinks: false }, class: 'btn btn-success' %>
+  </div>
+</div>
+<article>
+  <section id="property_overview">
+    <h3 class="article-title">Property Overview</h3>
+    <%= render 'property_overview' %>
+  </section>
+
+  <section id="property-documents">
+    <h3 class="article-title">Properties Compliance Documents</h3>
+    <%= render 'property_compliance_documents' %>
+  </section>
+
+  <section id="property_details">
+    <h3 class="article-title">Property Details</h3>
+    <%= render 'property_details' %>
+  </section>
+
+  <section id="additional_details">
+    <h3 class="article-title">Additional Details</h3>
+    <%= render 'property_additional_details' %>
+  </section>
+
+  <section>
+    <h3 class="article-title">Utilities & Services</h3>
+    <%= render 'property_utilities_and_services' %>
+  </section>
+
+  <section id="property-listing-details">
+    <h3 class="article-title">Property type additional details</h3>
+    <% if @property.property_type.include?("Student") && !@property.property_list_student.nil? %>
+      <%= render 'student_fields' %>
+    <% end %>
+    <% if @property.property_type.include?("Professional") && !@property.property_list_professional.nil? %>
+      <%= render 'professional_fields' %>
+    <% end %>
+    <% if @property.property_type.include?("Graduate") && !@property.property_list_graduate.nil? %>
+      <%= render 'graduate_fields' %>
+    <% end %>
+    <% if @property.property_type.include?("Family") && !@property.property_list_family.nil? %>
+      <%= render 'family_fields' %>
+      <% end %>
+  </section>
+
+  <section id="property_rooms">
+    <h3 class="article-title">Rooms</h3>
+    <%= render 'property_rooms' %>
+  </section>
+
+<section id="property_expenses">
+  <h3 class="article-title">Property Expenses</h3>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="title-bar bg-white">
+        <div class="actions btn-group d-flex w-100">
+          Year
+          <% business_years.each do |year| %>
+            <%= link_to year, filter_expense_property_property_expenses_path(property_id: @property.id, year: year), class: "badge badge-#{year == @year ? 'primary' : 'secondary'} mr-2 ml-2 btn-filter-expense", id: "btn-expense-#{year.gsub('/', '-')}", remote: true %>
+          <% end %>
+          <%#= link_to 'All', filter_expense_property_property_expenses_path(property_id: @property.id, year: 'All'), class: "badge badge-#{'All' == @year.capitalize ? 'primary' : 'secondary'} mr-2 ml-2 btn-filter-expense", id: "btn-expense-All", remote: true %>
+        </div>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-striped" valign="middle">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Expense</th>
+              <th>Category</th>
+              <th>Amount</th>
+              <th>Upload</th>
+              <th>Recurring</th>
+              <th>Number of Months</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="property_expense">
+            <%= render "property_expenses" %>
+          </tbody>
+        </table>
+      </div>
+      <div class="actions d-flex btn-group justify-content-end push">
+        <%= link_to (fa_icon 'plus')+' New Expense', new_property_property_expense_path(@property), class: 'btn small btn-success push', remote: true %>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="landlord_statement_report">
+  <h3 class="article-title">Landlord Monthly Statements</h3>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="title-bar bg-white">
+        <div class="actions btn-group d-flex w-100">
+          Year
+          <% business_years.each do |year| %>
+            <%= link_to year, filter_landlord_statement_property_path(id: @property.id, year: year), class: "badge badge-#{year == @year ? 'primary' : 'secondary'} mr-2 ml-2 btn-filter-statement", id: "btn-statement-#{year.gsub('/', '-')}", remote: true %>
+          <% end %>
+          <%#= link_to 'All', filter_landlord_statement_property_path(id: @property.id, year: 'All'), class: "badge badge-#{'All' == @year.capitalize ? 'primary' : 'secondary'} mr-2 ml-2 btn-filter-statement", id: "btn-statement-All", remote: true %>
+        </div>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-striped" valign="middle">
+          <thead>
+            <tr>
+              <th>Generation Date</th>
+              <th>Landlord</th>
+              <th>Statement Report</th>
+              <th>Mail sent</th>
+              <th>Mail sent At</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="landlord_statement">
+            <%= render "landlord_statements", term: :monthly %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+  <section id="landlord_annual_statement_report">
+    <h3 class="article-title">Landlord Annual Statements</h3>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="title-bar bg-white">
+          <div class="offset-lg-8 col-lg-2">
+            <label> Generate the statement</label>
+          </div>
+          <div class="col-lg-2 justify-content-end mt-2">
+            <%= text_field_tag :start_date, (@custom_report.present? ? "#{@custom_report.start_date.strftime("%d/%m/%Y")} - #{@custom_report.end_date.strftime("%d/%m/%Y")}" : '') , class: 'form-control monthly-report-datepicker daterange', 'data-report': 'annual_landlord_stmt', 'data-id': @property.id %>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Generation Date</th>
+                <th>Landlord</th>
+                <th>Statement Report</th>
+                <th>Mail sent</th>
+                <th>Mail sent At</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="landlord_annual_statement">
+              <%= render "landlord_statements", term: :yearly %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</article>
+<div class="modal fade" id="set-tenancy-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"></div>
+<div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        <button type="button" class="close" data-dismiss="modal" style="font-size: 3.5rem !important;"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <img src="" class="imagepreview" style="width: 100%;" >
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="doc-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Document: <span class="doc-name"></span></h3> <span class="doc-verified"></span> <span class="doc-verified-by"></span>
+        <button type="button" class="close" data-dismiss="modal" style="font-size: 3.5rem !important;"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+      </div>
+      <div class="modal-body">
+        <object data="" type="application/pdf" width="100%" height="520px" class="doc-preview"></object>
+      </div>
+    </div>
+  </div>
+</div>
+<%= render '/shared/common_modal' %>
+<script type="text/javascript">
+  $(document).on('ready turbolinks:load', function() {
+    Datepicker();
+  });
+</script>

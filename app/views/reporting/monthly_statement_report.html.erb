@@ -1,0 +1,102 @@
+<% content_for :title, 'Monthly Report' %>
+<p id="notice"><%= notice %></p>
+<div id="title-bar">
+  <h1>Monthly Payment Report</h1>
+  <div class="actions d-flex btn-group justify-content-end push">
+    <%= link_to 'Back', reporting_index_path, class: 'btn btn-secondary' %>
+  </div>
+</div>
+<article>
+  <section>
+    <h3 class="article-title">Full listing monthly Report</h3>
+    <div class="row">
+      <div class="col">
+        <span>Year</span>
+        <div class="actions btn-group d-flex w-100">
+          <% business_years.each do |year| %>
+            <%= link_to year, monthly_statement_reports_path(year: year), class: "badge badge-#{year == @year ? 'primary' : 'secondary'} mr-2 ml-2 btn-filter-expense" %>
+          <% end %>
+        </div>
+      </div>
+      <div class="col">
+
+      </div>
+      <div class="col">
+        <span>Custom Date Range for Generating the Next Monthly Report</span>
+        <%= text_field_tag :start_date, (@custom_report.present? ? "#{@custom_report.start_date.strftime("%d/%m/%Y")} - #{@custom_report.end_date.strftime("%d/%m/%Y")}" : '') , class: 'form-control monthly-report-datepicker daterange', 'data-report': 'monthly_property'%>
+      </div>
+    </div>
+
+    <div class="col-md-12 mt-2">
+      <div class="row">
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Generated at</th>
+                <th>Year</th>
+                <th>Report</th>
+                <th>Mail Sent</th>
+                <th>Mail sent at</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @property_reports.each do |report| %>
+                <tr>
+                  <td><%= report.created_at.strftime("%d/%m/%Y") %></td>
+                  <td><%= report.year %></td>
+                  <td>
+                    <% if report.report.present? %>
+                      <div class="docs doc-prv" title="Will show document on click soon" data = " <%= report.report %>" data-doc-name="" data-verified="" data-verified-by="">
+                        <%= document_badge(true, 'fas fa-file-pdf', '') %>
+                      </div>
+                    <% else %>
+                      N/A
+                    <% end %>
+                  </td>
+                  <td><%= yes_no(report.mail_sent) %></td>
+                  <td><%= report.mail_sent_at&.strftime('%d/%m/%Y') %></td>
+                  <td>
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-warning">Send To</button>
+                      <button type="button" class="btn btn-warning dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="sr-only">Toggle Dropdown</span>
+                      </button>
+                      <div class="send-report dropdown-menu">
+                        <%= link_to "James", send_property_report_path(send: 'james', id: report.id), class: "dropdown-item" %>
+                        <%= link_to "Accounts", send_property_report_path(send: 'accounts', id: report.id), class: "dropdown-item" %>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+</article>
+<div class="modal fade" id="doc-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Document: <span class="doc-name"></span></h3> <span class="doc-verified"></span> <span class="doc-verified-by"></span>
+        <button type="button" class="close" data-dismiss="modal" style="font-size: 3.5rem !important;"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+      </div>
+      <div class="modal-body">
+        <object data="" type="application/pdf" width="100%" height="520px" class="doc-preview"></object>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  $(document).on('ready turbolinks:load', function() {
+    Datepicker();
+    // $('.monthly-report-datepicker').on('change', function(){
+    //   window.location.href = "/monthly-reports?year=<%= @year %>&date=" + $(this).val()
+    // })
+  });
+</script>

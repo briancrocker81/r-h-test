@@ -1,0 +1,25 @@
+<% if @properties.count > 0 %>
+  <% @properties.uniq.each do |property| %>
+    <% checked = @event_property_ids.include? property.id %>
+    <% sel_class = checked==true ? 'plus' : 'minus' %>
+    <% property_name = property.property_name %>
+    <% property_id = property.id %>
+    <tr id="row-<%= property_id.to_s %>">
+      <td class="checkbox">
+        <%= check_box_tag "property_id[]", property_id, checked, class: 'properties_check'+' '+sel_class, data: {"property-id": property_id} %>
+        <label for="a" class="css-label">
+          <span class="fa fa-plus"></span>
+          <span class="fa fa-minus"></span>
+        </label>
+      </td>
+      <td class="property"><%= property_name %></td>
+      <td class="price"><%= property_rate(property) %></td>
+      <td class="ensuite"><%= ((property.number_of_bathrooms.to_i>0) ? '<i class="fa fa-bath" aria-hidden="true"></i>'.html_safe : '' )%></td>
+      <td><%= check_property_availability(property).html_safe %></td>
+    </tr>
+  <% end %>
+<% else %>
+  <tr>
+    <td colspan="5">No available properties</td>
+  </tr>
+<% end %>

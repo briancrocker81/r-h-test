@@ -1,0 +1,220 @@
+<% content_for :title, 'DataManager dashboard' %>
+<div class="page-title" style="flex-direction: row; display: flex">
+  <h1><%= current_user.first_name %>'s dashboard</h1>
+  <div class="" style="display: flex; margin-left: auto">
+    <h4 style="padding: 6px;"><b>Year:</b></h4>
+    <div id="business-years">
+      <% business_years(false).each_with_index do |year, i| %>
+        <span class="badge <%= @current_year == year ? 'badge-primary' : "badge-secondary btn-#{i}" %> filter-available-rooms" data-date="<%= year %>"><%= year %></span>
+      <% end %>
+    </div>
+  </div>
+</div>
+<div id="dashboard">
+  <div class="row">
+    <div id="home-left" class="col-md-12 col-lg-6">
+      <div class="row">
+        <div class="col-md-12">
+          <div id="my-day" class="dashboard-block">
+            <div class="row">
+              <div class="col-10 col-lg-9">
+                <%= link_to calendar_index_path do %>
+                  <h2><i class="fas fa-calendar"></i><span class="hide-b-lg"><%= agent? ? 'My Day' : 'Team Day' %> - </span> <%= Date.today.strftime("%A %d %B") %></h2>
+                <% end %>
+              </div>
+              <div class="col-2 col-lg-3 d-flex justify-content-center">
+                <%= link_to '<i class="fas fa-calendar-week"></i>'.html_safe, calendar_index_path, class: 'view-cal d-lg-none' %>
+                <%= link_to 'View Calendar', calendar_index_path, class: 'view-cal d-none d-lg-block' %>
+              </div>
+            </div>
+            <div class="row header-row">
+              <div class="col-2">Time</div>
+              <div class="col-5">With</div>
+              <div class="col-5">Mobile</div>
+            </div>
+<!--            <div class="parent" style="display: flex;height:300px;">-->
+              <ul id="my-events">
+                <% if agent? %>
+                  user
+                  <% @user_events.each do |event| %>
+                    <li>
+                      <%= link_to details(event), event %>
+                    </li>
+                  <% end %>
+                <% else %>
+                  <% @today_events_for_non_admin_users.each do |event| %>
+                    <li>
+                      <%= link_to details(event), event %>
+                    </li>
+                  <% end %>
+                <% end %>
+              </ul>
+<!--            </div>-->
+            <table id="viewings" class="table">
+              <tbody>
+                <tr>
+                  <td><%= link_to 'Today viewings', viewings_path(timing: 'today_events'), style: 'color: #ffff;' %></td>
+                  <td><%= @today_events.count rescue 0 %></td>
+                  <td><%= link_to 'This week viewings', viewings_path(timing: 'week_events'), style: 'color: #ffff;' %></td>
+                  <td><%= @week_events.count rescue 0 %></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="home-right" class="col-md-12 col-lg-6">
+      <div class="row">
+        <div class="col-md-12">
+          <div id="property" class="dashboard-block square">
+            <%= link_to properties_path do %>
+              <h2><i class="fas fa-home"></i>Properties</h2>
+            <% end %>
+            <div class="table-responsive">
+              <table class="table">
+                <tbody>
+                  <tr>
+                    <td><strong>Total Units</strong></td>
+                    <td><strong><%= @rooms.count %></strong></td>
+                  </tr>
+                  <tr class="data">
+                    <td colspan="2" style="padding: 7px 0;">
+                      <div class="d-none d-lg-block">
+                        <div class="top_row">
+                          <div><%= link_to 'Available', property_units_path(status: 'available', year: @current_year), class: 'room_status' %></div>
+                          <div><%= link_to 'Booking', property_units_path(status: 'booking', year: @current_year), class: 'room_status' %></div>
+                          <div><%= link_to 'Completed', property_units_path(status: 'complete', year: @current_year), class: 'room_status' %></div>
+                          <div><%= link_to 'Notice', property_units_path(status: 'notice', year: @current_year), class: 'room_status' %></div>
+                        </div>
+                        <div class="top_row">
+                          <% filtered_rooms = filter_room(@current_year) %>
+                          <div class="no-of-available-rooms"><%= filtered_rooms[:available_rooms] %></div>
+                          <div class="rooms-under-booking"><%= filtered_rooms[:rooms_under_booking]%></div>
+                          <div class="no-of-booked-rooms"><%= filtered_rooms[:booked_rooms]%></div>
+                          <div class="no-of-notice-rooms"><%= filtered_rooms[:notice_rooms]%></div>
+                        </div>
+                      </div>
+                      <div class="d-lg-none">
+                        <div class="row unit-mobile-row">
+                          <div class="col-6 text-left">
+                            <%= link_to 'Available', property_units_path(status: 'available', year: @current_year), class: 'room_status' %>
+                          </div>
+                          <div class="col-6">
+                            <%= filtered_rooms[:available_rooms] %>
+                          </div>
+                        </div>
+                        <div class="row unit-mobile-row">
+                          <div class="col-6 text-left">
+                            <%= link_to 'Booking', property_units_path(status: 'booking', year: @current_year), class: 'room_status' %>
+                          </div>
+                          <div class="col-6">
+                            <%= filtered_rooms[:rooms_under_booking]%>
+                          </div>
+                        </div>
+                        <div class="row unit-mobile-row">
+                          <div class="col-6 text-left">
+                            <%= link_to 'Completed', property_units_path(status: 'complete', year: @current_year), class: 'room_status' %>
+                          </div>
+                          <div class="col-6">
+                            <%= filtered_rooms[:booked_rooms]%>
+                          </div>
+                        </div>
+                        <div class="row unit-mobile-row">
+                          <div class="col-6 text-left">
+                            <%= link_to 'Notice', property_units_path(status: 'notice', year: @current_year), class: 'room_status' %>
+                          </div>
+                          <div class="col-6">
+                            <%= filtered_rooms[:notice_rooms]%>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <%= link_to property_listings_path, class: 'marketed-link' do %>
+              <h3><i class="fas fa-bullhorn"></i> Marketed <%= @properties_listed %></h3>
+            <% end %>
+          </div>
+        </div>
+<!--        <div class="col-md-6">-->
+<!--          <div id="finance" class="dashboard-block square">-->
+            <%#= link_to list_of_people_in_arrears_path do %>
+<!--              <h2><i class="fas fa-chart-line"></i>Arrears</h2>-->
+            <%# end %>
+<!--            <table class="table">-->
+<!--              <tbody>-->
+<!--              <tr>-->
+<!--                <td>-->
+                  <%#= link_to 'No. people in arrears', list_of_people_in_arrears_path, style: 'color: #ffff;' %>
+<!--                </td>-->
+<!--                <td><%#= TenancyPaymentItem.number_of_people_in_arrears_today.pluck(:tenancy_id).uniq.count %></td>-->
+<!--              </tr>-->
+<!--              <tr>-->
+<!--                <td>Total arrears value</td>-->
+                <!-- <td>&#163;<%#= number_with_delimiter(sprintf("%.2f",TenancyPaymentItem.number_of_people_in_arrears_today.pluck(:amount_due).inject(0){|sum,x| sum + x }, :delimiter => ',') %></td> -->
+<!--                <td>&#163;<%#= number_with_delimiter(sprintf("%.2f",TenancyPaymentItem.number_of_people_in_arrears_today.where(-->
+<!--                  due_date: Date.parse("01-09-20#{@year.split('/')[0]}")..Date.parse("31-08-20#{@year.split('/')[1]}")-->
+<!--                ).pluck(:arrears).sum(&:to_f)), :delimiter => ',') %></td>-->
+<!--              </tr>-->
+<!--              </tbody>-->
+<!--            </table>-->
+<!--          </div>-->
+<!--        </div>-->
+        <div class="col-lg-6">
+          <div id="documents-outstanding" class="dashboard-block square">
+            <%= link_to reporting_tenancies_path do %>
+              <h2><i class="fas fa-file"></i>Expiring</h2>
+            <% end %>
+            <table class="table">
+              <tbody>
+                <tr>
+                  <td><%= link_to "Tenancies", reporting_tenancies_path, style: 'color: #ffff;' %></td>
+                  <td><%= @next_month_expire_tenancies %></td>
+                </tr>
+                <tr>
+                  <td><%= link_to 'Certifications', reporting_compliance_documents_path(anchor: 'next_month_expired'),  style: 'color: #ffff;' %></td>
+                  <td><%= @next_month_expire_documents %></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="col-md-6">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('.filter-available-rooms').on('click', function(){
+      $(".filter-available-rooms").removeClass("badge-primary");
+      $(".filter-available-rooms").addClass("badge-secondary");
+      $(this).removeClass("badge-secondary");
+      $(this).addClass("badge-primary");
+      var years_range = $(this).data("date");
+      $('.room_status').each(function(){
+        var url = $(this).attr('href').split('=');
+        $(this).attr('href', url[0] + '=' + years_range);
+      })
+      $.ajax({
+        url: '/filter_rooms',
+        type: "GET",
+        data: {year: years_range, return_object: false},
+        dataType: 'json',
+        success: function (data) {
+          $('.no-of-available-rooms').replaceWith('<div class="no-of-available-rooms">'+data['available_rooms']+'</div>');
+          $('.no-of-booked-rooms').replaceWith('<div class="no-of-booked-rooms">'+data['booked_rooms']+'</td>');
+          $('.rooms-under-booking').replaceWith('<div class="rooms-under-booking">'+data['rooms_under_booking']+'</div>');
+        },
+        error: function (data) {
+
+        }
+      });
+    });
+  });
+</script>

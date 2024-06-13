@@ -1,0 +1,22 @@
+<section id="listed-block">
+  <h3 class="article-title">List on</h3>
+  <div class="row">
+    <div class="col-6">
+      <label>List of the website</label>
+      <div class="row">
+      <%= f.simple_fields_for :property_listing_locations, @property.property_listing_locations.sort_by { |ll| [ll.year, ll.listing_type] } do |ff| %>
+          <div id="listed-on" class="col-6">
+            <%= ff.input :listing_type, as: :hidden, input_html: { value: ff.object.listing_type } %>
+            <%= ff.input :year, as: :hidden %>
+            <%= ff.input :user_id, as: :hidden, input_html: { value: current_user.id } %>
+            <%= ff.input :_destroy, label: "#{ff.object.listing_type} - #{ff.object.year}", as: :boolean, input_html: { checked: ff.object.persisted? } %>
+          </div>
+      <%- end -%>
+      </div>
+    </div>
+    <div class="col-6">
+      <label>List Externally</label>
+      <%= f.input :list_on_3rd_party_websites, as: :boolean %>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,62 @@
+//NEW
+$pm-blue:       #033244;
+$pm-yellow:     #fcbd52;
+$info:          #17a2b8;
+$deep-grey:     #3e4a57;
+
+// Colours
+$white:         #ffffff;
+$grey:          #f5f5f5;
+$grey-button:   #798691;
+$light-grey:    #f8f9f8;
+$dark-grey:     #111111;
+$green:         #008534;
+$light-blue:    #48B0F6;
+$turquoise:     #17a2b8;
+$pea-green:     #969D3E;
+$purple:        #745faa;
+$manatee:       #8C91AB;
+$suva-grey:     #939393;
+$flamingo:      #f05e23;
+$yellow:        #ffc107;
+//$arsenic:       #2c2c2c;
+$arsenic:       $pm-blue;
+$iceberg-blue:  #859ACF;
+$pink:          #cf85c0;
+$beaver:        #A5836D;
+//$khaki:         #DBC35B;
+$khaki:         $pm-yellow;
+$success:       #009378;
+$expired:       #E99866;
+$disabled:      #f6f6f6;
+
+
+
+// Company Colours
+$company-primary: #0E7D36;
+$company-accent:  #00B050;
+
+@mixin box-shadow($color, $opacity: 0.3) {
+  box-shadow: 0 0 0 0.2rem rgba($color, $opacity);
+}
+
+@mixin background($color, $opacity: 0.3) {
+  background: rgba($color, $opacity);
+}
+
+$font-colour:   #626262;
+//$primary:       #008127;
+$primary:       $pm-blue;
+$text-black:    #2c2c2c;
+$text-primary:  #62549a;
+
+/* Small devices (tablets, 768px and up) */
+$screen-xs-min: 576px;
+$screen-sm-min: 768px;
+$screen-md-min: 992px;
+$screen-lg-min: 1200px;
+$screen-2k-min: 1620px;
+
+$screen-xs-max: 767px;
+$screen-sm-max: 991px;
+$screen-md-max: 1199px;

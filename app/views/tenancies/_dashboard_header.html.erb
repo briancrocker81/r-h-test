@@ -1,0 +1,28 @@
+<div id="tenancy-header" class="text-center col-12 d-block">
+  <div class="row">
+    <div id="logo" class="col-md-6 col-lg-4 col-xl-4">
+      <%= image_tag('city-lets-trimmed.png', class: 'img-fluid') %>
+    </div>
+    <div class="col-md-6 col-lg-4 col-xl-4 flex-center">
+      <div class="box">
+        <% if @tenancy.additional_tenants.count >= 1 %>
+          <h1 class="dual-tenancy-title">
+            <%= @tenancy.first_name %> <%= @tenancy.surname %>
+            <br>
+            <%= @tenancy.additional_tenants.first.first_name %> <%= @tenancy.additional_tenants.first.surname %>
+          </h1>
+        <% else %>
+          <h1><%= @tenancy.first_name %> <%= @tenancy.surname %></h1>
+        <% end %>
+
+        <h2><%= yield(:tenancy_dashboard_title) %></h2>
+        <h2><%= @tenancy.room.property.property_name %>, Room <%= @tenancy.room.number %></h2>
+      </div>
+    </div>
+    <div id="ombudsman" class="d-none d-lg-flex col-lg-4 col-xl-4 flex-center">
+      <div class="box">
+        <%= image_tag('the-property-ombudsman-lettings.jpg', class: 'img-fluid') %>
+      </div>
+    </div>
+  </div>
+</div>

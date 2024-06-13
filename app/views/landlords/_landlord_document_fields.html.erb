@@ -1,0 +1,23 @@
+<div class="nested-fields">
+  <div class="row">
+    <div class="col-md-6">
+      <% if f.object.document_file.present? &&  f.object.document_file.file.present? %>
+        <div class="<%= f.object.id %> doc_show">
+          <label>DOCUMENT FILE</label>
+          <br/>
+          <label><%= f.object.document_file.path.to_s.split("/").last  %></label>
+          <%= button_tag "<i class='fa fa-edit'></i>".html_safe, class: 'btn btn-warning doc-edit doc_show', type: 'button' %>
+        </div>
+      <% end %>
+      <span class="<%=(f.object.document_file.present? && f.object.document_file.file.present?) ? 'doc_hide' : 'doc_show' %>">
+        <%= f.input :document_file, as: :file %>
+        <%= button_tag "X", class: 'btn btn-danger doc-danger doc_hide', type: 'button', 'data-id': f.object.id.present? ? f.object.id : ''%>
+      </span>
+    </div>
+    <div class="col-md-6">
+      <%= f.input :document_name, collection: LandlordDocument::DOCUMENTS.map { |doc| [doc.split('_').map(&:capitalize).join(' '), doc]}, selected: f.object.document_name, include_blank: "Select document type" %>
+    </div>
+  </div>
+  <%= link_to_remove_association "Remove", f, class: "remove" %>
+  <hr>
+</div>

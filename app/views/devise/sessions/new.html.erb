@@ -1,0 +1,26 @@
+<div id="welcome-brand-logo">
+  <%= image_tag('city-lets.png', class: 'img-fluid') %>
+</div>
+
+
+<h2 class="text-center">Data Manager Log in</h2>
+
+<div class="row justify-content-md-center">
+  <div class="col-md-6">
+    <%= simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+      <div class="form-inputs">
+        <%= f.input :username, required: false, autofocus: true, input_html: { autocomplete: "username", class: 'form-control' } %>
+        <%= f.input :password, required: false, input_html: { autocomplete: "current-password", class: 'form-control'} %>
+      </div>
+      <div class="form-actions">
+        <%= f.input :remember_me, as: :boolean if devise_mapping.rememberable? %>
+        <%= f.button :submit, "Log in", class: 'btn-primary btn-block' %>
+      </div>
+    <% end %>
+  </div>
+</div>
+<div class="row mt-2 justify-content-md-center">
+  <div class="col-md-6">
+    <%= link_to "Forgot Password", new_user_password_path, method: :get, class: "login-input ml-auto", :data => {:turbolinks => false} %>
+  </div>
+</div>

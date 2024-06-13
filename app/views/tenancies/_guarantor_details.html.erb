@@ -1,0 +1,129 @@
+<section id="guarantor-details">
+  <h3 class="article-title">Guarantor Details</h3>
+  <div class="actions d-flex btn-group justify-content-end push mb-4">
+    <% if @tenancy.guarantor&.uri_string %>
+      <%= link_to mail_guarantor_dashboard_link_path(u_id: @tenancy.guarantor.uri_string), class: 'btn small btn-turquoise', title: 'Resend Guarantor Dashboard' do %>
+        <%= fa_icon 'envelope' %> Resend Guarantor Dashboard
+      <% end %>
+    <% end %>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-6">
+      <table class="table table-striped">
+        <tbody>
+          <tr>
+            <td>Guarantor Name</td>
+            <td><%= @tenancy.guarantor.guarantor_name rescue "Not set" %></td>
+          </tr>
+          <tr>
+            <td>Guarantor Address</td>
+            <td><%= @tenancy.guarantor.guarantor_address rescue "Not set" %></td>
+          </tr>
+          <tr>
+            <td>Guarantor Postcode</td>
+            <td><%= @tenancy.guarantor.guarantor_post_code rescue "Not set" %></td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+    <div class="col-lg-6">
+      <table class="table table-striped">
+        <tbody>
+          <tr>
+            <td>Guarantor Mobile</td>
+            <td><%= tel_to(@tenancy.guarantor.guarantor_mobile) rescue "Not set" %></td>
+          </tr>
+          <tr>
+            <td>Guarantor Email</td>
+            <td><%= mail_to @tenancy.guarantor.guarantor_email rescue "Not set" %></td>
+          </tr>
+          <tr>
+            <td>Guarantor Relationship</td>
+            <td><%= @tenancy.guarantor.guarantor_relationship rescue "Not set" %></td>
+          </tr>
+          <tr>
+            <td>Dashboard Link</td>
+            <td>
+              <% if @tenancy.guarantor&.uri_string %>
+                <%= link_to "View Guarantor Dashboard", guarantor_dashboard_url(@tenancy.guarantor.uri_string), target: '_blank' %>
+              <% else %>
+                Dashboard not set up. Please add guarantor details
+              <% end %>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <button class="btn small btn-primary d-flex ml-auto" type="button" data-toggle="collapse" data-target="#guarantor-additional-details" aria-expanded="false" aria-controls="guarantor-additional-details">
+    Show additional guarantor details
+  </button>
+
+  <div class="collapse" id="guarantor-additional-details">
+    <div class="card card-body">
+      <div class="row">
+        <div class="col-lg-6">
+          <table class="table table-striped">
+            <tbody>
+            <tr>
+              <td>Own property</td>
+              <td><%= yes_no(@tenancy.guarantor&.own_property) %></td>
+            </tr>
+            <tr>
+              <td>National Insurance Number</td>
+              <td><%= @tenancy.guarantor&.national_insurance_number %></td>
+            </tr>
+            <tr>
+              <td>Best contact number</td>
+              <td><%= @tenancy.guarantor&.contact_number %></td>
+            </tr>
+            <tr>
+              <td>Date of birth</td>
+              <td><%= @tenancy.guarantor&.date_of_birth&.strftime("%d/%m/%Y") %></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="col-lg-6">
+          <table class="table table-striped">
+            <tbody>
+            <tr>
+              <td>Employment status</td>
+              <td><%= @tenancy.guarantor&.employment_status %></td>
+            </tr>
+            <tr>
+              <td>Employer name</td>
+              <td><%= @tenancy.guarantor&.employer_name %></td>
+            </tr>
+            <tr>
+              <td>Employer manager</td>
+              <td><%= @tenancy.guarantor&.employer_manager %></td>
+            </tr>
+            <tr>
+              <td>Employer contact</td>
+              <td><%= @tenancy.guarantor&.employer_contact %></td>
+            </tr>
+            <tr>
+              <td>Employer address</td>
+              <td><%= @tenancy.guarantor&.employer_address %></td>
+            </tr>
+            <tr>
+              <td>Employer email</td>
+              <td><%= @tenancy.guarantor&.employer_email %></td>
+            </tr>
+            <tr>
+              <td>Net salary</td>
+              <td><%= @tenancy.guarantor&.net_salary %></td>
+            </tr>
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>

@@ -1,0 +1,490 @@
+<% content_for :tenancy_dashboard_title, "My Booking Form" %>
+<%= render 'dashboard_header' %>
+<%= simple_form_for @tenancy, :url => submit_booking_form_path(@tenancy.uri_string), method: :post, html: { id: 'editTenancy', 'data-valid': true} do |f| %>
+
+  <div id="title-bar" class="sticky-top">
+    <div class="actions btn-group d-flex justify-content-end push">
+      <%= link_to :back, class: 'btn btn-secondary', id: 'back' do %>
+        <i class="fas fa-backward d-block d-md-none"></i>
+        <span class="d-none d-md-block">Back</span>
+      <% end %>
+      <%= link_to '<i class="fas fa-print"></i>'.html_safe, '', onclick: 'window.print();return false;', class: 'btn btn-info del print'%>
+      <%= f.button :submit, "Submit my booking form", class: 'cmn-submit-btn booking-form-submit tenancy-dashboard-btn signature_pad_save' %>
+    </div>
+  </div>
+
+  <%= f.error_notification %>
+  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+  <%= render "tenancy_error" %>
+  <article id="tenancy-booking-form">
+    <%= f.hidden_field :tenant_type %>
+      <section>
+        <div class="row">
+          <div class="col-lg-12">
+            <h3 class="article-title">Personal details</h3>
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="form-group">
+                  <%= f.input :first_name, required: true %>
+                  <span id="first_name_error" style="color: red; font-size: 12px;"></span>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="form-group">
+                  <%= f.input :surname, required: true %>
+                  <span id="surname_error" style="color: red; font-size: 12px;"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-6">
+            <div class="form-group">
+              <%= f.input :dob, selected: @tenancy.dob || Time.now.year - 20, start_year: Time.now.year - 80, end_year: Time.now.year - 16, order: %i(day month year) %>
+              <span id="dob_error" style="color: red; font-size: 12px;"></span>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="form-group">
+              <%= f.input :mobile, required: true %>
+              <span id="mobile_error" style="color: red; font-size: 12px;"></span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-6">
+            <div class="form-group">
+              <%= f.input :email, required: true %>
+              <span id="email_error" style="color: red; font-size: 12px;"></span>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="form-group">
+              <%= f.input :nationality %>
+              <span id="nationality_error" style="color: red; font-size: 12px;"></span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-12">
+            <%= f.input :address, label: @tenancy.tenancy_is == 0 ? 'Home Address' : 'Current Address', required: true %>
+            <span id="address_error" style="color: red; font-size: 12px;"></span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-6">
+            <%= f.input :city %>
+            <span id="city_error" style="color: red; font-size: 12px;"></span>
+          </div>
+          <div class="col-lg-6">
+            <%= f.input :state, label: "Country" %>
+            <span id="state_error" style="color: red; font-size: 12px;"></span>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-lg-6">
+            <%= f.input :tenancy_is, label: 'I am a', collection: [ ["Student", 0], ["Professional", 1] ], selected: @tenancy.tenancy_is, include_blank: "Please choose one of the following options:", required: true %>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-lg-6">
+            <div class="form-group">
+              <label class="checkbox-inline">
+                <%= f.check_box :criminal_record %>
+                Have you been convicted of any criminal convictions?
+              </label>
+              <span id="criminal_record_error" style="color: red; font-size: 12px;"></span>
+            </div>
+          </div>
+        </div>
+        <div class="row" id="criminal-record">
+          <div class="col-lg-12">
+            <h3>Add offence</h3>
+            <div id="criminal_record">
+              <%= f.simple_fields_for :criminal_records do |criminal_record| %>
+                <%= render 'criminal_record_fields', f: criminal_record %>
+              <% end %>
+            </div>
+            <div class="links">
+              <%= link_to_add_association 'Add an offence', f, :criminal_records, class: 'btn btn-primary' %>
+            </div>
+            <hr>
+          </div>
+        </div>
+      </section>
+
+      <% if @tenancy.additional_tenants.count >= 1 %>
+        <section>
+          <h3 class="article-title">Second Contact Details</h3>
+          <%= f.simple_fields_for :additional_tenants do |additional_tenant| %>
+            <%= render 'booking_form_additional_tenants', f: additional_tenant %>
+          <% end %>
+        </section>
+      <% end %>
+
+      <section>
+        <h3 class="article-title">Tenancy Key Details</h3>
+        <div class="row">
+          <div class="col-sm-6 col-lg-3">
+            <div class="form-group">
+              <label class="form-control-label">Tenancy dates</label>
+              <p><%= @tenancy.tenancy_start.strftime("%d/%m/%Y") %> - <%= @tenancy.tenancy_end.strftime("%d/%m/%Y") %></p>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-3">
+            <div class="form-group">
+              <label class="form-control-label">Tenancy payment type</label>
+              <p><%= @tenancy.deposit_term.to_s.titleize() %></p>
+            </div>
+          </div>
+          <% if @tenancy.tenancy_is == 0 %>
+            <div class="col-sm-6 col-lg-3">
+              <div class="form-group">
+                <label class="form-control-label">Tenancy number of weeks</label>
+                <p><%= @tenancy.number_of_weeks %></p>
+              </div>
+            </div>
+          <% end %>
+          <div class="col-sm-6 col-lg-3">
+            <div class="form-group">
+              <label class="form-control-label">Tenancy number of months</label>
+              <p><%= @tenancy.number_of_months %></p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <% if @guarantor.present? %>
+        <section>
+          <div class="row guarantor-details">
+            <div class="col-lg-12">
+              <h3 class="article-title">Guarantor Details</h3>
+              <div class="row">
+                <%= f.simple_fields_for :guarantor do |guarantor| %>
+                  <div class="col-lg-4">
+                    <%= guarantor.input :guarantor_name, required: true %>
+                  </div>
+                  <div class="col-lg-4">
+                    <%= guarantor.input :guarantor_address %>
+                  </div>
+                  <div class="col-lg-4">
+                    <%= guarantor.input :guarantor_post_code %>
+                  </div>
+                  <div class="col-lg-4">
+                    <%= guarantor.input :guarantor_email, required: true %>
+                  </div>
+                  <div class="col-lg-4">
+                    <%= guarantor.input :guarantor_mobile, required: true %>
+                  </div>
+                  <div class="col-lg-4">
+                    <%= guarantor.input :guarantor_relationship %>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      <% end %>
+
+      <%# if @tenancy.tenant_type.to_i == 1 && @student_course_detail.present? %>
+        <section id="student-booking-details" class="student-fields" style="display: none">
+          <div class="row">
+            <div class="col-lg-12">
+              <h3 class="article-title">Student Course Details</h3>
+              <div class="row">
+                <%= f.simple_fields_for :student_course_detail do |course_detail| %>
+                  <div class="col-lg-6">
+                    <%= course_detail.input :studying_at %>
+                    <%= course_detail.hidden_field :validate_student %>
+                  </div>
+                  <div class="col-lg-6">
+                    <%= course_detail.input :student_id_number %>
+                  </div>
+                  <div class="col-lg-4">
+                    <%= course_detail.input :course %>
+                  </div>
+                  <div class="col-lg-4">
+                    <%= course_detail.input :course_start, :start_year => Time.now.year - 5, :end_year => Time.now.year + 10, discard_day: true, order: %i(month year), include_blank: true %>
+                  </div>
+                  <div class="col-lg-4">
+                    <%= course_detail.input :course_end, :start_year => Time.now.year - 5, :end_year => Time.now.year + 10, discard_day: true, order: %i(month year), include_blank: true %>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </section>
+      <%# end %>
+
+      <%# if @tenancy.tenant_type.to_i == 3 && @professional_detail.present? %>
+        <section id="professional-booking-details" class="professional-fields" style="display: none">
+          <div class="row">
+            <div class="col-lg-12">
+              <h3 class="article-title">Employee Details</h3>
+              <div class="row">
+                <%= f.simple_fields_for :professional_detail do |pr_detail| %>
+                  <div class="col-lg-6">
+                    <%#= pr_detail.input :working_at, required: true %>
+                    <%= pr_detail.input :working_at %>
+                    <%= pr_detail.hidden_field :validate_professional %>
+                  </div>
+                  <div class="col-lg-6">
+                    <%= pr_detail.input :job_title %>
+                  </div>
+                  <div class="col-lg-4">
+                    <%= pr_detail.input :salary %>
+                  </div>
+                  <div class="col-lg-4">
+                    <%#= pr_detail.input :salary_type %>
+                    <%= pr_detail.input :salary_type, label: 'Salary type', collection: [ ["Annual", 0], ["Monthly", 1], ["Weekly", 2] ], selected: @tenancy.professional_detail.salary_type, include_blank: "Select your salary type" %>
+                    <%#= pr_detail.select :salary_types, options_for_select(Tenancy.salary_types.keys.map{|c| [c.capitalize, c ]}, @tenancy.professional_detail.salary_type), {include_blank: "Select booking status"}, class: "form-control" %>
+                  </div>
+                  <div class="col-lg-4">
+                    <%#= pr_detail.input :salary_type %>
+                    <%= pr_detail.input :employment_type, label: 'Employment type', collection: [ ["Full Time", 0], ["Part Time", 1], ["Temporary", 2] ], selected: @tenancy.professional_detail.employment_type, include_blank: "Select your salary type" %>
+                    <%#= pr_detail.select :salary_types, options_for_select(Tenancy.salary_types.keys.map{|c| [c.capitalize, c ]}, @tenancy.professional_detail.salary_type), {include_blank: "Select booking status"}, class: "form-control" %>
+                  </div>
+                  <div class="col-lg-6">
+                    <%= pr_detail.input :receive_benefits, input_html: { class: '' }, :label_html => { class: '' }, required: false, label: 'Do you receive and benefits / financial support?' %>
+                  </div>
+
+                  <div class="col-lg-12">
+                    <%= pr_detail.input :benefit_details %>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </section>
+      <%# end %>
+
+      <section id="emergency-contact-details">
+        <div class="row">
+          <div class="col-lg-12">
+            <h3 class="article-title"><%= "Emergency Contact Details #{@tenancy.is_guarantor_available? ? '(if different from guarantor)' : '' }"%></h3>
+            <div class="row">
+              <div class="col-lg-6">
+                <%= f.input :emergency_contact_name, required: !@tenancy.is_guarantor_available? %>
+                <span id="emergency_contact_name_error" style="color: red; font-size: 12px;"></span>
+                <%= f.input :emergency_contact_number, required: !@tenancy.is_guarantor_available? %>
+                <span id="emergency_contact_number_error" style="color: red; font-size: 12px;"></span>
+                <%= f.input :emergency_contact_postcode, required: !@tenancy.is_guarantor_available? %>
+                <span id="emergency_contact_postcode_error" style="color: red; font-size: 12px;"></span>
+              </div>
+              <div class="col-lg-6">
+                <%= f.input :emergency_contact_address, input_html: { rows: 8 }, required: !@tenancy.is_guarantor_available? %>
+                <span id="emergency_contact_address_error" style="color: red; font-size: 12px;"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <hr>
+      <section>
+        <div class="row">
+          <div class="col-lg-12">
+            <h3 class="article-title">Deposit / Advanced Rent</h3>
+            <p>I hereby authorise CityLets to debit my account via my debit card below. Please take the agreed amount on
+              receipt of this form, or at your nearest convenience. This will be used for the following according to the
+              above agreement: </p>
+            <ol>
+              <li>Used as my Holding Fee (a maximum of 1 weeks rent) prior to documents being completed.</li>
+              <li>Once documents completed, used as a Deposit for the duration of my tenancy</li>
+              <li>Once documents completed, used as an Advanced Rent and deducted equally from my future rent payments </li>
+            </ol>
+
+            <p>I understand that by paying this holding fee I am making a commitment and reserving the property.
+              I understand that I will forfeit the equivalent of one weeks rent if I do not proceed with the booking and
+              complete the relevant documents within 15 days of being sent.</p>
+            <p>This will cover CityLets administration costs, if failing to complete the tenancy agreement or supporting
+              documents and take up occupancy. </p>
+            <p>I understand that I have a 15 day deadline for agreement, from when I submit the form and pay the holding
+              deposit to completing the tenancy agreement. </p>
+            <br>
+            <div class="row">
+              <% if @tenancy.tenancy_is == 0 %>
+                <div class="col-lg-3">
+                  <div class="form-group">
+                    <label class="form-control-label">Advanced Rent Payment Amount</label>
+                    <p>£<%= number_with_delimiter(sprintf("%.2f",@tenancy.advanced_rent_payment_amount.to_f), delimiter: ',') %></p>
+                  </div>
+                </div>
+                <div class="col-lg-3">
+                  <div class="form-group">
+                    <label class="form-control-label">Advance Payment Date</label>
+                    <% if @tenancy.advanced_rent_payment_date %>
+                      <p><%= @tenancy&.advanced_rent_payment_date&.strftime("%d/%m/%Y") %></p>
+                    <% elsif @tenancy_avr&.due_date&.strftime("%d/%m/%Y") %>
+                      <p><%= @tenancy_avr&.due_date&.strftime("%d/%m/%Y") %></p>
+                    <% else %>
+                      <p>n/a</p>
+                  <% end %>
+                  </div>
+                </div>
+              <% end %>
+              <%# else %>
+                <div class="col-lg-3">
+                  <div class="form-group">
+                    <% if @tenancy.deposit_guarantor_amount %>
+                      <label class="form-control-label">Deposit Amount</label>
+                      <p>£<%= @tenancy.deposit_guarantor_amount %></p>
+                    <% else %>
+                      <label class="form-control-label">1 Month Amount</label>
+                      <p>£<%= number_with_delimiter(sprintf("%.2f",@tenancy.monthly_price.to_f), delimiter: ',') %></p>
+                    <% end %>
+                  </div>
+                </div>
+                <div class="col-lg-3">
+                  <div class="form-group">
+                    <label class="form-control-label">Deposit Date</label>
+                    <p><%= @tenancy.deposit_date&.strftime("%d/%m/%Y") %></p>
+                  </div>
+                </div>
+              </div>
+              <%# end %>
+
+              <div class="row">
+                <div class="col-lg-4 col-xl-2">
+                  <%= f.input :payment_card_pan, label: 'Card Number' %>
+                  <span id="payment_card_pan_error" style="color: red; font-size: 12px;"></span>
+                </div>
+                <div class="col-8 col-lg-4 col-xl-3">
+                  <%= f.input :payment_card_expiry, label: 'Card Expiry', start_year: Time.now.year, end_year: Time.now.year + 15, order: %i(month year) %>
+                  <span id="payment_card_expiry_error" style="color: red; font-size: 12px;"></span>
+                </div>
+                <div class="col-4 col-lg-4 col-xl-1">
+                  <%= f.input :payment_card_cvc, label: 'Card CVC', input_html: { type: 'number' } %>
+                  <span id="payment_card_cvc_error" style="color: red; font-size: 12px;"></span>
+                </div>
+              </div>
+
+            </div>
+
+
+          <div class="col-12">
+            <div class="form-group">
+              <p><strong>Please note:</strong></p>
+              <p>Once the payment has been collected, Citylets will retain your transaction receipt for collection by you
+                from our office for 14 days after in which in will then be placed in confidential waste. </p>
+              <p>In view of the nature of the information provided above, Citylets will retain all authorities in a
+                locked safe thus avoiding any confidentiality or security breaches. </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="student-50" class="student-fields" style="display: none;">
+        <div class="row">
+          <div class="col-lg-12">
+            <h3 class="article-title">50% Rule - THIS CLAUSE IS ONLY RELEVANT TO PROPERTIES BOOKED ON A STUDENT CYCLE (SEPTEMBER START DATE)</h3>
+            <ul>
+              <li>This is not applicable for 1 bedroom apartments or studios.</li>
+              <li>I understand that Citylets will continue to actively market this complete
+                property to groups of students until over 50% of rooms are booked..</li>
+              <li>If Citylets do secure a booking from a group, they agree to inform me as
+                quickly as possible, so they can arrange to show a selection of rooms of a
+                similar or better standard, for an equal rent to that agreed.</li>
+              <li>If none of these rooms meet my expectations, I understand that I will qualify
+                for a refund of all monies paid</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+      <%# if @tenancy.tenant_is == 'Professional' %>
+        <section id="professional-documents" class="professional-fields" style="display: none">
+          <div class="row">
+            <div class="col-lg-12">
+              <h3 class="article-title">What else we will need</h3>
+              <p>To support your booking form you will also need to send us: </p>
+              <ul>
+                <li>Passport (If you don’t have a passport you’ll need to send 2 documents i.e. Driving licence and birth certificate)</li>
+                <li>3 Months bank statements or Pay Slips</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+      <%# end %>
+
+<!--      <section>-->
+<!--        <h3 class="article-title">Tenant Uploads</h3>-->
+<!--        <p>Please upload any required documents: these will likely be:</p>-->
+<!--        <ul>-->
+<!--          <li><strong>Student:</strong> Your student ID or proof of study and your passport</li>-->
+<!--          <li><strong>Professional:</strong> A passport photo and proof of income (bank statement or payslips for 3 months)</li>-->
+<!--        </ul>-->
+<!--        <p><small><strong>* Please note:</strong> You can only upload the following file types: jpg, jpeg, png, pdf, doc, or docx</small></p>-->
+<!--        <div id="tenancy_identifications">-->
+          <%#= f.simple_fields_for :tenancy_identifications do |tenancy_identification| %>
+            <%#= render 'tenancy_identification_fields', f: tenancy_identification %>
+          <%# end %>
+<!--          <div class="links">-->
+            <%#= link_to_add_association 'Add tenant identification', f, :tenancy_identifications, class: 'btn btn-info' %>
+<!--          </div>-->
+<!--        </div>-->
+<!--      </section>-->
+
+      <section>
+        <div class="row">
+          <div class="col-lg-12">
+            <h2 class="article-title">Special Conditions</h2>
+            <small>Please write in the box below any special conditions to be incorporated into this Tenancy Agreement</small>
+            <%= f.input :special_conditions, label: false %>
+            <p><strong>Please note:</strong></p>
+            <p>The special conditions will need to be confirmed in writing by the landlord or agent.</p>
+            <p>If you have NOT discussed these special conditions prior to booking please email separately </p>
+          </div>
+        </div>
+      </section>
+      <section>
+        <div class="row">
+          <div id="signature-box" class="col-lg-12">
+            <h2 class="article-title">Tenant Signature</h2>
+            <div class="form-group">
+              <%= f.input_field :signature, as: :hidden, class: 'signature_pad_input' %>
+              <div class="signature_pad">
+                <div class="signature_pad_body">
+                  <canvas id="one"></canvas>
+                </div>
+                <div class="signature_pad_footer">
+                  <button type="button" class="btn btn-danger signature_pad_clear">Clear signature</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-12">
+            <div class="form-group">
+              <div class="form-inline inline-me">
+                <%= f.input :confirm_tenancy, input_html: { class: 'confirm-checkbox' }, :label_html => { class: 'confirm-label' }, required: true, label: 'I confirm all the information entered here is correct' %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+  </article>
+  <div class="form-actions d-flex justify-content-end">
+    <%= f.button :submit, "Submit my booking form", class: 'cmn-submit-btn booking-form-submit tenancy-dashboard-btn signature_pad_save' %>
+  </div>
+<% end %>
+
+<script type="text/javascript">
+  // Toogle the switch on turbolinks
+  //$('#tenancy_criminal_record').bootstrapToggle(); // assumes the checkboxes have the class "toggle"
+  set_offence($('#tenancy_criminal_record').prop('checked'))
+
+  function set_offence(value){
+    if(value){
+      $('#criminal-record').show();
+    } else {
+      $('#criminal-record').hide();
+    }
+  }
+
+  $('#tenancy_criminal_record').change(function() {
+    set_offence($(this).prop('checked'));
+  })
+</script>

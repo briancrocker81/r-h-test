@@ -1,0 +1,6 @@
+<% unless @modal %>
+  window.location.replace("<%= edit_event_url(@event)%>");
+<% else %>
+  $('#remote_container').html('<%= j render "edit" %>');
+  $('#edit_event').modal('show');
+<% end %>

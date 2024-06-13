@@ -1,0 +1,37 @@
+<div class="modal-header">
+  <h3 class="modal-title">Sync Property</h3>
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <article>
+    <div class="row">
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Sync</th>
+              <th>Type</th>
+              <th>Create</th>
+              <th>Create Error</th>
+              <th>Delete</th>
+              <th>Delete Error</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr id="rightmove_<%=@room.id %>">
+              <%= render 'rightmove_response' %>
+            </tr>
+            <tr id="zoopla_<%= @room.id %>">
+              <%= render 'zoopla_response' %>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </article>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>

@@ -1,0 +1,24 @@
+var len = $('#generic_documents').find('.new_documents').length + $('.documents').children('.generic-doc').length
+$('#generic_document_form').attr('action', '/admin/create_generic_document');
+// $('#generic_document_form').attr('method', 'post');
+if (parseInt(len) < 4) {
+  $('#generic_documents').append("<%= j render 'form_field'%>");
+  $(".datepicker").datepicker({ autoclose: true });
+  $('.save-document').show();
+  $(".remove-document").on('click', function(){
+    $(this).parent().parent().remove();
+    if($('.new_documents').length == 0) {
+      $('.save-document').hide();
+    } else {
+      $('.save-document').show();
+    }
+  })
+} else {
+  alert('You may only upload four generic documents!')
+}
+DocumentPreview();
+if($('.documents').children('.generic-doc').length >= 3){
+  $('.add-generic').hide();
+} else {
+  $('.add-generic').show();
+}

@@ -1,0 +1,43 @@
+<% content_for :title, 'Registered System Users' %>
+<p id="notice"><%= notice %></p>
+
+<div id="title-bar" class="sticky-top">
+  <h1><%= t('.title') %></h1>
+  <%= link_to t('.new'), add_new_user_path, class: 'btn btn-primary push' %>
+</div>
+
+<%= form_for_filterrific @filterrific, html: {class: 'filterrific-form'} do |f| %>
+  <nav class="navbar navbar-expand-lg navbar-light">
+    <h3 class="d-block d-lg-none">Filters</h3>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fa fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <div class="row w-100 m-0">
+
+        <div class="col-12 col-lg-5">
+          <span>Search</span>
+          <%= f.text_field(
+                :search_query,
+                class: 'filterrific-periodically-observed form-control'
+              ) %>
+        </div>
+
+        <div class="col-12 col-lg-4 mb-4 mb-lg-0">
+            <span>
+              Sort by
+            </span>
+          <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by], {}, {class: 'form-control'}) %>
+        </div>
+
+        <div class="col-6 col-lg ml-auto mt-lg-5 text-right">
+          <%= link_to 'Reset filters', reset_filterrific_url, class: 'btn btn-arsenic' %>
+        </div>
+
+      </div>
+    </div>
+  </nav>
+
+<% end %>
+
+<%= render(partial: 'list', locals: { users: @users }) %>

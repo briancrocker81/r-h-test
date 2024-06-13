@@ -1,0 +1,19 @@
+<%= form_tag tenancy_staff_message_path(id: message.id), :method => :put, html: {multipart: true} do %>
+  <div class="form-group">
+    <div class="row">
+      <div class="col-md-12">
+        <label>Subject: </label>
+        <%= text_field_tag "subject", message.subject, class: "form-control form-inputs", placeholder: "Subject", required: true %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <label>Content: </label>
+        <%= text_area_tag "body", message.body,"cols" => 50, "rows" => 4, class: "form-control form-inputs", placeholder: "Type here your message.....", required: true %>
+      </div>
+    </div><br>
+    <%= button_tag(type: "submit", class: "btn btn-warning") do %>
+      <i class="fa fa-paper-plane"></i>&nbsp; Send
+    <% end %>
+  </div>
+<% end %>

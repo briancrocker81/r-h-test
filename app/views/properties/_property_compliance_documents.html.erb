@@ -1,0 +1,26 @@
+<div class="row">
+  <div class="col-12">
+    <div class="actions btn-group d-flex w-100">
+      <%= link_to 'Email tenants compliance documents', email_tenants_compliance_documents_path, method: :post, remote: true, data: { confirm: 'Are you sure?' }, class: 'btn small btn-info ml-auto mb-4' %>
+    </div>
+    <div class="row text-center">
+      <%# doc_should_present = ['epc', 'electrical-wiring', 'emergency-lighting', 'fire-alarm-test', 'pat-testing', 'fire-risk-assessment', 'gas-safety', 'right-to-rent-id', 'how-to-rent-guid'] %>
+      <% doc_should_present = ['epc', 'gas-safety', 'electrical-wiring'] %>
+      <% @property.compliance_documents.each do |doc| %>
+        <% if doc.document_name.present? && doc.document_file.present? %>
+          <div class="col-sm-6 col-lg-3 docs doc-prv" data="<%=doc.document_file%>" data-doc-name="<%=doc.document_name.split('_').map(&:capitalize).join(' ')%>" data-verified="" data-verified-by="">
+            <%= document_badge_date(true, 'fas fa-file-pdf', uppercase_strip(doc.document_name), doc.document_expiry) %>
+          </div>
+          <% doc_should_present.delete(doc.document_name.to_s) %>
+        <% end %>
+      <% end %>
+      <% if doc_should_present.count > 0 %>
+        <% doc_should_present.each do |doc| %>
+          <div class="col-sm-6 col-lg-3 docs" title="<%= doc.split('_').map(&:capitalize).join(' ') %>" >
+            <%= document_badge(false, 'fas fa-file-pdf', uppercase_strip(doc)) %>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>

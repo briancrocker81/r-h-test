@@ -1,0 +1,172 @@
+<% content_for :title, 'Listings home' %>
+<p id="notice"><%= notice %></p>
+
+<div id="title-bar" class="sticky-top">
+  <h1>Listings</h1>
+  <div class="actions d-flex btn-group justify-content-end push">
+    <%= link_to 'Archived Tenants', tenancies_path(archived: true), class: 'btn btn-khaki', :data => {:turbolinks => false} %>
+  </div>
+</div>
+
+<%= form_for_filterrific @filterrific, html: {class: 'filterrific-form'} do |f| %>
+  <nav class="navbar navbar-expand-lg navbar-light">
+    <h3 class="d-block d-lg-none">Filters</h3>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fa fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <div class="row w-100 m-0">
+        <div class="col-lg-12 col-xl-2 option">
+          <%= f.text_field(
+                :search_query,
+                class: 'filterrific-periodically-observed form-control',
+                placeholder: 'Search...'
+              ) %>
+        </div>
+        <%= f.fields_for :room_availability do |with_available_fields| %>
+          <div class="booking-status option form-inline">
+            <span>
+              <%= with_available_fields.check_box :room_available, {checked: (f.object.room_availability.present? && f.object.room_availability.room_available == "1") ? true : false} %>
+              <%= with_available_fields.label "Available", for: "filterrific_room_availability_room_available", style: "display: initial;"%>
+            </span>
+            <span>
+              <%= with_available_fields.check_box :room_booked, {checked: (f.object.room_availability.present? && f.object.room_availability.room_booked == "1") ? true : false} %>
+              <%= with_available_fields.label "Booking", for: "filterrific_room_availability_room_booked", style: "display: initial;"%>
+            </span>
+            <span>
+              <%= with_available_fields.check_box :room_complete, {checked: (f.object.room_availability.present? && f.object.room_availability.room_complete == "1") ? true : false} %>
+              <%= with_available_fields.label "Complete", for: "filterrific_room_availability_room_complete", style: "display: initial;"%>
+            </span>
+            <span>
+              <%= with_available_fields.check_box :room_expired, {checked: (f.object.room_availability.present? && f.object.room_availability.room_expired == "1") ? true : false} %>
+              <%= with_available_fields.label "Notice", for: "filterrific_room_availability_room_expired", style: "display: initial;"%>
+            </span>
+
+          </div>
+
+          <div class="col-md-6 col-lg-4 col-xl-2 option sort-by">
+            <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by], {}, {class: 'form-control'}) %>
+          </div>
+
+          <div class="col-md-6 col-lg-4 col-xl-2 option years">
+            <%= with_available_fields.hidden_field(:search_by_year_range, class: "filterrific-periodically-observed", id: "short-by-years", value: f.object.room_availability.present? && f.object.room_availability.search_by_year_range.present? ? f.object.room_availability.search_by_year_range : @current_year) %>
+            <% sort_year = f.object.room_availability.present? && f.object.room_availability.search_by_year_range.present? ? f.object.room_availability.search_by_year_range : @current_year %>
+            <div class="d-flex">
+              <div class="flex-fill">
+                <div class="years-filters">
+                  <% business_years(false).each do |year| %>
+                    <button type="button" class="btn years-range <%= year == sort_year ? 'btn-primary' : 'btn-secondary'%>" data-years-range="<%= year %>"><%= year %></button>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+
+        <div class="col-md-6 col-lg-4 col-xl-2 option filter-icons">
+          <div class="d-flex">
+            <div class="flex-fill">
+              <%= link_to '<i class="fas fa-print"></i>'.html_safe, '', onclick: 'window.print();return false;', class: 'btn-arsenic', title: 'Print page' %>
+            </div>
+            <div class="flex-fill">
+              <%= link_to '<i class="far fa-file-excel"></i>'.html_safe, '#', class: 'get-listings btn-arsenic', data: { format: "csv", mail: false}, title: 'Export to CSV' %>
+            </div>
+            <div class="flex-fill">
+              <%= link_to '<i class="far fa-file-pdf"></i>'.html_safe, '#', class: 'get-listings btn-arsenic', data: { format: "pdf", mail: false}, title: 'Export to PDF' %>
+            </div>
+            <div class="flex-fill">
+              <%= link_to '<i class="far fa-envelope"></i>'.html_safe, '#', class: 'get-listings btn-arsenic', data: { format: "pdf", mail: true}, title: 'Mail selected list' %>
+            </div>
+          </div>
+        </div>
+
+        <%= f.hidden_field(:with_room_ids, class: "filterrific-periodically-observed", value: (f.object.with_room_ids.present? ? f.object.with_room_ids : "")) %>
+        <div class="col text-right reset-filter">
+          <%= link_to 'Reset', reset_filterrific_url, class: 'btn', id: 'reset-filter' %>
+        </div>
+      </div>
+    </div>
+  </nav>
+<% end %>
+
+<%= render(
+      partial: 'list',
+      locals: { rooms: @rooms }
+    ) %>
+<script type="text/javascript">
+  $(document).ready(function(){
+    $("#filterrific_room_availability_room_available").click(function(){
+      $('#filterrific_room_availability_room_booked').prop("checked", false);
+      $('#filterrific_room_availability_room_complete').prop("checked", false);
+      $('#filterrific_room_availability_room_expired').prop("checked", false);
+    });
+    $("#filterrific_room_availability_room_booked").click(function(){
+      $('#filterrific_room_availability_room_available').prop("checked", false);
+      $('#filterrific_room_availability_room_complete').prop("checked", false);
+      $('#filterrific_room_availability_room_expired').prop("checked", false);
+    });
+    $("#filterrific_room_availability_room_complete").click(function(){
+      $('#filterrific_room_availability_room_available').prop("checked", false);
+      $('#filterrific_room_availability_room_booked').prop("checked", false);
+      $('#filterrific_room_availability_room_expired').prop("checked", false);
+    });
+    $("#filterrific_room_availability_room_expired").click(function(){
+      $('#filterrific_room_availability_room_available').prop("checked", false);
+      $('#filterrific_room_availability_room_booked').prop("checked", false);
+      $('#filterrific_room_availability_room_complete').prop("checked", false);
+    });
+  });
+
+  $('.years-range').on('click', function(){
+    $(".years-range").removeClass("btn-primary");
+    $(".years-range").addClass("btn-secondary");
+    var years_range = $(this).data("years-range");
+    if ($("#short-by-years").val()  !=  years_range){
+      $(this).removeClass("btn-secondary");
+      $(this).addClass("btn-primary");
+      $("#short-by-years").val(years_range);
+      $("#short-by-years").click();
+    }else{
+      $(this).removeClass("btn-primary");
+      $(this).addClass("btn-secondary");
+      $("#short-by-years").val("");
+      $("#short-by-years").click();
+    }
+  });
+  $(".years-range").removeClass("btn-primary");
+  $(document).ready(function() {
+    if ($("#short-by-years").val()  !=  ""){
+      var year = $("#short-by-years").val();
+      $(".years-filters").find("[data-years-range='" + year + "']").addClass("btn btn-primary");
+      $("#short-by-years").trigger('click');
+    }
+    $("#selectAll").select_all();
+    var format = "";
+    var mail = false;
+    $('.get-listings').on('click', function(){
+      format = $(this).data("format");
+      mail = $(this).data("mail");
+      select_all_rooms(format, mail);
+      $('#filterrific_filter').submit();
+    });
+
+    function select_all_rooms(format, mail){
+      var room_ids = [];
+      <!--      var all_ids = <%#= @all_rooms %>;-->
+      $('.selectable:checkbox:checked').each(function(){
+        room_ids.push($(this).val());
+      });
+      // if (room_ids.length === 0 ) {
+      //   console.log('Twas empty');
+      //   room_ids = all_ids;
+      //   console.log(room_ids);
+      // } else {
+      //   console.log(room_ids);
+      // }
+
+      $('#filterrific_with_room_ids').val([room_ids]);
+      $('#filterrific_filter').append("<input type='hidden' name='format' value='"+format+"' />");
+      $('#filterrific_filter').append("<input type='hidden' name='mail' value='"+mail+"' />");
+    }
+  });
+</script>

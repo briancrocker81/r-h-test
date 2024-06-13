@@ -1,0 +1,57 @@
+<%= render 'dashboard_header' %>
+<%= render "guarantor_error" %>
+<%= simple_form_for @guarantor,  url: confirm_signed_tenancy_path(@guarantor.uri_string), method: :post, local: true, html: {multipart: true, id: 'editTenancy'} do |f| %>
+  <div id="title-bar" class="sticky-top">
+    <div class="actions btn-group d-flex justify-content-end push">
+      <%= f.button :submit, "Confirm agreement", class: 'cmn-submit-btn agreement-submit tenancy-dashboard-btn signature_pad_save' %>
+      <%= link_to '<i class="fas fa-print"></i>'.html_safe, '', onclick: 'window.print();return false;', class: 'btn btn-info del'%>
+      <%= link_to 'Back', :back, class: 'btn btn-secondary' %>
+    </div>
+  </div>
+  <%= f.error_notification %>
+
+  <article id="tenancy-agreement">
+    <h2 class="article-title">Agreement Details</h2>
+
+    <section>
+      <h3 class="article-title">Signed Tenancy Agreement</h3>
+      <p>Please review the signed tenancy document below.  If you have any questions or concerns please email <%= mail_to "info@cityletsplymouth.co.uk", "info@cityletsplymouth.co.uk" %> </p>
+      <div class="row text-center">
+        <% @tenancy.tenancy_documents.each do |doc| %>
+          <% if doc.document_name.present? && doc.document_file.present? && doc.document_name == 'signed_tenancy_agreement' %>
+            <div class="col-sm-4 docs doc-prv" data="<%=doc.document_file%>" data-doc-name="<%=doc.document_name.split('_').map(&:capitalize).join(' ')%>">
+              <%= document_badge((doc.document_file != '' && !doc.document_file.nil?) ? true : false, 'fas fa-file-pdf', doc.document_name.split('_').map(&:capitalize).join(' ')) %>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+<!--    </section>-->
+
+<!--    <section>-->
+<!--      <div class="col-md-12">-->
+<!--        <div class="form-group confirm_signed_tenancy">-->
+<!--          <div class="form-inline inline-me">-->
+            <%= f.input :confirm_signed_tenancy, input_html: { class: 'confirm-checkbox' }, :label_html => { class: 'confirm-label' }, label: "I accept the terms of this document and agree to be the guarantor", required: true %>
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+    </section>
+
+  </article>
+  <div class="form-actions d-flex justify-content-end">
+    <%= f.button :submit, "Confirm agreement", class: 'cmn-submit-btn agreement-submit tenancy-dashboard-btn signature_pad_save' %>
+  </div>
+<% end %>
+<div class="modal fade" id="doc-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Document: <span class="doc-name"></span></h3>
+        <button type="button" class="close" data-dismiss="modal" style="font-size: 3.5rem !important;"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+      </div>
+      <div class="modal-body">
+        <object data="" type="application/pdf" width="100%" height="520px" class="doc-preview"></object>
+      </div>
+    </div>
+  </div>
+</div>

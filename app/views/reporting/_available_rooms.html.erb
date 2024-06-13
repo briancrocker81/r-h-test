@@ -1,0 +1,26 @@
+<section>
+  <h3 class="article-title">Available Rooms</h3>
+
+  <div class="col-md-12 mt-2">
+    <div class="row">
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <th>Address</th>
+            <th>Room</th>
+            <th>Rate</th>
+          </thead>
+          <tbody>
+            <% @available_rooms.each do |room| %>
+              <tr>
+                <td><%= link_to room&.property&.property_name, property_path(room.property) %></td>
+                <td><%= room.number %></td>
+                <td>£<%= number_with_delimiter(sprintf("%.2f",room.list_price.to_f), delimiter: ',') %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>

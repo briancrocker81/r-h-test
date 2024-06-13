@@ -1,0 +1,19 @@
+  <div class="form-group">
+    <%= f.input :signature, as: :hidden, input_html: { class: 'signature_pad_two_input' } %>
+    <div class="signature_pad">
+      <div class="signature_pad_body">
+        <canvas id="two"></canvas>
+      </div>
+      <div id="signature-two"  class="signature_pad_footer">
+        <button type="button" class="btn btn-danger signature_pad_clear">Clear signature</button>
+      </div>
+    </div>
+  </div>
+<span id="signature_error" style="color: red; font-size: 12px;"></span>
+<div class="form-group">
+  <div class="form-inline inline-me">
+    <%= f.input :accept_agreement, input_html: { class: 'confirm-checkbox' }, :label_html => { class: 'confirm-label' }, required: true, label: 'I confirm that I accept this agreement' %>
+  </div>
+</div>
+
+<%= f.hidden_field :signed_date, value: Date.today %>

@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<h1>System Content Data Categories</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Category</th>
+      <th>Title</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @system_content_data_categories.each do |system_content_data_category| %>
+      <tr>
+        <td><%= system_content_data_category.category %></td>
+        <td><%= system_content_data_category.title %></td>
+        <td><%= link_to 'Show', system_content_data_category %></td>
+        <td><%= link_to 'Edit', edit_system_content_data_category_path(system_content_data_category) %></td>
+        <td><%= link_to 'Destroy', system_content_data_category, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New System Content Data Category', new_system_content_data_category_path %>

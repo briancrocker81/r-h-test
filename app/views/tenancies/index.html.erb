@@ -1,0 +1,110 @@
+<% content_for :title, 'Tenant Listings' %>
+<p id="notice"><%= notice %></p>
+
+<div id="title-bar" class="sticky-top">
+  <h1><%= t('.title') %></h1>
+  <div class="actions d-flex btn-group justify-content-end push">
+    <%#= link_to t('.new'), new_tenancy_path, class: 'btn btn-primary', :data => {:turbolinks => false} %>
+    <%= link_to 'Active Tenants', listings_path, class: 'btn btn-info', :data => {:turbolinks => false} %>
+    <%#= link_to 'Archived', tenancies_path(archived: true), class: 'btn btn-warning', :data => {:turbolinks => false} %>
+  </div>
+</div>
+
+<%= form_for_filterrific @filterrific, html: {class: 'filterrific-form'} do |f| %>
+  <nav class="navbar navbar-expand-lg navbar-light">
+    <h3 class="d-block d-lg-none">Filters</h3>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fa fa-bars"></i>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <div class="row w-100 m-0">
+        <div class="col-md-6 col-lg-3 option">
+          <%= f.text_field(
+                  :search_query,
+                  class: 'filterrific-periodically-observed form-control',
+                  placeholder: 'Search...'
+              ) %>
+        </div>
+
+<!--        <div class="col-md-6 col-lg-2 option sort-by">-->
+          <%#= f.select(:sorted_by, @filterrific.select_options[:sorted_by], {}, {class: 'form-control'}) %>
+<!--        </div>-->
+
+<!--        <div class="col-md-6 col-lg-2 option">-->
+          <%#= f.hidden_field(:search_by_year_range, class: "filterrific-periodically-observed", id: "short-by-years", value: f.object.room_availability.present? && f.object.room_availability.search_by_year_range.present? ? f.object.room_availability.search_by_year_range : @current_year) %>
+          <%# sort_year = f.object.room_availability.present? && f.object.room_availability.search_by_year_range.present? ? f.object.room_availability.search_by_year_range : @current_year %>
+<!--          <div class="d-flex">-->
+<!--            <div class="flex-fill">-->
+<!--              <div class="years-filters">-->
+                <%# business_years(false).each do |year| %>
+<!--                  <button type="button" class="btn years-range <%#= year == sort_year ? 'btn-primary' : 'btn-secondary'%>" data-years-range="<%#= year %>"><%#= year %></button>-->
+                <%# end %>
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+
+    <!--    <div class="option filter-icons">-->
+    <!--      <div class="d-flex">-->
+    <!--        <div class="flex-fill">-->
+              <%#= link_to '<i class="fas fa-print"></i>'.html_safe, '', onclick: 'window.print();return false;', class: 'btn-arsenic', title: 'Print page'%>
+    <!--        </div>-->
+    <!--        <div class="flex-fill">-->
+              <%#= link_to '<i class="far fa-file-excel"></i>'.html_safe, '#', class: 'get-listings btn-arsenic', data: { format: "csv"}, title: 'Export to CSV' %>
+    <!--        </div>-->
+    <!--        <div class="flex-fill">-->
+              <%# link_to '<i class="far fa-file-pdf"></i>'.html_safe, '' %>
+    <!--        </div>-->
+    <!--      </div>-->
+    <!--    </div>-->
+
+        <div class="col text-right reset-filter">
+          <%= link_to 'Reset', reset_filterrific_url, class: 'btn', id: 'reset-filter' %>
+        </div>
+      </div>
+    </div>
+  </nav>
+<% end %>
+
+<%= render(
+        partial: 'list',
+        locals: { tenancies: @tenancies }
+    ) %>
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('.years-range').on('click', function(){
+      $(".years-range").removeClass("btn-primary");
+      $(".years-range").addClass("btn-secondary");
+      var years_range = $(this).data("years-range");
+      if ($("#tenant-short-by-years").val()  !=  years_range){
+        $(this).removeClass("btn-secondary");
+        $(this).addClass("btn-primary");
+        $("#tenant-short-by-years").val(years_range);
+        $("#tenant-short-by-years").click();
+      }else{
+        $(this).removeClass("btn-primary");
+        $(this).addClass("btn-secondary");
+        $("#tenant-short-by-years").val("");
+        $("#tenant-short-by-years").click();
+      }
+    });
+    $(".years-range").removeClass("btn-primary");
+    if ($("#tenant-short-by-years").val()  !=  ""){
+      var year = $("#tenant-short-by-years").val();
+      $(".years-filters").find("[data-years-range='" + year + "']").addClass("btn btn-primary");
+      $("#tenat-short-by-years").trigger('click');
+    }
+  });
+  $(document).ready(function() {
+    var format = "";
+    $('.get-listings').on('click', function(){
+      format = $(this).data("format");
+      select_all_rooms(format);
+      $('#filterrific_filter').submit();
+    });
+    function select_all_rooms(format){
+      $('#filterrific_filter').append("<input type='hidden' name='format' value='"+format+"' />");
+    }
+  });
+</script>

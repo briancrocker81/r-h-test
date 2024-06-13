@@ -1,0 +1,97 @@
+<div id="payment-type" class="student-only-fields" style="display:none;">
+
+  <label>Payment Listing Type:</label>
+  <div class="form-group">
+    <div class="btn-group row" role="group" aria-label="payment-type">
+      <div class="col-6 col-lg-3">
+        <button id="weekly-btn" type="button" class="btn btn-secondary payment-btn w-100" data-payment-type="weekly">Weekly</button><!-- Student & Professional default -->
+      </div>
+      <div class="col-6 col-lg-3">
+        <button id="monthly-btn" type="button" class="btn btn-secondary payment-btn w-100" data-payment-type="monthly">Monthly</button> <!-- Default Co Living / Home else -->
+      </div>
+      <span id="price-error" style="color: red; font-size: 12px;"></span>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="row">
+      <div id="student-fields" class="student-only-fields col-lg-3">
+        <%= f.input :advanced_rent_payment_amount, label: "Advanced Rent Amount" %>
+      </div>
+      <div class="col-lg-3 weekly-fields">
+        <%= f.input :weekly_price, label: "Weekly price" %>
+      </div>
+      <div class="col-lg-3 weekly-fields">
+        <%= f.input :number_of_weeks %>
+      </div>
+      <div class="col-lg-3 monthly-fields">
+        <%= f.input :monthly_price, label: "Monthly price" %>
+      </div>
+      <div class="col-lg-3 monthly-fields">
+        <%= f.input :number_of_months, label: 'Duration of tenancy (in Months)' %>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
+<div class="row">
+  <!--            <div class="col-lg-12 other-deposit-terms" style="display: none;">-->
+  <!--              <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">-->
+  <!--                <label>Payment term (if tenancy is professional)</label>-->
+  <!--                <div class="btn-group mr-2" role="group" aria-label="First group">-->
+  <!--                  <button type="button" class="btn btn-secondary deposit-term btn-wrap-text" data-deposit-term="one_month_no_guarantor" data-toggle="tooltip" title="1 Month Deposit - No Guarantor">1 Month Deposit - No Guarantor</button>-->
+  <!--                  <button type="button" class="btn btn-secondary deposit-term btn-wrap-text" data-deposit-term="half_month_guarantor" data-toggle="tooltip" title="1/2 Month Deposit - Guarantor">1/2 Month Deposit - Guarantor</button>-->
+  <!--                  <button type="button" class="btn btn-secondary deposit-term btn-wrap-text" data-deposit-term="no_deposit_no_guarantor" data-toggle="tooltip" title="No Deposit - No Guarantor">NO Deposit - No Guarantor</button>-->
+  <!--                </div>-->
+  <!--                <span class="deposit-term-error" style="color: red; font-size: 12px;"></span>-->
+  <!--              </div>-->
+  <!--            </div>-->
+  <div class="col-lg-12 student-deposit-terms" style="display: none;">
+    <!-- IF NO GUARANTOR STUDENT-->
+    <div class="btn-toolbar mb-4" role="toolbar" aria-label="Toolbar with button groups">
+      <label>Payment term</label>
+      <div class="btn-group mr-2" role="group" aria-label="First group">
+        <button type="button" class="btn btn-secondary deposit-term due-date-term professional-term" data-deposit-term="termly">Termly</button>
+        <button type="button" class="btn btn-secondary deposit-term due-date-term" data-deposit-term="monthly">Monthly</button>
+        <button type="button" class="btn btn-secondary deposit-term due-date-term" data-deposit-term="full">Full</button>
+      </div>
+
+      <span class="deposit-term-error" style="color: red; font-size: 12px;"></span>
+    </div>
+  </div>
+
+  <div id="student-payment-details" class="col-12">
+    <div class="termly row">
+      <div class="col-lg-12 student-term-date">
+        <div class="row">
+          <%= f.simple_fields_for :term_due_dates do |t| %>
+            <div class="col-lg-4 rent-installment">
+              <%= t.input :due_date_1, as: :date, order: [:day, :month, :year], start_year: (Time.now.year - 1), end_year: Time.now.year + 15, required: false, input_html: {value: "30-09-#{Date.today.year}"}  %>
+            </div>
+            <div class="col-lg-4 rent-installment">
+              <%= t.input :due_date_2,  as: :date, order: [:day, :month, :year], start_year: (Time.now.year - 1), end_year: Time.now.year + 15,  required: false, input_html: {value: "31-01-#{Date.today.year}"}   %>
+            </div>
+            <div class="col-lg-4 rent-installment">
+              <%= t.input :due_date_3, as: :date, order: [:day, :month, :year], start_year: (Time.now.year - 1), end_year: Time.now.year + 15,  required: false, input_html: {value: "30-04-#{Date.today.year}"}   %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-6 student-tenancy-values">
+    <div class="row">
+      <div class="col-6 student-tenancy-values" style="display: none">
+        <%= f.input :total_tenancy_value, disable: true %>
+      </div>
+      <div class="col-6 student-tenancy-values" style="display: none">
+        <label>Total Tenancy Value minus AvR</label>
+        <p id="tenancy-adv"></p>
+      </div>
+    </div>
+  </div>
+
+</div>

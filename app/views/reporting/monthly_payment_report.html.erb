@@ -1,0 +1,92 @@
+<% content_for :title, 'Monthly Report' %>
+<p id="notice"><%= notice %></p>
+<div id="title-bar">
+  <h1>Monthly Payment Report</h1>
+  <div class="actions push">
+    <div class="badges btn-group d-flex w-100 mb-3">
+      <% business_years.each do |year| %>
+        <%= link_to year, monthly_payment_report_path(year: year), class: "badge badge-#{year == @year ? 'primary' : 'secondary'} btn-filter-expense" %>
+      <% end %>
+    </div>
+    <div>
+      <%= link_to 'Back', reporting_index_path, class: 'ml-2 btn btn-secondary' %>
+      <%= link_to print_monthly_payment_report_path(year: @year), class: "btn btn-primary", target: '_blank' do %>
+        <i class="fas fa-print"></i>
+      <% end %>
+    </div>
+  </div>
+</div>
+<article>
+  <section>
+    <h3 class="article-title">Monthly Payment</h3>
+    <div class="row">
+      <div class="col">
+      </div>
+      <div class="col">
+
+      </div>
+      <div class="col">
+        <span>Date Range</span>
+        <%= text_field_tag :start_date,"#{@start_date.strftime('%d/%m/%Y')} - #{@end_date.strftime('%d/%m/%Y')}" , class: 'form-control daterange monthly_payment_report', 'data-report': 'monthly_property', 'data-url': generate_monthly_payment_report_path %>
+      </div>
+    </div>
+    <div class="col-md-12 mt-2">
+      <div class="row">
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Landlord</th>
+                <th>Income Total</th>
+                <th>Total Payment Due</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @landlords.each do |landlord| %>
+                <tr>
+                  <% rent_price = @rooms[landlord.id] ? @rooms[landlord.id] : 0.0 %>
+                  <% property_expense = @property_expenses[landlord.id] ? @property_expenses[landlord.id] : 0.0 %>
+                  <% total_income =  rent_price - property_expense %>
+                  <% if landlord.partnership_format == 'Listing Partner' || landlord.partnership_format == 'Tenancy Partner' %>
+                    <% commission = total_income - landlord.fee.to_f %>
+                  <% elsif landlord.partnership_format == 'Booking Partner'%>
+                    <% total_income = (@completed_rooms[landlord.id] ? @completed_rooms[landlord.id] : 0.0) - property_expense %>
+                    <% commission = total_income - landlord.fee.to_f %>
+                  <% else %>
+                    <% commission = total_income - ((rent_price * landlord.rate.to_f )/100) %>
+                  <% end %>
+                  <td><%= link_to landlord.landlord_name, landlord_path(landlord)%></td>
+                  <td>£<%= number_with_delimiter(sprintf("%.2f",total_income), delimiter: ',') %></td>
+                  <td>£<%= number_with_delimiter(sprintf("%.2f",commission), delimiter: ',')%></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+</article>
+<div class="modal fade" id="doc-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Document: <span class="doc-name"></span></h3> <span class="doc-verified"></span> <span class="doc-verified-by"></span>
+        <button type="button" class="close" data-dismiss="modal" style="font-size: 3.5rem !important;"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+      </div>
+      <div class="modal-body">
+        <object data="" type="application/pdf" width="100%" height="520px" class="doc-preview"></object>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  $(document).on('ready turbolinks:load', function() {
+    Datepicker();
+    // $('.monthly-report-datepicker').on('change', function(){
+    //   window.location.href = "/monthly-reports?year=<%= @year %>&date=" + $(this).val()
+    // })
+  });
+</script>

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <p>Hi <%= @guarantor.guarantor_name %></p>
+
+  <p>This email is to give you a access your guarantor dashboard to complete your information.</p>
+  <p>Click on the link to complete your documentation, <%= link_to "Guarantor Dashboard", guarantor_dashboard_url(u_id: @guarantor.uri_string), target: '_blank' %></p>
+
+  <p>Let us know if you have any questions or if you were planning on re-booking.</p>
+  <p>
+    <b> Thanks </b><br>
+    Team <br>
+    CityLets
+  </p>
+</body>
+</html>

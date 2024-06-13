@@ -1,0 +1,97 @@
+<section id="deposits">
+  <h3 class="article-title">Deposit & Initial Payments</h3>
+  <div class="row">
+    <div class="col-lg-3">
+      <div class="row">
+        <div class="col-6 col-lg-12">
+          <strong>Deposit Date</strong>
+        </div>
+        <div class="col-6 col-lg-12">
+          <p><%= @tenancy&.deposit_date&.strftime("%d/%m/%Y") %></p>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-3">
+      <div class="row">
+        <div class="col-6 col-lg-12">
+          <strong>Deposit Amount</strong>
+        </div>
+        <div class="col-6 col-lg-12">
+          <p><%= uk_price(@tenancy.deposit_guarantor_amount) %></p>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-2">
+      <div class="row">
+        <div class="col-6 col-lg-12">
+          <strong>Deposit Paid</strong>
+        </div>
+        <div class="col-6 col-lg-12">
+          <p><%= yes_no(@tenancy.deposit_paid) %></p>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-2">
+      <div class="row">
+        <div class="col-6 col-lg-12">
+          <strong>Deposit Protected</strong>
+        </div>
+        <div class="col-6 col-lg-12">
+          <p><%= yes_no(@tenancy.deposit_protected) %></p>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-2">
+      <div class="row">
+        <div class="col-6 col-lg-12">
+          <strong>Prescribed Info Sent</strong>
+        </div>
+        <div class="col-6 col-lg-12">
+          <p><%= yes_no(@tenancy.prescribed_info_sent) %></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+
+  <% if @tenancy.initial_payment %>
+    <br>
+    <div class="row">
+      <div class="col-lg-3">
+        <div class="row">
+          <div class="col-6 col-lg-12">
+            <strong>Initial Payment Date</strong>
+          </div>
+          <div class="col-6 col-lg-12">
+            <p><%= @tenancy&.initial_payment_date&.strftime("%d/%m/%Y") %></p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3">
+        <div class="row">
+          <div class="col-6 col-lg-12">
+            <strong>Initial Payment</strong>
+          </div>
+          <div class="col-6 col-lg-12">
+            <p><%= uk_price(@tenancy.initial_payment) %></p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3">
+        <div class="row">
+          <div class="col-6 col-lg-12">
+            <strong>Initial Payment Paid</strong>
+          </div>
+          <div class="col-6 col-lg-12">
+            <p><%= yes_no(@tenancy.initial_payment_paid) %></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br>
+  <% else %>
+    <p>This tenancy did not require an initial payment</p>
+  <% end %>
+</section>

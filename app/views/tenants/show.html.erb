@@ -1,0 +1,124 @@
+<h1>Tenant Details</h1>
+<p id="notice"><%= notice %></p>
+
+<section id="tenancy-details">
+  <h2>Tenancy Details</h2>
+  <div class="row">
+    <div class="col">
+      <p>
+        <strong>Property Name</strong>
+        <%= @tenant.property.property_name %>
+      </p>
+      <p>
+        <strong>Room Name / No</strong>
+        <%#= @tenant.room.room_details %>
+      </p>
+    </div>
+    <div class="col">
+      <p>
+        <strong>Tenancy start</strong>
+      </p>
+      <p>
+        <strong>Tenancy end</strong>
+      </p>
+    </div>
+  </div>
+</section>
+
+<section id="tenant-details">
+  <div class="row">
+    <div class="col">
+      <h2>Personal Details</h2>
+      <p>
+        <strong>First name:</strong>
+        <%= @tenant.first_name %>
+      </p>
+
+      <p>
+        <strong>Surname:</strong>
+        <%= @tenant.surname %>
+      </p>
+
+      <p>
+        <strong>Dob:</strong>
+        <%= @tenant.dob %>
+      </p>
+
+      <p>
+        <strong>Mobile number:</strong>
+        <%= @tenant.mobile_number %>
+      </p>
+
+      <p>
+        <strong>Email:</strong>
+        <%= @tenant.email %>
+      </p>
+
+      <p>
+        <strong>Nationality:</strong>
+        <%= @tenant.nationality %>
+      </p>
+    </div>
+    <div class="col">
+      <h2>Course Details</h2>
+      <p>
+<!--        <strong>Studying at:</strong>-->
+        <%#= @tenant.studying_at %>
+<!--      </p>-->
+
+<!--      <p>-->
+<!--        <strong>Student id number:</strong>-->
+        <%#= @tenant.student_id_number %>
+<!--      </p>-->
+
+<!--      <p>-->
+<!--        <strong>Course:</strong>-->
+        <%#= @tenant.course %>
+<!--      </p>-->
+    </div>
+  </div>
+</section>
+
+<section id="guarantor-details">
+  <div class="row">
+    <div class="col">
+      <h2>Guarantor Details</h2>
+<!--      <p>-->
+<!--        <strong>Guarantor name:</strong>-->
+        <%#= @tenant.guarantor_name %>
+<!--      </p>-->
+
+<!--      <p>-->
+<!--        <strong>Guarantor address:</strong>-->
+        <%#= @tenant.guarantor_address %>
+<!--      </p>-->
+
+<!--      <p>-->
+<!--        <strong>Guarantor post code:</strong>-->
+        <%#= @tenant.guarantor_post_code %>
+<!--      </p>-->
+
+<!--      <p>-->
+<!--        <strong>Guarantor email:</strong>-->
+        <%#= @tenant.guarantor_email %>
+<!--      </p>-->
+
+<!--      <p>-->
+<!--        <strong>Guarantor mobile:</strong>-->
+        <%#= @tenant.guarantor_mobile %>
+<!--      </p>-->
+
+<!--      <p>-->
+<!--        <strong>Guarantor relationship:</strong>-->
+        <%#= @tenant.guarantor_relationship %>
+<!--      </p>-->
+    </div>
+  </div>
+</section>
+
+
+
+
+
+<%= link_to 'Edit', edit_tenant_path(@tenant), class: 'btn btn-primary' %> |
+<%= link_to 'Back', tenants_path, class: 'btn btn-secondary' %>

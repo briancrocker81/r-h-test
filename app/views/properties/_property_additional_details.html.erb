@@ -1,0 +1,50 @@
+<div class="row">
+  <div class="col-sm-6">
+    <table class="table table-striped">
+      <tbody>
+      <tr>
+        <td>Property type</td>
+        <td><%= @property.property_type.reject(&:blank?).join(", ") %></td>
+      </tr>
+      <tr>
+        <td>Outside space</td>
+        <td><%= outside_options @property.outside_space %></td>
+      </tr>
+      <tr>
+        <td>Parking</td>
+        <td><%= parking_options @property.parking %></td>
+      </tr>
+      <tr>
+        <td>EPC Rating</td>
+        <td><%= @property.epc_rating %></td>
+      </tr>
+      <tr>
+        <td>Furnished</td>
+        <td><%= furnished(@property.furnished) rescue "" %></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="col-sm-6">
+    <table class="table table-striped">
+      <tbody>
+      <tr>
+        <td>Property style</td>
+        <td><%= @property.style %></td>
+      </tr>
+      <tr>
+        <td>Pets allowed?</td>
+        <td><%= yes_no @property.pets %></td>
+      </tr>
+      <tr>
+        <td>Ensuite</td>
+        <td><%= ensuite_options @property.ensuite %></td>
+      </tr>
+      <tr>
+        <td>Council tax band</td>
+        <td><%= @property.council_tax_band %></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,303 @@
+// Place all the styles related to the properties controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+.img-fit {
+  object-fit: contain;
+  width: 100%;
+  height: 150px;
+  &:hover {
+    cursor: pointer;
+  }
+}
+.trash-btn{
+  margin-left: -30px;
+  position: relative;
+  z-index: 444;
+  i {
+    background: $white;
+    padding: 5px;
+    color: #ff0202;
+    border-radius: 10px;
+    -webkit-box-shadow: 2px 2px 2px 0px rgba(0,0,0,0.25);
+    -moz-box-shadow: 2px 2px 2px 0px rgba(0,0,0,0.25);
+    box-shadow: 2px 2px 2px 0px rgba(0,0,0,0.25);
+    box-shadow: 2px 2px 2px 0px rgba(0,0,0,0.25);
+  }
+}
+.img-prv {
+  .image-actions {
+    background: $white;
+    margin-left: -30px;
+    position: absolute;
+    display: block;
+    top: 5px;
+    right: 5px;
+    z-index: 444;
+    padding: 5px;
+    border-radius: 10px;
+    -webkit-box-shadow: 2px 2px 2px 1px rgba(0,0,0,0.4);
+    box-shadow: 2px 2px 2px 1px rgba(0,0,0,0.4);
+    a {
+      display: inline-block;
+    }
+    .trash-btn-properties{
+      i {
+        padding: 0px;
+        color: #ff0202;
+        border-radius: 0px;
+      }
+    }
+    .edit-btn-properties {
+      margin-right: 5px;
+      border-right: 1px solid #dee2e6;
+      padding-right: 5px;
+    }
+  }
+}
+
+
+.img-title {
+  color: #50a846;
+  font-weight: 600;
+  cursor: pointer;
+}
+.property_landlord {
+  label {
+    width: 100%;
+  }
+  .select2-container {
+    width: 100% !important;
+    height: 40px;
+    .select2-selection--single {
+      height: 40px;
+      .select2-selection__rendered {
+        line-height: 40px;
+      }
+      .select2-selection__arrow {
+        height: 40px;
+      }
+    }
+  }
+}
+
+.property-angle {
+  position: relative;
+}
+.property-angle[data-toggle="collapse"]:after {
+  font-family: 'Font Awesome 5 Free';
+  content: "\f0d7";
+  float: right;
+  transition: all 0.5s;
+  font-weight: 900;
+  font-size: 22px;
+  line-height: 1;
+}
+.property-angle[data-toggle="collapse"] {
+  &.collapsed:after {
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    transform: rotate(90deg);
+  }
+}
+
+.properties {
+  .list-type {
+    fieldset {
+      margin-bottom: 0;
+      &:first-of-type {
+        margin-top: 10px;
+      }
+    }
+  }
+  #listed-block {
+    #listed-on {
+      .form-check-label {
+        text-transform: capitalize;
+      }
+    }
+  }
+  &.show {
+    #main {
+      article {
+        .badge {
+          &.listed-on {
+            padding: 8px 16px;
+            margin-right: 10px;
+            &:last-of-type {
+              margin-right: 0;
+            }
+          }
+        }
+        section {
+          &#property-listing-details {
+            padding: 0 15px;
+            article {
+              padding: 20px 0;
+              margin-bottom: 0;
+              &.odd {
+                background: $grey;
+                margin: 0 -15px;
+                padding: 20px 15px;
+              }
+              h2 {
+                i {
+                  font-size: 25px;
+                  margin-right: 10px;
+                }
+              }
+              table {
+                tbody {
+                  tr {
+                    &:first-of-type {
+                      td {
+                        border-top: 0;
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+          &#property_rooms, &#property_expenses {
+            .table-responsive {
+              margin-bottom: 10px;
+            }
+          }
+        }
+      }
+      #tenancy-documents, #property-documents {
+        .docs {
+          .badge {
+            width: 100%;
+            padding: 15px;
+            border-radius: 0 9px 0 9px;
+            position: relative;
+            min-height: 109px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            i {
+              font-size: 30px;
+              margin-bottom: 10px;
+            }
+            h5 {
+              margin-bottom: 0;
+              margin-bottom: 10px;
+            }
+            p {
+              color: $white;
+              margin-bottom: 0;
+            }
+            .doc-expired {
+              position: absolute;
+              top: 8px;
+              right: 8px;
+              border-radius: 45px;
+              background: $white;
+              min-height: 30px;
+              min-width: 30px;
+              i {
+                margin: 0;
+                color: $red;
+                font-size: 20px;
+                margin-top: 3px;
+              }
+            }
+          }
+        }
+      }
+      .doc-prv {
+        &.inline {
+          max-width: 125px;
+          .badge {
+            display: flex;
+            padding: 5px;
+            justify-content: center;
+            align-items: center;
+            i {
+              margin-right: 10px;
+            }
+            h5 {
+              margin: 0;
+            }
+          }
+        }
+        &:hover {
+          cursor: pointer;
+          opacity: 0.8;
+        }
+      }
+    }
+  }
+}
+
+
+// Set tenancy form
+#set-tenancy-modal {
+  .modal-section-title {
+    background: $arsenic;
+    color: $white;
+    padding: 5px 15px;
+    margin-bottom: 10px;
+    width: 100%;
+  }
+  #email-form {
+    margin-right: 10px;
+  }
+}
+
+// Properties show
+.properties {
+  &.show {
+    #property_overview {
+      #images-container {
+        margin-bottom: 20px;
+      }
+    }
+  }
+}
+
+// Property Rooms
+#property-rooms {
+  tr {
+    th {
+      &.tenancy {
+        background: $light-grey;
+      }
+    }
+    td {
+      vertical-align: middle;
+      &.tenancy-list {
+        padding: 0;
+          table {
+            margin: 0;
+            tbody {
+              tr {
+                &.bg-warning {
+                  height: 49px;
+                }
+                td {
+                  border: none;
+               }
+             }
+           }
+         }
+       }
+      &:last-of-type {
+        text-align: center;
+      }
+    }
+  }
+}
+
+
+// Booking Form
+#set-tenancy-form {
+  #second-tenant-fields {
+    display: none;
+    #third-tenant-fields {
+      display: none;
+    }
+  }
+}
+

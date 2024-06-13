@@ -1,0 +1,25 @@
+.home-link {
+  font-weight: bold;
+}
+
+#main {
+  width: 100%!important;
+}
+
+.filterrific-form, .pagy-container, #title-bar .btn, .user-profile.push, #sidebar, .actions, a.btn {
+  display: none;
+}
+
+
+
+#filterrific_results {
+  #selectAll, .selectable, .btn-primary {
+    display: none;
+  }
+  .table-responsive {
+    padding: 10px 0!important;
+    .table th, .table td {
+      padding: 4px;
+    }
+  }
+}

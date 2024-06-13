@@ -1,0 +1,46 @@
+<div class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 class="modal-title" id="exampleModalLabel">Tenancy Payment Items</h3>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <% item_id = @tenancy_payment_item.id.present? ? @tenancy_payment_item.id : '' %>
+    <%= simple_form_for [@tenancy, @tenancy_payment_item], :url => tenancy_payment_item_path(item_id: item_id), :remote => true, :method => :post, html: {multipart: true, id: ''} do |f| %>
+    <div class="modal-body" style="min-height: 55vh !important;">
+      <div class="form-group">
+        <div class="row">
+          <div class="col-md-6">
+            <%= f.input :item, class: "form-control" %>
+          </div>
+          <div class="col-md-6">
+            <%= f.input :due_date, order: %i(day month year), class: "form-control", start_year: Time.now.year - 1, end_year: Time.now.year + 3 %>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <%= f.input :amount_due, class: "form-control" %>
+          </div>
+          <div class="col-md-6">
+            <%= f.input :amount_paid, class: "form-control" %>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <%= f.input :date_paid, order: %i(day month year), class: "form-control", include_blank: true, start_year: Time.now.year - 2, end_year: Time.now.year + 3 %>
+          </div>
+          <div class="col-md-6">
+            <%= f.input :payment_method, label: 'Payment Method', collection: [ ["Card", 'card'], ["Cash", 'cash'], ["Net-Banking", 'net_banking'] ], selected: @tenancy_payment_item.payment_method, class: "form-control", :include_blank => true %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <%#= f.button :submit, "Save changes", class: "btn btn-primary submits-payment-item-form" %>
+      <button type="submit" class="btn btn-primary submit-payment-item-form">Save changes</button>
+      <button type="reset" class="btn btn-danger reset-payment-item-form">Close</button>
+    </div>
+    <% end %>
+  </div>
+</div>

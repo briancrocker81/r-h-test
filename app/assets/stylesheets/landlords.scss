@@ -1,0 +1,45 @@
+// Place all the styles related to the Landlords controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+.contact-num {
+  min-width: 150px;
+}
+
+#fee, #rate {
+  display: none;
+}
+
+#properties-row {
+  margin: 0;
+}
+.doc_show {
+  display: block;
+}
+.doc_hide {
+  display: none;
+}
+
+#main {
+  #landlord_booking_report {
+    .tenancy-documents {
+      min-width: 300px;
+    }
+    #landlord-docs {
+      .docs {
+        .badge {
+          padding: 5px;
+          border-radius: 5px;
+          min-height: unset;
+          i {
+            margin: 0;
+          }
+          h5 {
+            //display: none
+            font-size: 10px;
+          }
+        }
+      }
+    }
+  }
+
+}

@@ -1,0 +1,47 @@
+<section>
+  <h3 class="article-title">Tenancy Details</h3>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-group radio">
+        <%= f.input :rental_type, as: :radio_buttons, collection: [['By Home', 'home'], ['By Room', 'room']], checked: property.rental_type %>
+        <span id="property_rental_type_error" style="color: red; font-size: 12px;"></span>
+      </div>
+      <section>
+        <% if property.tenancies.present? %>
+          <div>
+            <ul>
+              <h2>Tenants</h2>
+              <% property.tenancies.each do |tenant|%>
+                <li>
+                  <%= link_to tenant.tenant_name, tenancy_path(tenant.id)%>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+      </section>
+    </div>
+    <div id="property-rental-price" class="col-md-6">
+      <div class="form-group" id='home-rental-price'>
+        <%= f.input :home_rental_price, id: :home_rental_price, class: 'form-control' %>
+        <span id="property_home_rental_price_error" style="color: red; font-size: 12px;"></span>
+      </div>
+      <div class="form-group" id='add-room-btn'>
+        <section>
+          <% if property.rooms.present? %>
+            <div>
+              <ul>
+                <h2>Rooms</h2>
+                <% property.rooms.each do |room|%>
+                  <li>
+                    <%= link_to property.property_name+' - '+room.number, room_path(room.id)%>
+                  </li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
+        </section>
+      </div>
+    </div>
+  </div>
+</section>

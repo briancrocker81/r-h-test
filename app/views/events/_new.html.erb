@@ -1,0 +1,29 @@
+<% unless @modal %>
+  <% content_for :title, 'Create new calendar event' %>
+  <% selected_data = session[:selected_data] %>
+  <%if selected_data.present? %>
+  <input type="hidden" id="event_start_hr" value="<%= selected_data["event_start_hr"]%>">
+  <input type="hidden" id="event_start_min" value="<%= selected_data["event_start_min"]%>">
+  <input type="hidden" id="event_end_hr" value="<%= selected_data["event_end_hr"]%>">
+  <input type="hidden" id="event_end_min" value="<%= selected_data["event_end_min"]%>">
+  <input type="hidden" id="selected_agent" value="<%= selected_data["selected_agent"]%>">
+  <input type="hidden" id="event_start_date" value="<%= selected_data["event_start_date"]%>">
+  <input type="hidden" id="event_end_date" value="<%= selected_data["event_end_date"]%>">
+  <% end %>
+  <%= render 'form', event: @event %>
+<% else %>
+  <div class="modal fade" id="new_event">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title col-4">New Event</h4>
+          <h4 class="modal-title-date col-4"></h4>
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fas fa-times-circle"></i></button>
+        </div>
+        <div class="modal-body">
+          <%= render 'form', event: @event %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

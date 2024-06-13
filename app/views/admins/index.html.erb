@@ -1,0 +1,84 @@
+<% content_for :title, 'Administration' %>
+<div class="page-title">
+  <h1>Administartion</h1>
+</div>
+<article>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="row">
+        <div class="col-lg-3 reporting-block">
+          <div class="flex-center green-bg">
+            <% if Company.exists?(1) %>
+              <%= link_to company_path(1), class: 'col-12 box' do %>
+                <h2 class="flex-center text-left">
+                  <i class="fas fa-mail-bulk"></i>Company details
+                </h2>
+              <% end %>
+            <% else %>
+              <%= link_to companies_path, class: 'col-12 box' do %>
+                <h2 class="flex-center text-left">
+                  <i class="fas fa-mail-bulk"></i>Company details
+                </h2>
+              <% end %>
+            <% end %>
+
+          </div>
+        </div>
+
+        <div class="col-lg-3 reporting-block">
+          <div class="flex-center deep-grey-bg">
+            <%= link_to generic_document_admin_path, class: 'col-12 box' do %>
+              <h2 class="flex-center text-left">
+                <i class="fas fa-file"></i>Generic Tenancy Documents
+              </h2>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="col-lg-3 reporting-block">
+          <div class="flex-center flamingo-bg">
+            <%= link_to system_signature_admin_path, class: 'col-12 box' do %>
+              <h2 class="flex-center text-left">
+                <i class="fas fa-file"></i>System Signature
+              </h2>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="col-lg-3 reporting-block">
+          <div class="flex-center turquoise-bg">
+            <%= link_to manage_automation_mail_admin_path, class: 'col-12 box' do %>
+              <h2 class="flex-center text-left">
+                <i class="fas fa-mail-bulk"></i>Manage Mail Automation
+              </h2>
+            <% end %>
+          </div>
+        </div>
+
+<!--        <div class="col-lg-3 reporting-block">-->
+<!--          <div class="flex-center green-bg">-->
+            <%#= link_to sync_setting_admin_path, class: 'col-12 box' do %>
+<!--              <h2 class="flex-center text-left">-->
+<!--                <i class="fas fa-cogs"></i>Property Sync-->
+<!--              </h2>-->
+            <%# end %>
+<!--          </div>-->
+<!--        </div>-->
+
+        <% if user_signed_in? && current_user.is_admin? %>
+          <div class="col-lg-3 reporting-block">
+            <div class="flex-center manatee-bg">
+              <%= link_to users_path, class: 'col-12 box' do %>
+                <h2 class="flex-center text-left">
+                  <i class="fas fa-user-tie"></i>User Admin
+                </h2>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+
+      </div>
+    </div>
+  </div>
+
+</article>

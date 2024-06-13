@@ -1,0 +1,37 @@
+<div class="nested-fields">
+  <div class="row">
+    <div class="col-md-3">
+      <%= f.input :document_name, collection: [ ['Booking Form', 'booking_form'],
+                                                ['Tenancy Agreement', 'signed_tenancy_agreement'],
+                                                ['Guarantor Form', 'guarantor_form'], ['Deposit Certificate', 'deposit_certificate'],
+                                                ['Credit Check', 'credit_check'], ['Guarantor ID', 'guarantor_id'],
+                                                ['Guarantor Utility Bill', 'guarantor_bill'],
+                                                ['Pay slip', 'pay_slip'], ['Tenancy Compliance', 'tenancy_compliance'],
+                                                ['Bank Statement', 'bank_statement'], ['Employment Contract', 'employment_contract'] ]  %>
+    </div>
+    <div class="col-md-3">
+      <% if f.object.present? && f.object.document_name.present? && f.object.document_file.present? %>
+        <div class="docs doc-prv" data="<%=f.object.document_file%>" data-doc-name="<%=f.object.document_name.split('_').map(&:capitalize).join(' ')%>" data-verified="<%=f.object.verified?%>" data-verified-by="<%= f.object.verified? ? f.object.users.full_name : 'N/A' %>" style = "margin-top: 20px;">
+          <%= document_badge((f.object.document_file != '' && !f.object.document_file.nil?) ? true : false, 'fas fa-file-pdf', f.object.document_name.split('_').map(&:capitalize).join(' ')) %>
+        </div>
+      <% else %>
+        <%= f.input :document_file, as: :file %>
+      <% end %>
+    </div>
+    <% if @tenancy.final_submission %>
+      <% if @tenancy.is_guarantor_available %>
+        <% if @tenancy.guarantor &&  @tenancy.guarantor.complete_guarantor_agreement %>
+          <div class="booking_check"></div>
+        <% end %>
+      <% else %>
+        <div class="booking_check"></div>
+      <% end %>
+    <% end %>
+    <div class="col-md-2 offset-md-2 remove">
+      <%= link_to_remove_association "Remove", f, class: "remove btn btn-warning", style: "margin-top: 20px;" %>
+    </div>
+    <div style="display: none;">
+      <%= f.hidden_field :staff_id, value: current_user.id %>
+    </div>
+  </div>
+</div>

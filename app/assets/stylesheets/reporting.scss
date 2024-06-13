@@ -1,0 +1,69 @@
+.reporting-block {
+  margin-bottom: 15px;
+  .flex-center {
+    height: 100px;
+    border-radius: 0 9px 0 9px;
+    .box {
+      padding: 15px 30px;
+      h2 {
+        text-align: center;
+        color: $white;
+        margin: 0;
+        line-height: 30px;
+        font-size: 18px;
+        i {
+          margin-right: 20px;
+          font-size: 30px;
+        }
+      }
+    }
+    &:hover {
+      opacity: 0.9;
+      a {
+        text-decoration: none;
+      }
+    }
+  }
+}
+
+// Annual Income
+.table {
+  &.annual-income tbody {
+    tr {
+      &:nth-last-child(3) {
+        td {
+          border-top: 20px $white solid;
+        }
+      }
+      &:nth-last-child(-n+3) {
+        td {
+          padding: 12px;
+          font-weight: bolder;
+          background: $text-black;
+          color: $white;
+          font-size: 15px;
+        }
+      }
+    }
+  }
+}
+.table {
+  &.annual-rent tbody {
+    tr {
+      &:nth-last-child(1) {
+        td {
+          border-top: 20px $white solid;
+        }
+      }
+      &:nth-last-child(-n+1) {
+        td {
+          padding: 12px;
+          font-weight: bolder;
+          background: $text-black;
+          color: $white;
+          font-size: 15px;
+        }
+      }
+    }
+  }
+}

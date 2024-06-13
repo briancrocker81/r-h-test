@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <p>Hi <%= @tenancy.first_name %></p>
+
+  <p>This email is to give you a access your tenancy dashboard to complete your further information.</p>
+  <p>Click on the link to complete your documentation, <%= link_to "Tenancy Dashboard", tenancy_dashboard_url(u_id: @tenancy.uri_string), target: '_blank' %></p>
+
+  <p>Let us know if you have any questions or if you were planning on re-booking.</p>
+  <p>
+    <b> Thanks </b><br>
+    Team <br>
+    CityLets
+  </p>
+</body>
+</html>

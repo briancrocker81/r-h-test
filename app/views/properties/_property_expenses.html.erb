@@ -1,0 +1,3 @@
+<% @property_expenses.order(expense_date: :asc).each do |property_expense| %>
+  <%= render 'properties/property_expense', property_expense: property_expense %>
+<% end %>

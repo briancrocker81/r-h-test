@@ -1,0 +1,99 @@
+// Bootstrap overides
+
+
+.badge {
+  padding: 0.5rem 0.7rem;
+  border-radius: 1px 7px 1px 7px;
+  &.badge-success {
+    background-color: $green;
+  }
+  &.badge-warning {
+    //background-color: $yellow;
+    color: $white;
+  }
+  &.badge-primary {
+    background-color: $turquoise;
+  }
+  &.badge-expired {
+    background-color: $expired;
+  }
+  &.badge-info {
+    background-color: $turquoise;
+    color: $white;
+  }
+}
+
+.card {
+  border: none;
+  .card-header {
+    padding: 0.75rem 1.25rem;
+    margin-bottom: 0;
+    background-color: white;
+    border: none;
+  }
+}
+
+.accordion {
+  .card {
+    .card-header {
+      border-radius: 0;
+      h2 {
+        background: $grey;
+        padding: 5px 7px;
+        .btn {
+          display: flex;
+          align-items: center;
+          color: $primary;
+          padding: 0;
+          font-weight: bold;
+          i {
+            margin-left: auto;
+            font-size: 16px;
+            &:before {
+              content: "\f078";
+              font-family: "Font Awesome 5 Free";
+            }
+          }
+          &.collapsed {
+            i {
+              &:before {
+                content: "\f053";
+                font-family: "Font Awesome 5 Free";
+              }
+            }
+          }
+        }
+      }
+    }
+    .collapse {
+      &.show {
+        //background: $dark-grey;
+      }
+    }
+  }
+}
+
+.table {
+  tbody {
+    tr {
+      td {
+        min-width: 80px;
+        &.small {
+          min-width: 50px;
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: $screen-lg-min) {
+  .table {
+    tbody {
+      tr {
+        td {
+          min-width: auto;
+        }
+      }
+    }
+  }
+}

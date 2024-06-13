@@ -1,0 +1,48 @@
+<%= render 'dashboard_header' %>
+<%= render "guarantor_error" %>
+<h2>Welcome <%= @guarantor.guarantor_name %></h2>
+<p>Please complete the following sections to complete the tenancy of <%= @guarantor.tenancy.first_name %> <%= @guarantor.tenancy.surname %>, for Room <%= @guarantor.tenancy.room.number %>, <%= @guarantor.tenancy.room.property.property_name %>.</p>
+<div id="tenancy-block" class="row">
+  <div class="col-md-4 block">
+    <% unless @guarantor.confirm_signed_tenancy %>
+      <%= link_to guarantor_tenancy_agreement_form_path(@guarantor.uri_string), :data => {"turbolinks" => false}, style: "color: #212529;", title: 'Click to view the completed tenancy form' do %>
+        <i class="fas fa-signature"></i>
+        <p>View the signed tenancy form</p>
+      <% end %>
+    <% else %>
+      <div class="block booking-green-btn">
+        <div class="box">
+          <i class="fa fa-check-circle" title="Guarantor confirmed the Tenancy signed!"></i>
+          <p>Confirm Tenancy signed!</p>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <div class="col-md-4 block">
+    <% unless @guarantor.confirm_guarantor %>
+      <%= link_to guarantor_agreement_form_path(@guarantor.uri_string), :data => {"turbolinks" => false}, style: "color: #212529;", title: 'Click to sign your agreement form' do %>
+        <i class="far fa-edit"></i>
+        <p>My guarantor Agreement Form</p>
+      <% end %>
+    <% else %>
+      <div class="block booking-green-btn">
+        <div class="box">
+          <i class="fa fa-check-circle" title="Form submitted"></i>
+          <p>Guarantor agreement signed!</p>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <br/>
+</div>
+<div class="row">
+  <div class="col-12 text-right">
+    <% if (@guarantor.confirm_guarantor && @guarantor.confirm_signed_tenancy) %>
+    <% unless @guarantor.complete_guarantor_agreement %>
+    <div id="submit-application">
+      <%= link_to 'Complete my guarantor agreement', complete_guarantor_agreement_path(@guarantor.uri_string), class: 'btn btn-success tenancy-dashboard-btn' %>
+    </div>
+    <% end %>
+    <% end %>
+  </div>
+</div>

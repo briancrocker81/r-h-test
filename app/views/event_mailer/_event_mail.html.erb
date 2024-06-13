@@ -1,0 +1,43 @@
+<p>Hello</p>
+
+<% if @event.event_type == 1 %>
+  <p>This email is to let you know we will be conducting a viewing on <strong><%= @event.start.strftime("%B %e, %Y") %> between <%= @event.start.strftime("%I:%M %p") %> - <%=@event.end.strftime("%I:%M %p") %></strong>.</p>
+  <p>The reason for a longer time gap is because we will be visiting another property in the viewing time slot. We could arrive at any time in that period.</p>
+  <p><strong>Please ensure the property is going to be in a clean and tidy condition for the viewing.</strong></p>
+  <p>When we are conducting the viewing you do not have to be present as we do have keys to the property to get access, but if you would like to be present during the viewing this is absolutely fine.</p>
+  <p>I understand you have been given an email about rebooking for the next academic year. If you would like to rebook for the next academic year then please let me know as soon as possible and we will send you a booking form.</p>
+  <p>If you have any questions or issues with this scheduled viewing and wish to discuss, then please email <%= mail_to "info@cityletsplymouth.co.uk", "info@cityletsplymouth.co.uk" %> </p>
+<% end %>
+
+<% if @event.event_type == 2 %>
+  <p>This email is to let you know we will be conducting a viewing on <strong><%= @event.start.strftime("%B %e, %Y") %> between <%= @event.start.strftime("%I:%M %p") %> - <%=@event.end.strftime("%I:%M %p") %></strong>.</p>
+  <p>The reason for a longer time gap is because we will be visiting another property in the viewing time slot. We could arrive at any time in that period.</p>
+  <p><strong>Please ensure the property is going to be in a clean and tidy condition for the viewing.</strong></p>
+  <p>When we are conducting the viewing you do not have to be present as we do have keys to the property to get access, but if you would like to be present during the viewing this is absolutely fine.</p>
+  <p>I understand you have been given an email about rebooking for the next academic year. If you would like to rebook for the next academic year then please let me know as soon as possible and we will send you a booking form.</p>
+  <p>If you have any questions or issues with this scheduled viewing and wish to discuss, then please email <%= mail_to "info@cityletsplymouth.co.uk", "info@cityletsplymouth.co.uk" %> </p>
+<% end %>
+
+<% if @event.event_type == 3 %>
+  <p>This email is to give you a heads up you that there will be a visit at your property on <%= @event.start.strftime("%A %B %e, %Y") %> between <%= @event.start.strftime("%I:%M %p") %> - <%= @event.end.strftime("%I:%M %p") %>.</p>
+  <p>The visits can be a member of staff or your landlord, walking through the property to check any current maintenance issues or future works to be done.</p>
+  <p>They may need access to your room but you do not have to be at the property during the visit- but of course, always nice to see you.</p>
+  <p>If you have any questions or issues with this visit and wish to discuss, then please email <%= mail_to "info@cityletsplymouth.co.uk", "info@cityletsplymouth.co.uk" %> </p>
+<% end %>
+
+<% if @event.event_type == 4 %>
+  <p>This email is to inform you that there will be cleaners coming to the property on the <%= @event.start.strftime("%A %B %e, %Y") %> between <%= @event.start.strftime("%I:%M %p") %> - <%= @event.end.strftime("%I:%M %p") %>.</p>
+  <p>Please can you ensure the properties communal areas are clear and tidy as best as possible and please make sure you don’t leave any personal belongings in the communal area.</p>
+  <p>If you have any questions or issues with this clean and wish to discuss, then please email <%= mail_to "info@cityletsplymouth.co.uk", "info@cityletsplymouth.co.uk" %> </p>
+<% end %>
+
+<% if @event.event_type == 5 %>
+  <p>This email is to give you a heads up you that there will be a visit from our maintenance team at your property on <%= @event.start.strftime("%A %B %e, %Y") %> between <%= @event.start.strftime("%I:%M %p") %> - <%= @event.end.strftime("%I:%M %p") %>.</p>
+  <p>The visits can be a member of staff or your landlord, completing any maintenance issues you have reported.</p>
+  <p>They may need access to your room but you do not have to be at the property during the visit- but of course, always nice to see you.</p>
+  <p>If you have any questions or issues with this visit and wish to discuss, then please email <%= mail_to "info@cityletsplymouth.co.uk", "info@cityletsplymouth.co.uk" %> </p>
+<% end %>
+
+<p>Kind regards</p>
+<p>CityLets Plymouth</p>
+ 

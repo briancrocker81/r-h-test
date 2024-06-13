@@ -1,0 +1,114 @@
+<% content_for :title, 'Reporting dashboard' %>
+<div id="title-bar" class="sticky-top">
+  <h1>Reporting</h1>
+</div>
+<article>
+  <section>
+    <h3 class="article-title">Core Reports & Forecasts</h3>
+    <div class="row">
+      <div class="col-lg-3 reporting-block">
+        <div class="flex-center flamingo-bg">
+          <%= link_to reporting_compliance_documents_path, class: 'col-12 box' do %>
+            <h2 class="flex-center text-left"><i class="fas fa-file"></i> Compliance documents</h2>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="col-lg-3 reporting-block">
+        <div class="flex-center green-bg">
+          <%= link_to available_room_path, class: 'col-12 box' do %>
+            <h2 class="flex-center text-left"><i class="fas fa-chart-pie"></i> Availability Report</h2>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="col-lg-3 reporting-block">
+        <div class="flex-center beaver-bg">
+          <%= link_to annual_rent_report_path, class: 'col-12 box' do %>
+            <h2 class="flex-center text-left"><i class="fas fa-chart-area"></i> Annual Rent Report</h2>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="col-lg-3 reporting-block">
+        <div class="flex-center iceberg-blue-bg">
+          <%= link_to sales_analysis_report_path, class: 'col-12 box' do %>
+            <h2 class="flex-center text-left"><i class="fas fa-chart-area"></i> Sales Analysis Report</h2>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <section>
+    <h3 class="article-title">Financial Reports & Forecasts</h3>
+    <div class="row">
+      <div class="col-lg-3 reporting-block">
+        <div class="flex-center yellow-bg">
+          <%= link_to list_of_people_in_arrears_path, class: 'col-12 box' do %>
+            <h2 class="flex-center text-left"><i class="fas fa-chart-line"></i> Arrears Report</h2>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="col-lg-3 reporting-block">
+        <div class="flex-center turquoise-bg">
+          <%= link_to monthly_payment_report_path, class: 'col-12 box' do %>
+            <h2 class="flex-center text-left"><i class="far fa-chart-bar"></i> Monthly Payment Report</h2>
+          <% end %>
+        </div>
+      </div>
+
+
+
+      <div class="col-lg-3 reporting-block">
+        <div class="flex-center manatee-bg">
+          <%= link_to annual_commission_report_path, class: 'col-12 box' do %>
+            <h2 class="flex-center text-left"><i class="fas fa-chart-area"></i> Commission Report</h2>
+          <% end %>
+        </div>
+      </div>
+
+
+
+
+
+      <!--
+        <div class="col-lg-3 reporting-block">
+          <div class="flex-center light-blue-bg">
+            <%= link_to reporting_combined_landlord_path, class: 'col-12 box', data: { confirm: 'Are you sure? This will regenerate all landlord reports for this month and may take some time.' } do %>
+              <h2 class="flex-center text-left"><i class="fas fa-chart-area"></i> Combined Landlord Report</h2>
+            <% end %>
+          </div>
+        </div>
+-->
+
+    </div>
+  </section>
+
+
+</article>
+
+
+
+
+<!--<div class="col">-->
+<!--  Availability-->
+<!--</div>-->
+
+<!--<div class="col">-->
+<!--  Income-->
+<!--</div>-->
+
+<!--<div class="col">-->
+<!--  Rent Roll-->
+<!--</div>-->
+
+<!--<div class="col">-->
+<!--  Landlord monthly statement-->
+<!--</div>-->
+
+<!--<div class="col">-->
+<!--  Landlord annual statement-->
+<!--</div>-->

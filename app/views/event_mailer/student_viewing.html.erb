@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <p>Hello</p>
+    <p>This email is to let you know we will be conducting a viewing on <strong><%= @event.start.strftime("%B %e, %Y") %> between <%= @event.start.strftime("%I:%M %p") %> - <%=@event.end.strftime("%I:%M %p") %></strong>.</p>
+    <p>The reason for a longer time gap is because we will be visiting another property in the viewing time slot. We could arrive at any time in that period.</p>
+    <p><strong>Please ensure the property is going to be in a clean and tidy condition for the viewing.</strong></p>
+    <p>When we are conducting the viewing you do not have to be present as we do have keys to the property to get access, but if you would like to be present during the viewing this is absolutely fine.</p>
+    <p>I understand you have been given an email about rebooking for the next academic year. If you would like to rebook for the next academic year then please let me know as soon as possible and we will send you a booking form.</p>
+    <p>If you have any questions or issues with this scheduled viewing and wish to discuss, then please email <%= link_to "info@cityletsplymouth.co.uk" %> </p>
+    <p>Kind regards</p>
+  </body>
+</html>

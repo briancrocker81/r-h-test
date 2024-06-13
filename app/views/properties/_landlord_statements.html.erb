@@ -1,0 +1,19 @@
+<% @landlord_statement_reports.where(term_type: term).order(created_at: :asc).each do |report| %>
+  <tr>
+    <td><%= report.created_at.strftime('%d/%m/%Y') %></td>
+    <td><%= link_to report.landlord&.contact_name, report.landlord %></td>
+    <td>
+      <% if report.report.present? %>
+        <div class="doc-prv" title="Click to show report" data = " <%= report.report %>" data-doc-name="" data-verified="" data-verified-by="">
+          <span class="badge badge-success"><i class="fas fa-file-pdf"></i> View</span>
+        </div>
+      <% else %>
+        N/A
+      <% end %>
+    <td><%= yes_no(report.mail_sent) %></td>
+    <td><%= report.mail_sent_at.try(:strftime, '%d/%m/%Y') %></td>
+    <td>
+      <%= link_to "Resend", resend_statement_report_property_path(id: @property.id, landlord_statement_report_id: report.id), 'data-confirm': "Are you sure?", title: 'Resend', class: 'btn btn-primary' %>
+    </td>
+  </tr>
+<% end %>

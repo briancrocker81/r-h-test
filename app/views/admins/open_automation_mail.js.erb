@@ -1,0 +1,18 @@
+$('#commonModal .modal-content').html("<%= j render 'manage_automation_mail_form'%>")
+$('#commonModal').modal('show');
+$('#mail_types').on('change', function(){
+  var mail_type = $(this).val();
+
+  $.get('/admin/get_mail_options?mail=' + mail_type, function(data){
+    var opts = []
+    console.log(data, data['options']);
+    if (data['options']){
+      $('#mail_methods').children().remove().end()
+      $.each(data['options'], function(i, opt){
+        opts.push("<option value=" + opt +">" + opt +"</option>");
+      })
+      $('#mail_methods').append(opts);
+    }
+  })
+
+})
